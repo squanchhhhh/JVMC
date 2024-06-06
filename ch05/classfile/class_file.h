@@ -13,25 +13,6 @@
 #include "attr_info.h"
 #include "member_info.h"
 
-
-typedef struct {
-    uint32_t magic;
-    uint16_t minor_version;
-    uint16_t major_version;
-    ConstantPool *constant_pool;
-    uint16_t access_flags;
-    uint16_t this_class;
-    uint16_t super_class;
-    uint16_t interfaces_count;
-    uint16_t *interfaces;
-    uint16_t fields_count;
-    MemberInfo **fields;
-    uint16_t methods_count;
-    MemberInfo **methods;
-    uint16_t attributes_count;
-    AttributeInfo **attributes;
-} ClassFile;
-
 void readAndCheckMagic(ClassFile *cf, ClassReader *reader);
 
 void readAndCheckVersion(ClassFile *cf, ClassReader *reader);

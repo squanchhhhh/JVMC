@@ -55,4 +55,11 @@ typedef struct{
 
 void read_line_number_attribute(void *self,ClassReader * reader);
 void init_line_number_attribute(LineNumberTableAttribute *self,ClassReader * reader);
+typedef struct{
+    AttributeInfo base;
+    ConstantPool *pool;
+    uint16_t source_file_index;
+}SourceFileAttribute;
+void read_source_file_attribute(void *self,ClassReader * reader);
+void init_source_file_attribute(SourceFileAttribute *self,ClassReader * reader);
 #endif //JVMC_ATTR_INFO_H

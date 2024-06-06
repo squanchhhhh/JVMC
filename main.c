@@ -8,8 +8,8 @@ int main(int argc,char * argv[]) {
     printf("version: %d,%d\n",class_file->major_version,class_file->minor_version);
     printf("constants count: %d\n", class_file->constant_pool->count);
     printf("access_flags: %d\n", class_file->access_flags);
-    printf("this_class: %d\n", class_file->this_class);
-    printf("super_class: %d\n", class_file->super_class);
+    printf("this_class: %s\n", get_utf8_string(class_file->constant_pool,class_file->this_class));
+    printf("super_class: %s\n", get_utf8_string(class_file->constant_pool,class_file->super_class));
     printf("interfaces count: %d\n", class_file->interfaces_count);
     printf("fields count: %d\n", class_file->fields_count);
     for (int i = 0; i < class_file->fields_count; i++){

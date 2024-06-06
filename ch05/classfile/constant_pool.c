@@ -22,8 +22,19 @@ ConstantInfo *read_constant_info(ClassReader *reader, ConstantPool *pool) {
     pool->index ++;
     return const_info;
 }
+
+/**
+ * 对于class类型，读取到的是index，所以需要再做一次转换
+ * @param pool
+ * @param index
+ * @return
+ */
 char* get_utf8_string(ConstantPool *pool,uint16_t index){
     ConstantUtf8Info *info = (ConstantUtf8Info *)pool->constants[index];
+    if (info->base.tag == CONSTANT_Class){
+        ConstantClassInfo *info = (ConstantClassInfo *)pool->constants[index];
+        return get_utf8_string(pool,info->name_index);
+    }
     return info->str;
 }
 ConstantPool *read_constant_pool(ClassReader *reader) {

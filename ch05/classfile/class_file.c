@@ -42,8 +42,8 @@ ClassFile *parseClassFile(const uint8_t *classData, size_t size) {
     cf->this_class = read_uint16_class(reader);
     cf->super_class = read_uint16_class(reader);
     cf->interfaces = read_uint16s_class(reader);
-    cf->fields = read_members(reader, cf->constant_pool);
-    cf->methods = read_members(reader, cf->constant_pool);
+    cf->fields = read_members(reader, cf->constant_pool, cf, 0);
+    cf->methods = read_members(reader, cf->constant_pool, cf, 1);
     cf->attributes = read_attributes(reader, cf->constant_pool);
 
     return cf;

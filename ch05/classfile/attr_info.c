@@ -87,11 +87,10 @@ AttributeInfo *new_attribute_info(char *name, uint32_t len, ConstantPool *pool) 
                 //return (AttributeInfo *)attr;
                 printf("SignatureAttribute\n");
             } else if (STRCMP(name, "SourceFile")) {
-                //SourceFileAttribute *attr = (SourceFileAttribute *)malloc(sizeof(SourceFileAttribute));
-                //attr->cp = pool;
-                // Initialize SourceFileAttribute if necessary
-                //return (AttributeInfo *)attr;
-                printf("SourceFileAttribute\n");
+                SourceFileAttribute *attr = (SourceFileAttribute *)malloc(sizeof(SourceFileAttribute));
+                attr->pool = pool;
+                init_source_file_attribute(attr,NULL);
+                return (AttributeInfo *)attr;
             } else if (STRCMP(name, "Synthetic")) {
                 static AttributeInfo synthetic_attr = {NULL};
                 return &synthetic_attr;
@@ -164,4 +163,13 @@ void read_line_number_attribute(void *self,ClassReader * reader){
 }
 void init_line_number_attribute(LineNumberTableAttribute *self,ClassReader * reader){
     self->base.read_info = read_line_number_attribute;
+}
+
+
+void read_source_file_attribute(void *self,ClassReader * reader){
+    SourceFileAttribute *info = (SourceFileAttribute *) self;
+    info->source_file_index = read_uint16_class(reader);
+}
+void init_source_file_attribute(SourceFileAttribute *self,ClassReader * reader){
+    self->base.read_info = read_source_file_attribute;
 }

@@ -76,4 +76,5 @@ add_executable(JVMC main.c
         ch05/classfile/member_info.c
         ch05/classfile/member_info.h
         ch05/all_class_headers.h
+        ch05/classfile/common.h
 )

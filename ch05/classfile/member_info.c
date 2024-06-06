@@ -4,8 +4,13 @@
 
 #include "member_info.h"
 
-MemberInfo **read_members(ClassReader*reader,ConstantPool*pool){
+MemberInfo **read_members(ClassReader *reader, ConstantPool *pool, ClassFile *cf, int flag) {
     int count = read_uint16_class(reader);
+    if (flag == 0) {
+        cf->fields_count = count;
+    }else{
+        cf->methods_count = count;
+    }
     MemberInfo ** members = (MemberInfo**)malloc(count * sizeof(MemberInfo*));
     for (int i = 0; i < count; ++i) {
         members[i] = read_member(reader,pool);

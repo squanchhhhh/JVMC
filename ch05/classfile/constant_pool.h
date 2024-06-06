@@ -36,91 +36,105 @@ struct ConstantInfo {
 };
 
 struct ConstantPool {
+    ConstantInfo **constants;
     int index;
     int count;
-    ConstantInfo **constants;  // Pointer to an array of pointers
 };
 ConstantPool *read_constant_pool(ClassReader *reader);
 char* get_utf8_string(ConstantPool *pool,uint16_t index);
 
 
 typedef struct {
+    ConstantInfo base;
     int32_t value;
-    ConstantInfo *base;
 } ConstantIntegerInfo;
 void read_integer(void *self, ClassReader *reader);
 void init_read_integer(ConstantIntegerInfo *self, ClassReader *reader);
 
 typedef struct {
+    ConstantInfo base;
     float value;
-    ConstantInfo *base;
 }ConstantFloatInfo;
 void read_float(void *self, ClassReader *reader);
 void init_read_float(ConstantFloatInfo *self, ClassReader *reader);
 
 typedef struct {
+    ConstantInfo base;
     int64_t value;
-    ConstantInfo *base;
 }ConstantLongInfo;
 void read_long(void *self, ClassReader *reader);
 void init_read_long(ConstantLongInfo *self, ClassReader *reader);
 
 typedef struct {
+    ConstantInfo base;
     double value;
-    ConstantInfo *base;
 }ConstantDoubleInfo;
 void read_double(void *self, ClassReader *reader);
 void init_read_double(ConstantDoubleInfo *self, ClassReader *reader);
 
 typedef struct {
+    ConstantInfo base;
     char * str;
-    ConstantInfo *base;
 }ConstantUtf8Info;
 char *decode_mutf8(const uint8_t *bytearr, size_t length);
 void read_utf8(void *info, ClassReader *reader);
 void init_read_utf8(ConstantUtf8Info *info, ClassReader *reader);
 
 typedef struct {
+    ConstantInfo base;
     ConstantPool * pool;
     uint16_t string_index;
-    ConstantInfo *base;
 }ConstantStringInfo;
 void read_string(void *info, ClassReader *reader);
 void init_read_string(ConstantStringInfo *info, ClassReader *reader);
 
 typedef struct {
+    ConstantInfo base;
     ConstantPool * pool;
     uint16_t name_index;
-    ConstantInfo *base;
 }ConstantClassInfo;
 void read_class(void *info, ClassReader *reader);
 void init_read_class(ConstantClassInfo *info, ClassReader *reader);
 
 typedef struct {
+    ConstantInfo base;
     uint16_t name_index;
     uint16_t descriptor_index;
-    ConstantInfo * base;
 }ConstantNameAndTypeInfo;
 void read_name(void *info, ClassReader *reader);
 void init_read_name(ConstantNameAndTypeInfo *info, ClassReader *reader);
 
+
+/**
+ * 为了保证实现多态的效果，这里的ConstantInfo不能使用指针
+ * 如果使用指针会导致类型强转时无法读取到base的信息
+ */
 typedef struct {
-    ConstantInfo * base;
+    ConstantInfo base;
     ConstantPool * pool;
     uint16_t class_index;
     uint16_t name_and_type_index;
-}ConstantMemberrefInfo;
-typedef struct {
-    ConstantMemberrefInfo * base;
-}ConstantFieldrefInfo;
-typedef struct {
-    ConstantMemberrefInfo * base;
 }ConstantMethodrefInfo;
+void read_methodref(void *info, ClassReader *reader);
+void init_read_methodref(ConstantMethodrefInfo *info, ClassReader *reader,uint8_t tag);
+
 typedef struct {
-    ConstantMemberrefInfo * base;
+    ConstantInfo base;
+    ConstantPool * pool;
+    uint16_t class_index;
+    uint16_t name_and_type_index;
+}ConstantFieldrefInfo;
+void read_fieldref(void *info, ClassReader *reader);
+void init_read_fieldref(ConstantFieldrefInfo *info, ClassReader *reader,uint8_t tag);
+typedef struct {
+    ConstantInfo base;
+    ConstantPool * pool;
+    uint16_t class_index;
+    uint16_t name_and_type_index;
 }ConstantInterfaceMethodrefInfo;
-void read_memberref(void *info, ClassReader *reader);
-void init_read_memberref(ConstantMemberrefInfo *info, ClassReader *reader,uint8_t tag);
+void read_interface_methodref(void *info, ClassReader *reader);
+void init_read_interface_methodref(ConstantInterfaceMethodrefInfo *info, ClassReader *reader,uint8_t tag);
+
 
 
 

@@ -100,11 +100,6 @@ AttributeInfo* new_attribute_info(char *name, uint32_t len, ConstantPool *pool) 
         default:
             break;
     }
-    UnparsedAttributeInfo *attr = (UnparsedAttributeInfo *)malloc(sizeof(UnparsedAttributeInfo ));
-    attr->base->read_info = NULL; // or appropriate function
-    attr->len = len;
-    attr->info = NULL;
-    return (AttributeInfo *)attr;
 }
 
 AttributeInfo **read_attributes(ClassReader *reader, ConstantPool *pool) {
@@ -122,7 +117,7 @@ void read_unparsed_attribute_info(void*self,ClassReader * reader){
     info->info = read_bytes_class(reader, info->len);
 }
 void init_unparsed_attribute_info(UnparsedAttributeInfo *self,ClassReader * reader){
-    self->base->read_info = read_unparsed_attribute_info;
+    self->base.read_info = read_unparsed_attribute_info;
 }
 
 void read_code_attribute(void *self,ClassReader * reader){
@@ -135,7 +130,7 @@ void read_code_attribute(void *self,ClassReader * reader){
     info->attributes = read_attributes(reader, info->pool);
 }
 void init_code_attribute(CodeAttribute *self,ClassReader * reader){
-    self->base->read_info = read_code_attribute;
+    self->base.read_info = read_code_attribute;
 }
 
 ExceptionTableEntry **read_exception_table(ClassReader *reader) {

@@ -10,9 +10,8 @@ void read_integer(void *self, ClassReader *reader) {
     info->value = (int32_t) read_uint32_class(reader);
 }
 void init_read_integer(ConstantIntegerInfo *self, ClassReader *reader) {
-    self->base = (ConstantInfo*)malloc(sizeof(ConstantInfo*));
-    self->base->tag = CONSTANT_Integer;
-    self->base->read_info = read_integer;
+    self->base.tag = CONSTANT_Integer;
+    self->base.read_info = read_integer;
 }
 
 ConstantInfo *read_constant_info(ClassReader *reader, ConstantPool *pool) {
@@ -117,14 +116,22 @@ ConstantInfo *new_constant_info(uint8_t tag, ConstantPool *pool, ClassReader *re
 //        }
         case CONSTANT_Fieldref:{
             ConstantFieldrefInfo *info = malloc(sizeof(ConstantFieldrefInfo));
-            info->base = (ConstantMemberrefInfo*)malloc(sizeof(ConstantMemberrefInfo));
-            init_read_memberref(info->base, reader,CONSTANT_Fieldref);
+            init_read_fieldref(info, reader,CONSTANT_Fieldref);
             return (ConstantInfo *)info;
         }
         case CONSTANT_Methodref:{
             ConstantMethodrefInfo *info = malloc(sizeof(ConstantMethodrefInfo));
-            info->base = (ConstantMemberrefInfo*)malloc(sizeof(ConstantMemberrefInfo));
-            init_read_memberref(info->base, reader,CONSTANT_Methodref);
+            init_read_methodref(info, reader,CONSTANT_Methodref);
+            return (ConstantInfo *)info;
+        }
+        case CONSTANT_InterfaceMethodref:{
+            ConstantInterfaceMethodrefInfo *info = malloc(sizeof(ConstantInterfaceMethodrefInfo));
+            init_read_interface_methodref(info, reader,CONSTANT_InterfaceMethodref);
+            return (ConstantInfo *)info;
+        }
+        case CONSTANT_NameAndType:{
+            ConstantNameAndTypeInfo *info = malloc(sizeof(ConstantNameAndTypeInfo));
+            init_read_name(info, reader);
             return (ConstantInfo *)info;
         }
         default:
@@ -140,8 +147,8 @@ void read_float(void *self, ClassReader *reader){
 }
 
 void init_read_float(ConstantFloatInfo *self, ClassReader *reader){
-    self->base->tag = CONSTANT_Float;
-    self->base->read_info = read_float;
+    self->base.tag = CONSTANT_Float;
+    self->base.read_info = read_float;
 }
 
 void read_long(void *self, ClassReader *reader){
@@ -150,8 +157,8 @@ void read_long(void *self, ClassReader *reader){
     info->value = *(long *)&val;
 }
 void init_read_long(ConstantLongInfo *self, ClassReader *reader){
-    self->base->tag = CONSTANT_Long;
-    self->base->read_info = read_long;
+    self->base.tag = CONSTANT_Long;
+    self->base.read_info = read_long;
 }
 void read_double(void *self, ClassReader *reader){
     ConstantDoubleInfo *info = (ConstantDoubleInfo *)self;
@@ -159,8 +166,8 @@ void read_double(void *self, ClassReader *reader){
     info->value = *(double *)&val;
 }
 void init_read_double(ConstantDoubleInfo *self, ClassReader *reader){
-    self->base->tag = CONSTANT_Double;
-    self->base->read_info = read_double;
+    self->base.tag = CONSTANT_Double;
+    self->base.read_info = read_double;
 }
 
 
@@ -241,16 +248,16 @@ void read_utf8(void *info_, ClassReader *reader) {
     free(bytes);
 }
 void init_read_utf8(ConstantUtf8Info *info, ClassReader *reader){
-    info->base->tag = CONSTANT_Utf8;
-    info->base->read_info = read_utf8;
+    info->base.tag = CONSTANT_Utf8;
+    info->base.read_info = read_utf8;
 }
 void read_string(void *info, ClassReader *reader){
     ConstantStringInfo *info_ = (ConstantStringInfo *)info;
     info_->string_index = read_uint16_class(reader);
 }
 void init_read_string(ConstantStringInfo *info, ClassReader *reader){
-    info->base->tag = CONSTANT_String;
-    info->base->read_info = read_string;
+    info->base.tag = CONSTANT_String;
+    info->base.read_info = read_string;
 }
 
 void read_class(void *info, ClassReader *reader){
@@ -258,8 +265,8 @@ void read_class(void *info, ClassReader *reader){
     info_->name_index = read_uint16_class(reader);
 }
 void init_read_class(ConstantClassInfo *info, ClassReader *reader){
-    info->base->tag = CONSTANT_Class;
-    info->base->read_info = read_class;
+    info->base.tag = CONSTANT_Class;
+    info->base.read_info = read_class;
 }
 
 void read_name(void *info, ClassReader *reader){
@@ -268,18 +275,39 @@ void read_name(void *info, ClassReader *reader){
     info_->descriptor_index = read_uint16_class(reader);
 }
 void init_read_name(ConstantNameAndTypeInfo *info, ClassReader *reader){
-    info->base->tag = CONSTANT_NameAndType;
-    info->base->read_info = read_name;
+    info->base.tag = CONSTANT_NameAndType;
+    info->base.read_info = read_name;
 }
 
-void read_memberref(void *info, ClassReader *reader){
-    ConstantMemberrefInfo *info_ = (ConstantMemberrefInfo *)info;
+void read_methodref(void *info, ClassReader *reader){
+    ConstantMethodrefInfo *info_ = (ConstantMethodrefInfo *)info;
     info_->class_index = read_uint16_class(reader);
     info_->name_and_type_index = read_uint16_class(reader);
 }
-void init_read_memberref(ConstantMemberrefInfo *info, ClassReader *reader,uint8_t tag){
-    info->base = (ConstantInfo *)malloc(sizeof(ConstantInfo));
-    info->base->tag = tag;
-    info->base->read_info = read_memberref;
+void init_read_methodref(ConstantMethodrefInfo *info, ClassReader *reader,uint8_t tag){
+    info->base.tag = tag;
+    info->base.read_info = read_methodref;
 }
+
+void read_fieldref(void *info, ClassReader *reader){
+    ConstantFieldrefInfo *info_ = (ConstantFieldrefInfo *)info;
+    info_->class_index = read_uint16_class(reader);
+    info_->name_and_type_index = read_uint16_class(reader);
+}
+void init_read_fieldref(ConstantFieldrefInfo *info, ClassReader *reader,uint8_t tag){
+    info->base.tag = tag;
+    info->base.read_info = read_fieldref;
+}
+
+void read_interface_methodref(void *info, ClassReader *reader){
+    ConstantInterfaceMethodrefInfo *info_ = (ConstantInterfaceMethodrefInfo *)info;
+    info_->class_index = read_uint16_class(reader);
+    info_->name_and_type_index = read_uint16_class(reader);
+}
+void init_read_interface_methodref(ConstantInterfaceMethodrefInfo *info, ClassReader *reader,uint8_t tag){
+    info->base.tag = tag;
+    info->base.read_info = read_interface_methodref;
+}
+
+
 

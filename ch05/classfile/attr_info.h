@@ -23,22 +23,23 @@ typedef struct{
 ExceptionTableEntry ** read_exception_table(ClassReader *reader);
 
 typedef struct{
+    AttributeInfo base;
     char* name;
     uint32_t len;
     uint8_t * info;
-    AttributeInfo *base;
+
 }UnparsedAttributeInfo;
 void read_unparsed_attribute_info(void*self,ClassReader * reader);
 void init_unparsed_attribute_info(UnparsedAttributeInfo *self,ClassReader * reader);
 
 typedef struct{
+    AttributeInfo base;
     ConstantPool * pool;
     uint16_t max_stack;
     uint16_t max_locals;
     uint8_t * code;
     ExceptionTableEntry ** exception_table;
     AttributeInfo ** attributes;
-    AttributeInfo *base;
 }CodeAttribute;
 void read_code_attribute(void *self,ClassReader * reader);
 void init_code_attribute(CodeAttribute *self,ClassReader * reader);

@@ -11,9 +11,10 @@
 typedef struct{
     void (*read_info)(void* ,ClassReader *);
 }AttributeInfo;
-AttributeInfo * new_attribute_info(char*name,uint32_t len,ConstantPool * pool);
+AttributeInfo *new_attribute_info(char*name,uint32_t len,ConstantPool * pool);
 AttributeInfo * read_attribute(ClassReader * reader,ConstantPool*pool);
 AttributeInfo ** read_attributes(ClassReader *reader, ConstantPool* pool);
+
 typedef struct{
     uint16_t start_pc;
     uint16_t end_pc;
@@ -27,7 +28,6 @@ typedef struct{
     char* name;
     uint32_t len;
     uint8_t * info;
-
 }UnparsedAttributeInfo;
 void read_unparsed_attribute_info(void*self,ClassReader * reader);
 void init_unparsed_attribute_info(UnparsedAttributeInfo *self,ClassReader * reader);
@@ -43,6 +43,16 @@ typedef struct{
 }CodeAttribute;
 void read_code_attribute(void *self,ClassReader * reader);
 void init_code_attribute(CodeAttribute *self,ClassReader * reader);
+typedef struct{
+    uint16_t start_pc;
+    uint16_t line_number;
+}lineNumberTable;
 
+typedef struct{
+    AttributeInfo base;
+    lineNumberTable ** lines;
+}LineNumberTableAttribute;
 
+void read_line_number_attribute(void *self,ClassReader * reader);
+void init_line_number_attribute(LineNumberTableAttribute *self,ClassReader * reader);
 #endif //JVMC_ATTR_INFO_H

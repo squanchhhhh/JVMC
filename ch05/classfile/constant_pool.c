@@ -40,7 +40,7 @@ ConstantPool *read_constant_pool(ClassReader *reader) {
         free(constants);  // 确保释放已经分配的内存
         exit(EXIT_FAILURE);
     }
-    pool->index = 0;
+    pool->index = 1;
     pool->count = count;
     pool->constants = constants;
     // 初始化常量池条目

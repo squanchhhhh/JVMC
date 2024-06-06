@@ -1,0 +1,3 @@
+/Users/squanch/CLionProjects/JVMC/cmake-build-debug/CMakeFiles/JVMC.dir
+/Users/squanch/CLionProjects/JVMC/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/squanch/CLionProjects/JVMC/cmake-build-debug/CMakeFiles/rebuild_cache.dir

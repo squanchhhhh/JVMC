@@ -17,3 +17,14 @@ void loop(Thread *thread, unsigned char *bytecode){
         inst->Execute(thread,frame);
     }
 }
+
+void interpret(MemberInfo * member){
+    CodeAttribute *codeAttribute =get_code_attribute(member);
+    int max_locals = codeAttribute->max_locals;
+    int max_stack = codeAttribute->max_stack;
+    uint8_t* code = codeAttribute->code;
+    Thread * thread = new_thread();
+    Frame * frame = new_frame(thread,max_locals,max_stack);
+    push_frame(thread,frame);
+    loop(thread,code);
+}

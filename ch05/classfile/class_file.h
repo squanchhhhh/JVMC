@@ -10,9 +10,8 @@
 #include <stdio.h>
 #include "class_reader.h"
 #include "constant_pool.h"
-#include "attr_info.h"
 #include "member_info.h"
-
+MemberInfo * get_main_method(ClassFile*class_file);
 void readAndCheckMagic(ClassFile *cf, ClassReader *reader);
 
 void readAndCheckVersion(ClassFile *cf, ClassReader *reader);

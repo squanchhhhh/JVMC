@@ -9,6 +9,7 @@
 #include <string.h>
 #include "class_reader.h"
 #include "class_file.h"
+#include "attr_info.h"
 
 void readAndCheckVersion(ClassFile *cf, ClassReader *reader) {
     cf->minor_version = read_uint16_class(reader);
@@ -44,7 +45,7 @@ ClassFile *parseClassFile(const uint8_t *classData, size_t size) {
     cf->interfaces = read_uint16s_class(reader);
     cf->fields = read_members(reader, cf->constant_pool, cf, 0);
     cf->methods = read_members(reader, cf->constant_pool, cf, 1);
-    cf->attributes = read_attributes(reader, cf->constant_pool);
+    cf->attributes = read_attributes(reader, cf->constant_pool, NULL);
 
     return cf;
 }
@@ -55,4 +56,15 @@ void readAndCheckMagic(ClassFile *cf, ClassReader *reader) {
         fprintf(stderr, "java.lang.ClassFormatError: magic!\n");
         exit(EXIT_FAILURE);
     }
+}
+
+MemberInfo * get_main_method(ClassFile *cf){
+    int count = cf->methods_count;
+    for (int i = 0; i < count; ++i) {
+        MemberInfo *method = cf->methods[i];
+        if (memcmp(read_member_name(method,cf->constant_pool),"main",4)==0) {
+            return method;
+        }
+    }
+    return NULL;
 }

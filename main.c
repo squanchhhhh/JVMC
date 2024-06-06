@@ -2,24 +2,12 @@
 #include "ch05/rtda/thread.h"
 #include "ch05/cmd.h"
 #include "ch05/all_class_headers.h"
+#include "ch05/interpret.h"
 ClassFile * loadClassFile(char*class_name);
 int main(int argc,char * argv[]) {
     ClassFile * class_file = loadClassFile("/Users/squanch/CLionProjects/JVMC/MyFirstJvmTest.class");
-    printf("version: %d,%d\n",class_file->major_version,class_file->minor_version);
-    printf("constants count: %d\n", class_file->constant_pool->count);
-    printf("access_flags: %d\n", class_file->access_flags);
-    printf("this_class: %s\n", get_utf8_string(class_file->constant_pool,class_file->this_class));
-    printf("super_class: %s\n", get_utf8_string(class_file->constant_pool,class_file->super_class));
-    printf("interfaces count: %d\n", class_file->interfaces_count);
-    printf("fields count: %d\n", class_file->fields_count);
-    for (int i = 0; i < class_file->fields_count; i++){
-        printf("    %s\n", read_member_name(class_file->fields[i],class_file->constant_pool));
-    }
-    printf("methods count: %d\n", class_file->methods_count);
-    for (int i = 0; i < class_file->methods_count; i++){
-        printf("    %s\n",read_member_name(class_file->methods[i],class_file->constant_pool));
-    }
-    return 0;
+    MemberInfo * main = get_main_method(class_file);
+    interpret(main);
 }
 
 ClassFile * loadClassFile(char*class_name){

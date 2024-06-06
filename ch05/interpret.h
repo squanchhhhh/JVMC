@@ -7,5 +7,9 @@
 #include "rtda/thread.h"
 #include "instructions/base/instruction.h"
 #include "instructions/factory.h"
+#include "classfile/common.h"
+#include "classfile/member_info.h"
+
 void loop(Thread *thread, unsigned char *bytecode);
+void interpret(MemberInfo * Member);
 #endif //JVMC_INTERPRET_H

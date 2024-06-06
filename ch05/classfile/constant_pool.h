@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "class_reader.h"
-
+#include "common.h"
 // 常量池标签
 #define CONSTANT_Class              7
 #define CONSTANT_Fieldref           9
@@ -26,35 +26,19 @@
 #define CONSTANT_MethodType         16
 #define CONSTANT_InvokeDynamic      18
 
-typedef struct ConstantPool ConstantPool;
-typedef struct ConstantInfo ConstantInfo;
+
 ConstantInfo *new_constant_info(uint8_t tag, ConstantPool *pool, ClassReader *reader);
 ConstantInfo *read_constant_info(ClassReader *reader, ConstantPool *pool);
-struct ConstantInfo {
-    uint8_t tag;
-    void (*read_info)(void *self, ClassReader *reader);
-};
 
-struct ConstantPool {
-    ConstantInfo **constants;
-    int index;
-    int count;
-};
 ConstantPool *read_constant_pool(ClassReader *reader);
 char* get_utf8_string(ConstantPool *pool,uint16_t index);
 
 
-typedef struct {
-    ConstantInfo base;
-    int32_t value;
-} ConstantIntegerInfo;
+
 void read_integer(void *self, ClassReader *reader);
 void init_read_integer(ConstantIntegerInfo *self, ClassReader *reader);
 
-typedef struct {
-    ConstantInfo base;
-    float value;
-}ConstantFloatInfo;
+
 void read_float(void *self, ClassReader *reader);
 void init_read_float(ConstantFloatInfo *self, ClassReader *reader);
 

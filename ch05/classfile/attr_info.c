@@ -3,7 +3,11 @@
 //
 
 #include "attr_info.h"
-
+#include "common.h"
+/*
+ * 方便后面识别code属性
+ */
+#define CODE 1
 AttributeInfo *read_attribute(ClassReader *reader, ConstantPool *pool) {
     uint16_t attr_name_index = read_uint16_class(reader);
     char *attr_name = (char *) get_utf8_string(pool, attr_name_index);
@@ -104,8 +108,9 @@ AttributeInfo *new_attribute_info(char *name, uint32_t len, ConstantPool *pool) 
     }
 }
 
-AttributeInfo **read_attributes(ClassReader *reader, ConstantPool *pool) {
+AttributeInfo **read_attributes(ClassReader *reader, ConstantPool *pool, MemberInfo *member) {
     uint16_t attr_count = read_uint16_class(reader);
+    if (member!=NULL)member->count = attr_count;
     AttributeInfo **info = (AttributeInfo **) malloc(sizeof(AttributeInfo *) * attr_count);
     for (int i = 0; i < attr_count; ++i) {
         info[i] = read_attribute(reader, pool);
@@ -130,10 +135,11 @@ void read_code_attribute(void *self, ClassReader *reader) {
     uint32_t code_length = read_uint32_class(reader);
     info->code = read_bytes_class(reader, code_length);
     info->exception_table = read_exception_table(reader);
-    info->attributes = read_attributes(reader, info->pool);
+    info->attributes = read_attributes(reader, info->pool, NULL);
 }
 
 void init_code_attribute(CodeAttribute *self, ClassReader *reader) {
+    self->base.type = CODE;
     self->base.read_info = read_code_attribute;
 }
 

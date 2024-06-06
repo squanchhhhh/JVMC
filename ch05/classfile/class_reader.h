@@ -6,12 +6,8 @@
 #define JVMC_CLASS_READER_H
 #include <stdint.h>
 #include <stdlib.h>
+#include "common.h"
 
-typedef struct {
-    const uint8_t *data;
-    size_t size;
-    size_t index;
-} ClassReader;
 
 ClassReader* create_class_reader(const uint8_t *data, size_t size);
 void destroy_class_reader(ClassReader *reader);

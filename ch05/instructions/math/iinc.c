@@ -4,8 +4,13 @@
 
 #include "iinc.h"
 void init_IINC(IINC*self){
-    NoOperands_instruction_init(&self->base);
-    self->base.base.Execute = execute_IINC;
+    self->base.FetchOperands= fetch_IINC;
+    self->base.Execute = execute_IINC;
+}
+void fetch_IINC(void*self,BytecodeReader*reader){
+    IINC* iinc = (IINC*)self;
+    iinc->index = read_uint8(reader);
+    iinc->increment = read_uint8(reader);
 }
 void execute_IINC(void * self,Frame* frame){
     IINC* iinc = (IINC*)self;

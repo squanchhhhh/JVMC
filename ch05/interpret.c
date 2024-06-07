@@ -18,7 +18,7 @@ void loop(Thread *thread, unsigned char *bytecode){
         inst->FetchOperands(inst,reader);
         set_next_pc(frame,reader->pc);
         printf("pc:%2d\n", pc);
-        inst->Execute(thread,frame);
+        inst->Execute(inst,frame);
     }
 }
 

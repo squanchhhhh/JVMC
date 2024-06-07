@@ -6,22 +6,22 @@
 #define JVMC_SH_H
 #include "../base/instruction.h"
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }ISHL;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }ISHR;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }IUSHR;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }LSHL;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }LSHR;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }LUSHR;
 void init_ISHL(ISHL*self);
 void init_ISHR(ISHR*self);

@@ -5,20 +5,20 @@
 #include <math.h>
 #include "rem.h"
 void init_DREM(DREM*self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = excute_DREM;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = excute_DREM;
 }
 void init_FREM(FREM*self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = excute_FREM;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = excute_FREM;
 }
 void init_IREM(IREM*self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = excute_IREM;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = excute_IREM;
 }
 void init_LREM(LREM*self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = excute_LREM;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = excute_LREM;
 }
 void excute_DREM(void*self,Frame*frame){
     double v2 = pop_double(frame->operand_stack);

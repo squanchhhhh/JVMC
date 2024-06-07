@@ -6,77 +6,77 @@
 #define JVMC_CONST_H
 #include "../base/instruction.h"
 typedef struct {
-    NoOperandsInstruction* base;
+    NoOperandsInstruction base;
 } ACONST_NULL;
 void excute_aconst_null(void * self,Frame *frame);
 
 typedef struct {
-    NoOperandsInstruction* base;
+    NoOperandsInstruction base;
 } DCONST_0;
 void excute_dconst_0(void * self,Frame *frame);
 
 typedef struct {
-    NoOperandsInstruction* base;
+    NoOperandsInstruction base;
 } DCONST_1;
 void excute_dconst_1(void * self,Frame *frame);
 
 typedef struct {
-    NoOperandsInstruction* base;
+    NoOperandsInstruction base;
 } FCONST_0;
 void excute_fconst_0(void * self,Frame *frame);
 
 typedef struct {
-    NoOperandsInstruction* base;
+    NoOperandsInstruction base;
 } FCONST_1;
 void excute_fconst_1(void * self,Frame *frame);
 
 typedef struct {
-    NoOperandsInstruction* base;
+    NoOperandsInstruction base;
 } FCONST_2;
 void excute_fconst_2(void * self,Frame *frame);
 
 typedef struct {
-    NoOperandsInstruction* base;
+    NoOperandsInstruction base;
 } ICONST_M1;
 void excute_iconst_m1(void * self,Frame *frame);
 
 typedef struct {
-    NoOperandsInstruction* base;
+    NoOperandsInstruction base;
 } ICONST_0;
 void excute_iconst_0(void * self,Frame *frame);
 
 typedef struct {
-    NoOperandsInstruction* base;
+    NoOperandsInstruction base;
 } ICONST_1;
 void excute_iconst_1(void * self,Frame *frame);
 
 typedef struct {
-    NoOperandsInstruction* base;
+    NoOperandsInstruction base;
 } ICONST_2;
 void excute_iconst_2(void * self,Frame *frame);
 
 typedef struct {
-    NoOperandsInstruction* base;
+    NoOperandsInstruction base;
 } ICONST_3;
 void excute_iconst_3(void * self,Frame *frame);
 
 typedef struct {
-    NoOperandsInstruction* base;
+    NoOperandsInstruction base;
 } ICONST_4;
 void excute_iconst_4(void * self,Frame *frame);
 
 typedef struct {
-    NoOperandsInstruction* base;
+    NoOperandsInstruction base;
 } ICONST_5;
 void excute_iconst_5(void * self,Frame *frame);
 
 typedef struct {
-    NoOperandsInstruction* base;
+    NoOperandsInstruction base;
 } LCONST_0;
 void excute_lconst_0(void * self,Frame *frame);
 
 typedef struct {
-    NoOperandsInstruction* base;
+    NoOperandsInstruction base;
 } LCONST_1;
 void excute_lconst_1(void * self,Frame *frame);
 

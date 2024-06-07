@@ -6,19 +6,19 @@
 #define JVMC_LSTORE_H
 #include "../base/instruction.h"
 typedef struct{
-    Index8Instruction *base;
+    Index8Instruction base;
 }  LSTORE;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }  LSTORE_0;
 typedef struct{
-    NoOperandsInstruction* base;
+    NoOperandsInstruction base;
 }  LSTORE_1;
 typedef struct{
-    NoOperandsInstruction* base;
+    NoOperandsInstruction base;
 }  LSTORE_2;
 typedef struct{
-    NoOperandsInstruction* base;
+    NoOperandsInstruction base;
 }  LSTORE_3;
 void _lstore(Frame*frame,int index);
 void excute_lstore(void* self,Frame*frame);

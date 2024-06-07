@@ -6,7 +6,7 @@
 #define JVMC_SWAP_H
 #include "../base/instruction.h"
 typedef struct{
-    NoOperandsInstruction * base;
+    NoOperandsInstruction base;
 }SWAP;
 void init_SWAP(SWAP * swap);
 void excute_SWAP(void * self,Frame*frame);

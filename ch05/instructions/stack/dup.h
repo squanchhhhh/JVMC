@@ -6,22 +6,22 @@
 #define JVMC_DUP_H
 #include "../base/instruction.h"
 typedef struct {
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }DUP;
 typedef struct {
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }DUP_X1;
 typedef struct {
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }DUP_X2;
 typedef struct {
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }DUP2;
 typedef struct {
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }DUP2_X1;
 typedef struct {
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }DUP2_X2;
 
 void init_DUP(DUP*self);

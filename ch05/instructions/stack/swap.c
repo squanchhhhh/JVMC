@@ -4,8 +4,8 @@
 
 #include "swap.h"
 void init_SWAP(SWAP * swap){
-    NoOperands_instruction_init(swap->base);
-    swap->base->base.Execute = excute_SWAP;
+    NoOperands_instruction_init(&swap->base);
+    swap->base.base.Execute = excute_SWAP;
 }
 void excute_SWAP(void * self,Frame*frame){
     Slot slot1 = pop_slot(frame->operand_stack);

@@ -4,28 +4,28 @@
 
 #include "sh.h"
 void init_ISHL(ISHL*self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = execute_ISHL;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_ISHL;
 }
 void init_ISHR(ISHR*self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = execute_ISHR;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_ISHR;
 }
 void init_IUSHR(IUSHR*self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = execute_IUSHR;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_IUSHR;
 }
 void init_LSHL(LSHL*self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = execute_LSHL;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_LSHL;
 }
 void init_LSHR(LSHR*self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = execute_LSHR;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_LSHR;
 }
 void init_LUSHR(LUSHR*self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = execute_LUSHR;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_LUSHR;
 }
 void execute_ISHR(void*self,Frame* frame){
     int v2 = pop_int(frame->operand_stack);

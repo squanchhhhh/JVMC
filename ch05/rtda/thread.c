@@ -31,6 +31,7 @@ Frame *current_frame(Thread *thread) {
     return (Frame *) top(thread->stack);
 }
 
+
 Stack *new_stack(unsigned int size) {
     Stack *stack = (Stack *) malloc(sizeof(Stack));
     stack->max_size = size;
@@ -47,6 +48,10 @@ void push(Stack *stack, Frame *frame) {
     }
     stack->_top = frame;
     stack->size++;
+}
+
+void set_next_pc(Frame *frame, int pc) {
+    frame->next_pc = pc;
 }
 
 Frame *pop(Stack *stack) {

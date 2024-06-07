@@ -6,22 +6,22 @@
 #define JVMC_IF_ICMP_H
 #include "../base/instruction.h"
 typedef struct{
-    BranchInstruction * base;
+    BranchInstruction base;
 }IF_ICMPEQ;
 typedef struct{
-    BranchInstruction * base;
+    BranchInstruction base;
 }IF_ICMPNE;
 typedef struct{
-    BranchInstruction * base;
+    BranchInstruction base;
 }IF_ICMPLT;
 typedef struct{
-    BranchInstruction * base;
+    BranchInstruction base;
 }IF_ICMPLE;
 typedef struct{
-    BranchInstruction * base;
+    BranchInstruction base;
 }IF_ICMPGT;
 typedef struct{
-    BranchInstruction * base;
+    BranchInstruction base;
 }IF_ICMPGE;
 void init_IF_ICMPEQ(IF_ICMPEQ*self);
 void init_IF_ICMPNE(IF_ICMPNE*self);

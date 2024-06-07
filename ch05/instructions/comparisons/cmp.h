@@ -6,19 +6,19 @@
 #define JVMC_CMP_H
 #include "../base/instruction.h"
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }LCMP;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }FCMPG;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }FCMPL;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }DCMPL;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }DCMPG;
 void init_LCMP(LCMP*self);
 void init_FCMPG(FCMPG*self);

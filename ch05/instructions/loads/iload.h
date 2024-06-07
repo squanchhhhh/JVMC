@@ -7,19 +7,19 @@
 #include "../base/instruction.h"
 // todo other loads
 typedef struct {
-    Index8Instruction *base;
+    Index8Instruction base;
 }ILOAD;
 typedef struct {
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }ILOAD_0;
 typedef struct {
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }ILOAD_1;
 typedef struct {
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }ILOAD_2;
 typedef struct {
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }ILOAD_3;
 void excute_iload(void * self,Frame *frame);
 void excute_iload_0(void * self,Frame *frame);
@@ -34,19 +34,19 @@ void init_ILOAD_3(ILOAD_3*self);
 void _iload(Frame*frame,int index);
 
 typedef struct{
-    Index8Instruction *base;
+    Index8Instruction base;
 }FLOAD;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }FLOAD_0;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }FLOAD_1;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }FLOAD_2;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }FLOAD_3;
 void excute_fload(void * self,Frame *frame);
 void excute_fload_0(void * self,Frame *frame);
@@ -63,19 +63,19 @@ void _fload(Frame*frame,int index);
 
 
 typedef struct{
-    Index8Instruction *base;
+    Index8Instruction base;
 }DLOAD;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }DLOAD_0;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }DLOAD_1;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }DLOAD_2;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }DLOAD_3;
 void excute_dload(void * self,Frame *frame);
 void excute_dload_0(void * self,Frame *frame);
@@ -91,19 +91,19 @@ void init_DLOAD_3(DLOAD_3*self);
 void _dload(Frame*frame,int index);
 
 typedef struct{
-    Index8Instruction *base;
+    Index8Instruction base;
 }ALOAD;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }ALOAD_0;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }ALOAD_1;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }ALOAD_2;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }ALOAD_3;
 void excute_aload(void * self,Frame *frame);
 void excute_aload_0(void * self,Frame *frame);
@@ -120,19 +120,19 @@ void _aload(Frame*frame,int index);
 
 
 typedef struct{
-    Index8Instruction *base;
+    Index8Instruction base;
 }LLOAD;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }LLOAD_0;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }LLOAD_1;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }LLOAD_2;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }LLOAD_3;
 void excute_lload(void * self,Frame *frame);
 void excute_lload_0(void * self,Frame *frame);

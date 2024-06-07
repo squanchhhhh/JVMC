@@ -6,22 +6,22 @@
 #define JVMC_D2X_H
 #include "../base/instruction.h"
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }D2F;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }D2I;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }D2L;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }F2D;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }F2I;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }F2L;
 void init_D2F(D2F *self);
 void init_D2I(D2I *self);

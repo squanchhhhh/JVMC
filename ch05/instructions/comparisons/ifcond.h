@@ -6,22 +6,22 @@
 #define JVMC_IFCOND_H
 #include "../base/instruction.h"
 typedef struct{
-    BranchInstruction *base;
+    BranchInstruction base;
 }IFEQ;
 typedef struct{
-    BranchInstruction *base;
+    BranchInstruction base;
 }IFNE;
 typedef struct{
-    BranchInstruction *base;
+    BranchInstruction base;
 }IFLT;
 typedef struct{
-    BranchInstruction *base;
+    BranchInstruction base;
 }IFLE;
 typedef struct{
-    BranchInstruction *base;
+    BranchInstruction base;
 }IFGT;
 typedef struct{
-    BranchInstruction *base;
+    BranchInstruction base;
 }IFGE;
 void init_IFEQ(IFEQ*self);
 void init_IFNE(IFNE*self);

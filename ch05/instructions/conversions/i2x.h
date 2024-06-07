@@ -6,31 +6,31 @@
 #define JVMC_I2X_H
 #include "../base/instruction.h"
 typedef struct{
-    NoOperandsInstruction * base;
+    NoOperandsInstruction base;
 }I2L;
 typedef struct{
-    NoOperandsInstruction * base;
+    NoOperandsInstruction base;
 }I2F;
 typedef struct{
-    NoOperandsInstruction * base;
+    NoOperandsInstruction base;
 }I2D;
 typedef struct{
-    NoOperandsInstruction * base;
+    NoOperandsInstruction base;
 }L2I;
 typedef struct{
-    NoOperandsInstruction * base;
+    NoOperandsInstruction base;
 }L2F;
 typedef struct{
-    NoOperandsInstruction * base;
+    NoOperandsInstruction base;
 }L2D;
 typedef struct{
-    NoOperandsInstruction * base;
+    NoOperandsInstruction base;
 }I2B;
 typedef struct{
-    NoOperandsInstruction * base;
+    NoOperandsInstruction base;
 }I2C;
 typedef struct{
-    NoOperandsInstruction * base;
+    NoOperandsInstruction base;
 }I2S;
 void init_I2L(I2L *self);
 void init_I2F(I2F *self);

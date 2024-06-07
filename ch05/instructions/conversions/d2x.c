@@ -4,28 +4,28 @@
 
 #include "d2x.h"
 void init_D2F(D2F *self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = execute_D2F;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_D2F;
 }
 void init_D2I(D2I *self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = execute_D2I;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_D2I;
 }
 void init_D2L(D2L *self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = execute_D2L;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_D2L;
 }
 void init_F2D(F2D *self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = execute_F2D;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_F2D;
 }
 void init_F2I(F2I *self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = execute_F2I;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_F2I;
 }
 void init_F2L(F2L *self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = execute_F2L;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_F2L;
 }
 void execute_D2F(void * self,Frame*frame){
     double v = pop_double(frame->operand_stack);

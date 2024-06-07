@@ -15,7 +15,12 @@ Instruction * new_instruction(unsigned char * opcode){
         case 0x00: return NULL; //M(NOP);
         CREATE_INSTRUCTION(0x01,ACONST_NULL)
         CREATE_INSTRUCTION(0x02,ICONST_M1)
-        CREATE_INSTRUCTION(0x03,ICONST_0)
+//        CREATE_INSTRUCTION(0x03,ICONST_0)
+        case 0x03: {
+            ICONST_0 *instruction = M(ICONST_0);
+            init_ICONST_0(instruction);
+            return (Instruction *) instruction;
+        }
         CREATE_INSTRUCTION(0x04,ICONST_1)
         CREATE_INSTRUCTION(0x05,ICONST_2)
         CREATE_INSTRUCTION(0x06,ICONST_3)

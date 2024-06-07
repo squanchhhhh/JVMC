@@ -7,7 +7,7 @@
 #include "../base/instruction.h"
 
 typedef struct{
-    BranchInstruction *base;
+    BranchInstruction base;
 }GOTO;
 void init_GOTO(GOTO *self);
 void execute_GOTO(void * self,Frame*frame);

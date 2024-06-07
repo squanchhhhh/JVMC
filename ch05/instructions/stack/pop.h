@@ -6,10 +6,10 @@
 #define JVMC_POP_H
 #include "../base/instruction.h"
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }POP;
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
 }POP2;
 void init_POP(POP*self);
 void init_POP2(POP2*self);

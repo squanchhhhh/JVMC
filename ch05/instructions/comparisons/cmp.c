@@ -4,24 +4,24 @@
 
 #include "cmp.h"
 void init_LCMP(LCMP*self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = execute_LCMP;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_LCMP;
 }
 void init_FCMPG(FCMPG*self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = execute_FCMPG;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_FCMPG;
 }
 void init_FCMPL(FCMPL*self) {
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = execute_FCMPL;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_FCMPL;
 }
 void init_DCMPL(DCMPL*self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = execute_DCMPL;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_DCMPL;
 }
 void init_DCMPG(DCMPG*self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = execute_DCMPG;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_DCMPG;
 }
 void _FCMP(Frame*frame,int flag){
     float v2 = pop_float(frame->operand_stack);

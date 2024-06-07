@@ -4,8 +4,8 @@
 
 #include "iinc.h"
 void init_IINC(IINC*self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute = execute_IINC;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_IINC;
 }
 void execute_IINC(void * self,Frame* frame){
     IINC* iinc = (IINC*)self;

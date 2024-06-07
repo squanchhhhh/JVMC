@@ -4,28 +4,28 @@
 
 #include "boolean.h"
 void init_IAND(IAND * self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute=execute_IAND;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute=execute_IAND;
 }
 void init_IOR(IOR * self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute=execute_IOR;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute=execute_IOR;
 }
 void init_IXOR(IXOR * self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute=execute_IXOR;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute=execute_IXOR;
 }
 void init_LAND(LAND * self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute=execute_LAND;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute=execute_LAND;
 }
 void init_LOR(LOR * self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute=execute_LOR;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute=execute_LOR;
 }
 void init_LXOR(LXOR * self){
-    NoOperands_instruction_init(self->base);
-    self->base->base.Execute=execute_LXOR;
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute=execute_LXOR;
 }
 void execute_IAND(void*self,Frame*frame){
     int v2 = pop_int(frame->operand_stack);

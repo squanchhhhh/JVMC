@@ -80,6 +80,7 @@ typedef struct{
     Thread * thread;
     int next_pc;
 }Frame;
+void set_next_pc(Frame*frame,int pc);
 
 Frame *new_frame(Thread * thread,unsigned int max_locals,unsigned int max_stack);
 

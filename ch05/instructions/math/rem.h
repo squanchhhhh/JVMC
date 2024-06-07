@@ -6,16 +6,16 @@
 #define JVMC_REM_H
 #include "../base/instruction.h"
 typedef struct{
-    NoOperandsInstruction * base;
+    NoOperandsInstruction base;
 }DREM;
 typedef struct{
-    NoOperandsInstruction * base;
+    NoOperandsInstruction base;
 }FREM;
 typedef struct{
-    NoOperandsInstruction * base;
+    NoOperandsInstruction base;
 }IREM;
 typedef struct{
-    NoOperandsInstruction * base;
+    NoOperandsInstruction base;
 }LREM;
 void init_DREM(DREM*self);
 void init_FREM(FREM*self);

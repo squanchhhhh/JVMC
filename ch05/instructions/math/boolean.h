@@ -6,22 +6,22 @@
 #define JVMC_BOOLEAN_H
 #include "../base/instruction.h"
 typedef struct {
-    NoOperandsInstruction * base;
+    NoOperandsInstruction base;
 }IAND;
 typedef struct {
-    NoOperandsInstruction * base;
+    NoOperandsInstruction base;
 }IOR;
 typedef struct {
-    NoOperandsInstruction * base;
+    NoOperandsInstruction base;
 }IXOR;
 typedef struct {
-    NoOperandsInstruction * base;
+    NoOperandsInstruction base;
 }LAND;
 typedef struct {
-    NoOperandsInstruction * base;
+    NoOperandsInstruction base;
 }LOR;
 typedef struct {
-    NoOperandsInstruction * base;
+    NoOperandsInstruction base;
 }LXOR;
 void init_IAND(IAND * self);
 void init_IOR(IOR * self);

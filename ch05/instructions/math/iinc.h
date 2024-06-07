@@ -6,7 +6,7 @@
 #define JVMC_IINC_H
 #include "../base/instruction.h"
 typedef struct{
-    NoOperandsInstruction *base;
+    NoOperandsInstruction base;
     uint index;
     int increment;
 }IINC;

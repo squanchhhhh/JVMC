@@ -81,3 +81,9 @@ uint8_t* read_bytes_class(ClassReader *reader, uint32_t length) {
     reader->index += length;
     return bytes;
 };
+//读到文件末尾（为stackmaptable设计）
+uint8_t* read_until_end(ClassReader *reader){
+    uint8_t *bytes = (uint8_t *)malloc(reader->size - reader->index);
+    memcpy(bytes, reader->data + reader->index, reader->size - reader->index);
+    return bytes;
+}

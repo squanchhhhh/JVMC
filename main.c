@@ -5,7 +5,7 @@
 #include "ch05/interpret.h"
 ClassFile * loadClassFile(char*class_name);
 int main(int argc,char * argv[]) {
-    ClassFile * class_file = loadClassFile("/Users/squanch/CLionProjects/JVMC/MyFirstJvmTest.class");
+    ClassFile * class_file = loadClassFile("/Users/squanch/CLionProjects/JVMC/GaussTest.class");
     MemberInfo * main = get_main_method(class_file);
     interpret(main);
 }

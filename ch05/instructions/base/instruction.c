@@ -7,6 +7,7 @@ void NoOperands_instruction_fetch(){
     //do nothing
 }
 void NoOperands_instruction_init(NoOperandsInstruction *self){
+    self->base = *(Instruction*)malloc(sizeof(Instruction));
     self->base.FetchOperands = NoOperands_instruction_fetch;
 }
 void Branch_instruction_fetch(void *self,BytecodeReader*reader){

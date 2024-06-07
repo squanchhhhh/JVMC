@@ -12,12 +12,12 @@ AttributeInfo *read_attribute(ClassReader *reader, ConstantPool *pool) {
     uint16_t attr_name_index = read_uint16_class(reader);
     char *attr_name = (char *) get_utf8_string(pool, attr_name_index);
     uint32_t attr_length = read_uint32_class(reader);
-    AttributeInfo *info = new_attribute_info(attr_name, attr_length, pool);
+    AttributeInfo *info = new_attribute_info(attr_name, attr_length, pool,reader);
     info->read_info(info, reader);
     return info;
 }
 
-AttributeInfo *new_attribute_info(char *name, uint32_t len, ConstantPool *pool) {
+AttributeInfo *new_attribute_info(char *name, uint32_t len, ConstantPool *pool,ClassReader*reader) {
     switch (name[0]) {
         case 'B':
             if (STRCMP(name, "BootstrapMethods")) {
@@ -98,6 +98,10 @@ AttributeInfo *new_attribute_info(char *name, uint32_t len, ConstantPool *pool) 
             } else if (STRCMP(name, "Synthetic")) {
                 static AttributeInfo synthetic_attr = {NULL};
                 return &synthetic_attr;
+            } else if (STRCMP(name, "StackMapTable")){
+                StackMapTableAttributeInfo *attr = (StackMapTableAttributeInfo *)malloc(sizeof(StackMapTableAttributeInfo));
+                init_stack_map_table_attribute(attr,reader,len);
+                return (AttributeInfo *)attr;
             }
             break;
         default: {
@@ -110,7 +114,7 @@ AttributeInfo *new_attribute_info(char *name, uint32_t len, ConstantPool *pool) 
 
 AttributeInfo **read_attributes(ClassReader *reader, ConstantPool *pool, MemberInfo *member) {
     uint16_t attr_count = read_uint16_class(reader);
-    if (member!=NULL)member->count = attr_count;
+    if (member!=NULL) member->count = attr_count;
     AttributeInfo **info = (AttributeInfo **) malloc(sizeof(AttributeInfo *) * attr_count);
     for (int i = 0; i < attr_count; ++i) {
         info[i] = read_attribute(reader, pool);
@@ -178,4 +182,28 @@ void read_source_file_attribute(void *self,ClassReader * reader){
 }
 void init_source_file_attribute(SourceFileAttribute *self,ClassReader * reader){
     self->base.read_info = read_source_file_attribute;
+}
+
+void read_stack_map_table_entrys(StackMapTableAttributeInfo * info ,ClassReader *reader){
+    for (int i = 0; i < info->number_of_entries;i++){
+        info->entries[i] = read_stack_map_table_entry(reader);
+    }
+}
+
+StackMapTableEntry *read_stack_map_table_entry(ClassReader *reader){
+    StackMapTableEntry * entry = (StackMapTableEntry *)malloc(sizeof(StackMapTableEntry));
+    entry->frame_type = read_uint8_class(reader);
+    entry->offset = read_uint16_class(reader);
+}
+
+void read_stack_map_table_attribute(void *self,ClassReader * reader){
+    //do nothing
+//    StackMapTableAttributeInfo *info = (StackMapTableAttributeInfo *) self;
+//    info->number_of_entries = read_uint16_class(reader);
+//    info->entries = (StackMapTableEntry**) malloc(info->number_of_entries*sizeof(StackMapTableEntry*));
+//    read_stack_map_table_entrys(info,reader);
+}
+void init_stack_map_table_attribute(StackMapTableAttributeInfo *self,ClassReader * reader,int len){
+    self->contents = read_bytes_class(reader,len);
+    self->base.read_info = read_stack_map_table_attribute;
 }

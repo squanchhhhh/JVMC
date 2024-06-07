@@ -28,10 +28,13 @@ void init_FCONST_2(FCONST_2 * self){
     self->base->base.Execute = excute_fconst_2;
 }
 void init_ICONST_M1(ICONST_M1 * self){
+    self = (ICONST_M1*)malloc(sizeof(ICONST_M1));
     NoOperands_instruction_init(self->base);
     self->base->base.Execute = excute_iconst_m1;
 }
 void init_ICONST_0(ICONST_0 * self){
+    self = (ICONST_0*)malloc(sizeof(ICONST_0));
+    self->base = (NoOperandsInstruction*) malloc(sizeof(NoOperandsInstruction));
     NoOperands_instruction_init(self->base);
     self->base->base.Execute = excute_iconst_0;
 }

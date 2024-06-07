@@ -43,6 +43,20 @@ typedef struct{
     uint16_t handler_pc;
     uint16_t catch_type;
 }ExceptionTableEntry;
+
+typedef struct{
+    uint8_t frame_type;
+    uint16_t offset;
+    uint8_t * locals;
+}StackMapTableEntry;
+typedef struct{
+    AttributeInfo base;
+    uint16_t number_of_entries;
+    //临时保存frame
+    uint8_t * contents;
+    StackMapTableEntry ** entries;
+}StackMapTableAttributeInfo;
+
 typedef struct{
     AttributeInfo base;
     char* name;

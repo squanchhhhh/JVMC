@@ -20,15 +20,12 @@ typedef struct {
 void NoOperands_instruction_init(NoOperandsInstruction * self);
 void NoOperands_instruction_fetch();
 
-typedef struct{
-    NoOperandsInstruction * base;
-}NOP;
 
 typedef struct {
     Instruction base;
     int offset;
 }BranchInstruction;
-void Branch_instruction_init(BranchInstruction self);
+void Branch_instruction_init(BranchInstruction *self);
 void Branch_instruction_fetch(void *self,BytecodeReader *reader);
 
 typedef struct {
@@ -45,6 +42,11 @@ typedef struct {
 void Index16_instruction_init(Index16Instruction self);
 void Index16_instruction_fetch(void *self,BytecodeReader *reader);
 
-
+typedef struct{
+    NoOperandsInstruction * base;
+}NOP;
+void init_NOP(NoOperandsInstruction * self);
+void fetch_NOP(void * self,BytecodeReader *reader);
+void execute_NOP(void * self,Frame*frame);
 
 #endif //JVMC_INSTRUCTION_H

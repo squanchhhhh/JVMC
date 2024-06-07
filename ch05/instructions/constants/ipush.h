@@ -6,14 +6,14 @@
 #define JVMC_IPUSH_H
 #include "../base/instruction.h"
 typedef struct{
-    Instruction * base;
+    Instruction base;
     int8_t val;
 }BIPUSH;
 void init_BIPUSH(BIPUSH*self);
 void fetch_bipush(void *bipush,BytecodeReader * reader);
 void excute_bipush(void *bipush,Frame * frame);
 typedef struct{
-    Instruction * base;
+    Instruction base;
     int16_t val;
 }SIPUSH;
 void init_SIPUSH(SIPUSH*self);

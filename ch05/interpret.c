@@ -7,6 +7,8 @@ void loop(Thread *thread, unsigned char *bytecode){
     Frame * frame = pop_frame(thread);
     BytecodeReader * reader = (BytecodeReader*)malloc(sizeof(BytecodeReader));
     while(1){
+        printf("operand_stack: %2d %2d\n",frame->operand_stack->slots[0].num,frame->operand_stack->slots[1].num);
+        printf("local_vars:%2d  %2d   %2d\n", frame->local_vars->slots[0].num, frame->local_vars->slots[1].num,frame->local_vars->slots[2].num);
         int pc = frame->next_pc;
         thread->pc = pc;
         // add pc

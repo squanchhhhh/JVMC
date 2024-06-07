@@ -4,11 +4,11 @@
 
 #include "if_acmp.h"
 void init_IF_ACMPEQ(IF_ACMPEQ * self){
-    Branch_instruction_init(self->base);
+    Branch_instruction_init(&self->base);
     self->base.base.Execute = execute_IF_ACMPEQ;
 }
 void init_IF_ACMPNE(IF_ACMPNE * self){
-    Branch_instruction_init(self->base);
+    Branch_instruction_init(&self->base);
     self->base.base.Execute = execute_IF_ACMPNE;
 }
 void execute_IF_ACMPEQ(void * self,Frame*frame){

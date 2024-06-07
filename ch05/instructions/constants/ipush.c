@@ -3,9 +3,13 @@
 //
 
 #include "ipush.h"
+/**
+ * 父类不能为指针
+ * @param self
+ */
 void init_BIPUSH(BIPUSH*self){
-    self->base->Execute = excute_bipush;
-    self->base->FetchOperands = fetch_bipush;
+    self->base.Execute = excute_bipush;
+    self->base.FetchOperands = fetch_bipush;
 }
 void fetch_bipush(void *bipush,BytecodeReader * reader){
     BIPUSH * self = (BIPUSH *)bipush;
@@ -17,8 +21,8 @@ void excute_bipush(void *bipush,Frame * frame){
 }
 
 void init_SIPUSH(SIPUSH*self){
-    self->base->FetchOperands = fetch_bipush;
-    self->base->Execute = excute_bipush;
+    self->base.FetchOperands = fetch_bipush;
+    self->base.Execute = excute_bipush;
 }
 void fetch_sipush(void *sipush,BytecodeReader * reader){
     SIPUSH * self = (SIPUSH *)sipush;

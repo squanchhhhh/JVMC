@@ -23,6 +23,7 @@ typedef struct {
 typedef struct {
     NoOperandsInstruction base;
 }LXOR;
+
 void init_IAND(IAND * self);
 void init_IOR(IOR * self);
 void init_IXOR(IXOR * self);

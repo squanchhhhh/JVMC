@@ -12,15 +12,10 @@
 #define M(x) (x*)malloc(sizeof(x))
 Instruction * new_instruction(unsigned char * opcode){
     switch (*opcode) {
-        case 0x00: return NULL; //M(NOP);
+        CREATE_INSTRUCTION(0x00,NOP)
         CREATE_INSTRUCTION(0x01,ACONST_NULL)
         CREATE_INSTRUCTION(0x02,ICONST_M1)
-//        CREATE_INSTRUCTION(0x03,ICONST_0)
-        case 0x03: {
-            ICONST_0 *instruction = M(ICONST_0);
-            init_ICONST_0(instruction);
-            return (Instruction *) instruction;
-        }
+        CREATE_INSTRUCTION(0x03,ICONST_0)
         CREATE_INSTRUCTION(0x04,ICONST_1)
         CREATE_INSTRUCTION(0x05,ICONST_2)
         CREATE_INSTRUCTION(0x06,ICONST_3)
@@ -71,15 +66,15 @@ Instruction * new_instruction(unsigned char * opcode){
 //        CREATE_INSTRUCTION(0x33,BALOAD)
 //        CREATE_INSTRUCTION(0x34,CALOAD)
 //        CREATE_INSTRUCTION(0x35,SALOAD)
-//        CREATE_INSTRUCTION(0x36,ISTORE)
+        CREATE_INSTRUCTION(0x36,ISTORE)
         CREATE_INSTRUCTION(0x37,LSTORE)
 //        CREATE_INSTRUCTION(0x38,FSTORE)
 //        CREATE_INSTRUCTION(0x39,DSTORE)
 //        CREATE_INSTRUCTION(0x3A,ASTORE)
-//        CREATE_INSTRUCTION(0x3B,ISTORE_0)
-//        CREATE_INSTRUCTION(0x3C,ISTORE_1)
-//        CREATE_INSTRUCTION(0x3D,ISTORE_2)
-//        CREATE_INSTRUCTION(0x3E,ISTORE_3)
+        CREATE_INSTRUCTION(0x3B,ISTORE_0)
+        CREATE_INSTRUCTION(0x3C,ISTORE_1)
+        CREATE_INSTRUCTION(0x3D,ISTORE_2)
+        CREATE_INSTRUCTION(0x3E,ISTORE_3)
         CREATE_INSTRUCTION(0x3F,LSTORE_0)
         CREATE_INSTRUCTION(0x40,LSTORE_1)
         CREATE_INSTRUCTION(0x41,LSTORE_2)
@@ -113,7 +108,7 @@ Instruction * new_instruction(unsigned char * opcode){
         CREATE_INSTRUCTION(0x5D,DUP2_X1)
         CREATE_INSTRUCTION(0x5E,DUP2_X2)
         CREATE_INSTRUCTION(0x5F,SWAP)
-//        CREATE_INSTRUCTION(0x60,IADD)
+        CREATE_INSTRUCTION(0x60,IADD)
 //        CREATE_INSTRUCTION(0x61,LADD)
 //        CREATE_INSTRUCTION(0x62,FADD)
 //        CREATE_INSTRUCTION(0x63,DADD)

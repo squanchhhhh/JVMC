@@ -57,3 +57,4 @@ void execute_LXOR(void*self,Frame*frame){
     long v1 = pop_long(frame->operand_stack);
     push_long(frame->operand_stack,v1^v2);
 }
+

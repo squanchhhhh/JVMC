@@ -4,27 +4,27 @@
 
 #include "ifcond.h"
 void init_IFEQ(IFEQ*self){
-    Branch_instruction_init(self->base);
+    Branch_instruction_init(&self->base);
     self->base.base.Execute = execute_IFEQ;
 }
 void init_IFNE(IFNE*self){
-    Branch_instruction_init(self->base);
+    Branch_instruction_init(&self->base);
     self->base.base.Execute = execute_IFNE;
 }
 void init_IFLT(IFLT*self){
-    Branch_instruction_init(self->base);
+    Branch_instruction_init(&self->base);
     self->base.base.Execute = execute_IFLT;
 }
 void init_IFLE(IFLE*self){
-    Branch_instruction_init(self->base);
+    Branch_instruction_init(&self->base);
     self->base.base.Execute = execute_IFLE;
 }
 void init_IFGT(IFGT*self){
-    Branch_instruction_init(self->base);
+    Branch_instruction_init(&self->base);
     self->base.base.Execute = execute_IFGT;
 }
 void init_IFGE(IFGE*self){
-    Branch_instruction_init(self->base);
+    Branch_instruction_init(&self->base);
     self->base.base.Execute = execute_IFGE;
 }
 void execute_IFEQ(void * self,Frame*frame){

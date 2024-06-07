@@ -36,4 +36,41 @@ void execute_LSHR(void*self,Frame* frame);
 void execute_LSHL(void*self,Frame* frame);
 void execute_LUSHR(void*self,Frame* frame);
 
+typedef struct{
+    NoOperandsInstruction base;
+}IADD;
+typedef struct{
+    NoOperandsInstruction base;
+}FADD;
+typedef struct{
+    NoOperandsInstruction base;
+}LADD;
+typedef struct{
+    NoOperandsInstruction base;
+}DADD;
+typedef struct{
+    NoOperandsInstruction base;
+}ISUB;
+typedef struct{
+    NoOperandsInstruction base;
+}FSUB;
+typedef struct{
+    NoOperandsInstruction base;
+}DSUB;
+
+
+void init_IADD(IADD*self);
+void init_FADD(FADD*self);
+void init_LADD(LADD*self);
+void init_DADD(DADD*self);
+void init_ISUB(ISUB*self);
+void init_FSUB(FSUB*self);
+void init_DSUB(DSUB*self);
+void execute_IADD(void*self,Frame* frame);
+void execute_FADD(void*self,Frame* frame);
+void execute_LADD(void*self,Frame* frame);
+void execute_DADD(void*self,Frame* frame);
+void execute_ISUB(void*self,Frame* frame);
+void execute_FSUB(void*self,Frame* frame);
+void execute_DSUB(void*self,Frame* frame);
 #endif //JVMC_SH_H

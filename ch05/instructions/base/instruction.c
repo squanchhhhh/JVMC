@@ -13,8 +13,8 @@ void Branch_instruction_fetch(void *self,BytecodeReader*reader){
     BranchInstruction* branchInstr = (BranchInstruction*)self;
     branchInstr->offset = (int)read_int16(reader);
 }
-void Branch_instruction_init(BranchInstruction self){
-    self.base.FetchOperands = Branch_instruction_fetch;
+void Branch_instruction_init(BranchInstruction *self){
+    self->base.FetchOperands = Branch_instruction_fetch;
 }
 void Index8_instruction_fetch(void *self,BytecodeReader *reader){
     Index8Instruction* indexInstr = (Index8Instruction*)self;
@@ -34,4 +34,15 @@ void branch(Frame*frame,int offset){
     int pc = frame->thread->pc;
     int next_pc = pc+offset;
     frame->next_pc = next_pc;
+}
+
+void init_NOP(NoOperandsInstruction * self){
+    self->base.FetchOperands=fetch_NOP;
+    self->base.Execute=execute_NOP;
+}
+void fetch_NOP(void * self,BytecodeReader *reader){
+
+}
+void execute_NOP(void * self,Frame*frame){
+
 }

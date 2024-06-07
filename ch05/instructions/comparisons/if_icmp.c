@@ -4,27 +4,27 @@
 
 #include "if_icmp.h"
 void init_IF_ICMPEQ(IF_ICMPEQ*self){
-    Branch_instruction_init(self->base);
+    Branch_instruction_init(&self->base);
     self->base.base.Execute = execute_IF_ICMPEQ;
 }
 void init_IF_ICMPNE(IF_ICMPNE*self){
-    Branch_instruction_init(self->base);
+    Branch_instruction_init(&self->base);
     self->base.base.Execute = execute_IF_ICMPNE;
 }
 void init_IF_ICMPLT(IF_ICMPLT*self){
-    Branch_instruction_init(self->base);
+    Branch_instruction_init(&self->base);
     self->base.base.Execute = execute_IF_ICMPLT;
 }
 void init_IF_ICMPLE(IF_ICMPLE*self){
-    Branch_instruction_init(self->base);
+    Branch_instruction_init(&self->base);
     self->base.base.Execute = execute_IF_ICMPLE;
 }
 void init_IF_ICMPGT(IF_ICMPGT*self){
-    Branch_instruction_init(self->base);
+    Branch_instruction_init(&self->base);
     self->base.base.Execute = execute_IF_ICMPGT;
 }
 void init_IF_ICMPGE(IF_ICMPGE*self){
-    Branch_instruction_init(self->base);
+    Branch_instruction_init(&self->base);
     self->base.base.Execute = execute_IF_ICMPGE;
 }
 void execute_IF_ICMPEQ(void * self,Frame*frame){

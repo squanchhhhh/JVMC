@@ -4,7 +4,6 @@
 
 #ifndef JVMC_CLASS_FILE_H
 #define JVMC_CLASS_FILE_H
-
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -17,5 +16,5 @@ void readAndCheckMagic(ClassFile *cf, ClassReader *reader);
 void readAndCheckVersion(ClassFile *cf, ClassReader *reader);
 
 ClassFile *parseClassFile(const uint8_t *classData, size_t size);
-
+ClassFile * loadClassFile(char*class_name);
 #endif //JVMC_CLASS_FILE_H

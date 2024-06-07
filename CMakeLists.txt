@@ -6,8 +6,8 @@ set(CMAKE_C_STANDARD 11)
 add_executable(JVMC main.c
         ch05/instructions/base/instruction.c
         ch05/instructions/base/instruction.h
-        ch05/rtda/object.c
-        ch05/rtda/object.h
+        ch05/rtda/heap/object.c
+        ch05/rtda/heap/object.h
         ch05/rtda/thread.c
         ch05/rtda/thread.h
         ch05/instructions/factory.c
@@ -76,5 +76,8 @@ add_executable(JVMC main.c
         ch05/classfile/member_info.c
         ch05/classfile/member_info.h
         ch05/all_class_headers.h
-        ch05/classfile/common.h
+        ch05/classfile/common_classfile_struct.h
+        ch05/rtda/heap/class.c
+        ch05/rtda/heap/class.h
+        ch05/rtda/common_rtda_struct.h
 )

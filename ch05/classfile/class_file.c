@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <libc.h>
 #include "class_reader.h"
 #include "class_file.h"
 #include "attr_info.h"
@@ -35,7 +37,6 @@ void readAndCheckVersion(ClassFile *cf, ClassReader *reader) {
 ClassFile *parseClassFile(const uint8_t *classData, size_t size) {
     ClassReader *reader = create_class_reader(classData, size);
     ClassFile *cf = (ClassFile *) malloc(sizeof(ClassFile));
-
     readAndCheckMagic(cf, reader);
     readAndCheckVersion(cf, reader);
     cf->constant_pool = read_constant_pool(reader);
@@ -46,7 +47,6 @@ ClassFile *parseClassFile(const uint8_t *classData, size_t size) {
     cf->fields = read_members(reader, cf->constant_pool, cf, 0);
     cf->methods = read_members(reader, cf->constant_pool, cf, 1);
     cf->attributes = read_attributes(reader, cf->constant_pool, NULL);
-
     return cf;
 }
 
@@ -67,4 +67,39 @@ MemberInfo * get_main_method(ClassFile *cf){
         }
     }
     return NULL;
+}
+ClassFile * loadClassFile(char*class_name){
+    // 打开文件
+    int fd = open(class_name, O_RDONLY);
+    if (fd == -1) {
+        perror("open");
+        return NULL;
+    }
+    // 获取文件大小
+    struct stat file_stat;
+    if (fstat(fd, &file_stat) == -1) {
+        perror("fstat");
+        close(fd);
+        return NULL;
+    }
+    size_t file_size = file_stat.st_size;
+    // 分配缓冲区
+    uint8_t *bytes = (uint8_t *)malloc(file_size);
+    if (bytes == NULL) {
+        perror("malloc");
+        close(fd);
+        return NULL;
+    }
+    // 读取文件内容到缓冲区
+    ssize_t bytes_read = read(fd, bytes, file_size);
+    if (bytes_read != file_size) {
+        perror("read");
+        free(bytes);
+        close(fd);
+        return NULL;
+    }
+    // 关闭文件
+    close(fd);
+    ClassFile * class_file = parseClassFile(bytes, file_size);
+    return class_file;
 }

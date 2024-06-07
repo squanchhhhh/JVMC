@@ -4,7 +4,11 @@
 
 #ifndef JVMC_OBJECT_H
 #define JVMC_OBJECT_H
-typedef struct{
+#include "class.h"
 
+typedef struct{
+    Class *class;
+    LocalVars slots;
 }Object;
+
 #endif //JVMC_OBJECT_H

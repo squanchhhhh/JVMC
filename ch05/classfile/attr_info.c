@@ -3,11 +3,23 @@
 //
 
 #include "attr_info.h"
-#include "common.h"
+#include "common_classfile_struct.h"
 /*
  * 方便后面识别code属性
  */
 #define CODE 1
+#define CONSTANT_VALUE 2
+
+void read_constant_value_attribute(void* self, ClassReader *reader){
+    ConstantValueAttribute *attr = (ConstantValueAttribute *) self;
+    attr->constant_value_index = read_uint16_class(reader);
+}
+
+void init_constant_value_attribute(ConstantValueAttribute *self, ClassReader *reader){
+    self->base.read_info = read_constant_value_attribute;
+    self->base.type =
+
+}
 AttributeInfo *read_attribute(ClassReader *reader, ConstantPool *pool) {
     uint16_t attr_name_index = read_uint16_class(reader);
     char *attr_name = (char *) get_utf8_string(pool, attr_name_index);
@@ -34,10 +46,9 @@ AttributeInfo *new_attribute_info(char *name, uint32_t len, ConstantPool *pool,C
                 init_code_attribute(attr, NULL);
                 return (AttributeInfo *) attr;
             } else if (STRCMP(name, "ConstantValue")) {
-                //ConstantValueAttribute *attr = (ConstantValueAttribute *)malloc(sizeof(ConstantValueAttribute));
-                // Initialize ConstantValueAttribute if necessary
-                //return (AttributeInfo *)attr;
-                printf("ConstantValueAttribute\n");
+                ConstantValueAttribute *attr = (ConstantValueAttribute *)malloc(sizeof(ConstantValueAttribute));
+                init_constant_value_attribute(attr, reader);
+                return (AttributeInfo *)attr;
             }
             break;
         case 'D':

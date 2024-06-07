@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "class_reader.h"
-#include "common.h"
+#include "common_classfile_struct.h"
 // 常量池标签
 #define CONSTANT_Class              7
 #define CONSTANT_Fieldref           9

@@ -40,3 +40,14 @@ CodeAttribute * get_code_attribute(MemberInfo *self){
     }
     return NULL;
 }
+
+ConstantValueAttribute *get_constant_value_attribute(MemberInfo *self){
+    int count = self->count;
+    AttributeInfo **attribute = self->attributes;
+    for (int i = 0; i < count; ++i) {
+        if (attribute[i]->type == CONSTANT_VALUE){
+            return (ConstantValueAttribute*)attribute[i];
+        }
+    }
+    return NULL;
+}

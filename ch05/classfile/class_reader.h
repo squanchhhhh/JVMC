@@ -6,7 +6,7 @@
 #define JVMC_CLASS_READER_H
 #include <stdint.h>
 #include <stdlib.h>
-#include "common.h"
+#include "common_classfile_struct.h"
 
 
 ClassReader* create_class_reader(const uint8_t *data, size_t size);

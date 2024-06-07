@@ -4,7 +4,7 @@
 
 #ifndef JVMC_THREAD_H
 #define JVMC_THREAD_H
-#include "object.h"
+#include "heap/object.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <libc.h>
@@ -14,7 +14,7 @@ typedef struct{
     Object *ref;
 }Slot;
 
-typedef struct {
+typedef struct LocalVars {
     Slot *slots;     // 指向Slot数组
     unsigned int size;   // 数组大小
 } LocalVars;

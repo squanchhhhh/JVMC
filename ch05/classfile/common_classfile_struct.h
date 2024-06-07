@@ -2,9 +2,10 @@
 // Created by Squanch on 2024/6/6.
 //
 
-#ifndef JVMC_COMMON_H
-#define JVMC_COMMON_H
+#ifndef JVMC_COMMON_CLASSFILE_STRUCT_H
+#define JVMC_COMMON_CLASSFILE_STRUCT_H
 #define CODE 1
+#define CONSTANT_VALUE 2
 /**
  * 存放结构体,防止冲突
  */
@@ -32,7 +33,7 @@ typedef struct {
 typedef struct {
     ConstantInfo base;
     int32_t value;
-} ConstantIntegerInfo;
+}ConstantIntegerInfo;
 typedef struct{
     void (*read_info)(void* ,ClassReader *);
     int type;
@@ -86,7 +87,10 @@ typedef struct{
     ConstantPool *pool;
     uint16_t source_file_index;
 }SourceFileAttribute;
-
+typedef struct{
+    AttributeInfo base;
+    uint16_t constant_value_index;
+}ConstantValueAttribute;
 typedef struct{
     ConstantPool * pool;
     uint16_t access_flags;
@@ -112,5 +116,6 @@ typedef struct {
     MemberInfo **methods;
     uint16_t attributes_count;
     AttributeInfo **attributes;
-} ClassFile;
-#endif //JVMC_COMMON_H
+}ClassFile;
+
+#endif //JVMC_COMMON_CLASSFILE_STRUCT_H

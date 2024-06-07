@@ -7,7 +7,7 @@
 
 #include "class_reader.h"
 #include "constant_pool.h"
-#include "common.h"
+#include "common_classfile_struct.h"
 #include <string.h>
 
 #define STRCMP(s1, s2) (strcmp((s1), (s2)) == 0)
@@ -43,7 +43,9 @@ void init_source_file_attribute(SourceFileAttribute *self, ClassReader *reader);
 void read_stack_map_table_entrys(StackMapTableAttributeInfo * info ,ClassReader *reader);
 
 StackMapTableEntry *read_stack_map_table_entry(ClassReader *reader);
+void read_constant_value_attribute(void* self, ClassReader *reader);
 
+void init_constant_value_attribute(ConstantValueAttribute *self, ClassReader *reader);
 
 void read_stack_map_table_attribute(void *self,ClassReader * reader);
 

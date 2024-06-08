@@ -22,6 +22,7 @@ void init_constant_value_attribute(ConstantValueAttribute *self, ClassReader *re
 AttributeInfo *read_attribute(ClassReader *reader, ConstantPool *pool) {
     uint16_t attr_name_index = read_uint16_class(reader);
     char *attr_name = (char *) get_utf8_string(pool, attr_name_index);
+    printf("开始加载属性:%s\n",attr_name);
     uint32_t attr_length = read_uint32_class(reader);
     AttributeInfo *info = new_attribute_info(attr_name, attr_length, pool,reader);
     info->read_info(info, reader);
@@ -63,9 +64,9 @@ AttributeInfo *new_attribute_info(char *name, uint32_t len, ConstantPool *pool,C
                 //return (AttributeInfo *)attr;
                 printf("EnclosingMethodAttribute\n");
             } else if (STRCMP(name, "Exceptions")) {
-                //ExceptionsAttribute *attr = (ExceptionsAttribute *)malloc(sizeof(ExceptionsAttribute));
-                // Initialize ExceptionsAttribute if necessary
-                //return (AttributeInfo *)attr;
+                ExceptionAttribute *attr = (ExceptionAttribute *)malloc(sizeof(ExceptionAttribute));
+                init_exception_attribute(attr,reader,len);
+                return (AttributeInfo *)attr;
                 printf("ExceptionsAttribute\n");
             }
             break;
@@ -96,10 +97,10 @@ AttributeInfo *new_attribute_info(char *name, uint32_t len, ConstantPool *pool,C
             break;
         case 'S':
             if (STRCMP(name, "Signature")) {
-                // SignatureAttribute *attr = (SignatureAttribute *)malloc(sizeof(SignatureAttribute));
+                SignatureAttributeInfo *attr = (SignatureAttributeInfo *)malloc(sizeof(SignatureAttributeInfo));
+                init_signature_attribute(attr,reader,len);
                 // Initialize SignatureAttribute if necessary
-                //return (AttributeInfo *)attr;
-                printf("SignatureAttribute\n");
+                return (AttributeInfo *)attr;
             } else if (STRCMP(name, "SourceFile")) {
                 SourceFileAttribute *attr = (SourceFileAttribute *)malloc(sizeof(SourceFileAttribute));
                 attr->pool = pool;
@@ -194,6 +195,22 @@ void init_source_file_attribute(SourceFileAttribute *self,ClassReader * reader){
     self->base.read_info = read_source_file_attribute;
 }
 
+void read_signature_attribute(void *self,ClassReader * reader){
+    // do nothing
+}
+void init_signature_attribute(SignatureAttributeInfo *self,ClassReader * reader,int len){
+    self->temp_store = read_bytes_class(reader,len);
+    self->base.read_info = read_signature_attribute;
+}
+
+void read_exception_attribute(void *self, ClassReader *reader){
+    // do nothing
+}
+
+void init_exception_attribute(ExceptionAttribute *self, ClassReader *reader,int len){
+    self->temp_store = read_bytes_class(reader,len);
+    self->base.read_info = read_exception_attribute;
+}
 void read_stack_map_table_entrys(StackMapTableAttributeInfo * info ,ClassReader *reader){
     for (int i = 0; i < info->number_of_entries;i++){
         info->entries[i] = read_stack_map_table_entry(reader);

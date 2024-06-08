@@ -62,8 +62,19 @@ MemberInfo * get_main_method(ClassFile *cf){
     return NULL;
 }
 ClassFile * loadClassFile(char*class_name){
-    // 打开文件
-    int fd = open(class_name, O_RDONLY);
+    // 定义基础路径
+    const char *base_path = "/Users/squanch/CLionProjects/JVMC/";
+    // 计算拼接后的路径长度
+    size_t path_len = strlen(base_path) + strlen(class_name) + strlen(".class") + 1;
+    // 分配内存
+    char *full_path = (char *)malloc(path_len);
+    if (!full_path) {
+        perror("malloc");
+        return NULL;
+    }
+    // 拼接路径
+    snprintf(full_path, path_len, "%s%s.class", base_path, class_name);
+    int fd = open(full_path, O_RDONLY);
     if (fd == -1) {
         perror("open");
         return NULL;

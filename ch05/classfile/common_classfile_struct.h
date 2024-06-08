@@ -52,6 +52,9 @@ typedef struct StackMapTableEntry StackMapTableEntry;
 typedef struct ConstantValueAttribute ConstantValueAttribute;
 typedef struct ExceptionTableEntry ExceptionTableEntry;
 typedef struct LocalVariableTableEntry LocalVariableTableEntry;
+typedef struct SignatureAttributeInfo SignatureAttributeInfo;
+typedef struct ExceptionAttribute ExceptionAttribute;
+
 typedef struct MemberInfo MemberInfo;
 
 
@@ -132,6 +135,22 @@ struct ConstantFieldRefInfo{
 struct AttributeInfo{
     void (*read_info)(void* ,ClassReader *);
     int type;
+};
+//Signature_attribute {
+//    u2 attribute_name_index;
+//    u4 attribute_length;
+//    u2 signature_index;
+//}
+struct SignatureAttributeInfo{
+    AttributeInfo base;
+    uint16_t signature_index;
+    //todo 临时保存属性信息
+    uint8_t* temp_store;
+    uint16_t attribute_name_index;
+};
+struct ExceptionAttribute{
+    AttributeInfo base;
+    uint8_t * temp_store;
 };
 struct ExceptionTableEntry{
     uint16_t start_pc;

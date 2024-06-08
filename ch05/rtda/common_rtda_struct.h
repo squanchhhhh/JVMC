@@ -127,14 +127,16 @@ struct ClassRef{
     SymRef base;
 };
 
-typedef struct ClassMapNode {
-    char *name;
-    Class *class;
-    struct ClassMapNode *next;
-} ClassMapNode;
+//typedef struct ClassMapNode {
+//    char *name;
+//    Class *class;
+//    struct ClassMapNode *next;
+//} ClassMapNode;
 
 struct ClassLoader{
-    ClassMapNode **classMap; // 数组指针，用于哈希表
-    int size;                // 哈希表的大小
+    char** names;
+    Class ** classes;
+    int size;                // 大小
 };
+
 #endif //JVMC_COMMON_RTDA_STRUCT_H

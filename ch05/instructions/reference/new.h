@@ -63,4 +63,21 @@ typedef struct {
 void init_CHECK_CAST(CHECK_CAST *self);
 
 void execute_CHECK_CAST(void *self, Frame *frame);
+
+typedef struct {
+    Index16Instruction base;
+}INVOKE_SPECIAL;
+
+void init_INVOKE_SPECIAL(INVOKE_SPECIAL *self);
+
+void execute_INVOKE_SPECIAL(void *self, Frame *frame);
+
+typedef struct {
+    Index16Instruction base;
+}INVOKE_VIRTUAL;
+
+void init_INVOKE_VIRTUAL(INVOKE_VIRTUAL *self);
+
+void execute_INVOKE_VIRTUAL(void *self, Frame *frame);
+
 #endif //JVMC_NEW_H

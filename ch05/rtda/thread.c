@@ -10,6 +10,9 @@ Thread *new_thread() {
     thread->stack = new_stack(1024);
     return thread;
 }
+Frame * new_frame_thread(Thread*thread,RtMethods*method){
+    new_frame(thread,method);
+}
 
 int pc(Thread *thread) {
     return thread->pc;
@@ -74,11 +77,11 @@ Frame *top(Stack *stack) {
 }
 
 
-Frame *new_frame(Thread *thread, unsigned int max_locals, unsigned int max_stack, RtMethods *method) {
+Frame *new_frame(Thread *thread,RtMethods *method) {
     Frame *frame = (Frame *) malloc(sizeof(Frame));
     frame->thread = thread;
-    frame->local_vars = new_local_vars(max_locals);
-    frame->operand_stack = new_operand_stack(max_stack);
+    frame->local_vars = new_local_vars(method->max_locals);
+    frame->operand_stack = new_operand_stack(method->max_stack);
     return frame;
 }
 

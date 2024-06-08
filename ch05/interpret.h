@@ -11,5 +11,5 @@
 #include "classfile/member_info.h"
 
 void loop(Thread *thread, unsigned char *bytecode);
-void interpret(MemberInfo * Member);
+void interpret(RtMethods*methods);
 #endif //JVMC_INTERPRET_H

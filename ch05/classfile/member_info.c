@@ -21,6 +21,7 @@ MemberInfo *read_member(ClassReader*reader,ConstantPool*pool){
     member->access_flags = read_uint16_class(reader);
     member->name_index = read_uint16_class(reader);
     member->descriptor_index = read_uint16_class(reader);
+    member->pool = pool;
     member->attributes = read_attributes(reader, pool, member);
     return member;
 }

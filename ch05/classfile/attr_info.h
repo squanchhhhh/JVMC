@@ -18,6 +18,8 @@ typedef struct StackMapTableAttributeInfo StackMapTableAttributeInfo;
 typedef struct StackMapTableAttributeInfo StackMapTableAttributeInfo;
 typedef struct StackMapTableEntry StackMapTableEntry;
 typedef struct ConstantValueAttribute ConstantValueAttribute;
+typedef struct SignatureAttributeInfo SignatureAttributeInfo;
+typedef struct ExceptionAttribute ExceptionAttribute;
 typedef struct MemberInfo MemberInfo;
 #define STRCMP(s1, s2) (strcmp((s1), (s2)) == 0)
 
@@ -48,6 +50,13 @@ void init_line_number_attribute(LineNumberTableAttribute *self, ClassReader *rea
 void read_source_file_attribute(void *self, ClassReader *reader);
 
 void init_source_file_attribute(SourceFileAttribute *self, ClassReader *reader);
+
+void init_signature_attribute(SignatureAttributeInfo *self,ClassReader * reader,int len);
+void read_signature_attribute(void *self,ClassReader * reader);
+
+void read_exception_attribute(void *self, ClassReader *reader);
+
+void init_exception_attribute(ExceptionAttribute *self, ClassReader *reader,int len);
 
 void read_stack_map_table_entrys(StackMapTableAttributeInfo * info ,ClassReader *reader);
 

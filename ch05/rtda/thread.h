@@ -86,7 +86,7 @@ struct Frame{
 };
 void set_next_pc(Frame*frame,int pc);
 
-Frame *new_frame(Thread *thread, unsigned int max_locals, unsigned int max_stack, RtMethods *method);
+Frame *new_frame(Thread *thread, RtMethods *method);
 
 //--------------------------------------线程栈------------------------------------------------
 typedef struct {
@@ -112,6 +112,7 @@ struct Thread {
 
 Thread *new_thread();
 
+Frame * new_frame_thread(Thread*thread,RtMethods*method);
 int pc(Thread *thread);
 
 //设置pc

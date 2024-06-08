@@ -6,7 +6,9 @@
 #define JVMC_CLASS_H
 
 #include "../common_rtda_struct.h"
+
 typedef struct Object Object;
+
 Class *new_class(ClassFile *cf);
 
 int is_accessible(Class *a, Class *b);
@@ -55,9 +57,15 @@ InterfaceMethodRef *new_interface_method_ref(RtConstantPool *pool, ConstantInter
 
 RtConstantInfo *get_constant_info(RtConstantPool *pool, uint16_t index);
 
+Class *find_class_by_name(ClassLoader *loader, char *name);
+
 unsigned int hash(const char *str, int size);
 
-ClassLoader *NewClassLoader(int size);
+ClassLoader *new_class_loader();
+
+RtMethods *get_main_method_rt(Class *cls);
+
+RtMethods *get_static_method_rt(Class *cls, char *name, char *description);
 
 void resolve_super_class(Class *class);
 

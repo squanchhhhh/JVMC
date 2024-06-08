@@ -4,10 +4,17 @@
 #include "ch05/all_class_headers.h"
 #include "ch05/interpret.h"
 
-int main(int argc,char * argv[]) {
-    ClassFile * class_file = loadClassFile("/Users/squanch/CLionProjects/JVMC/GaussTest.class");
-    MemberInfo * main = get_main_method(class_file);
-    interpret(main);
+void start_jvm() {
+    char *class_name = "MyObject";
+    ClassLoader *loader = new_class_loader();
+    Class *main_class = load_non_array_class(loader, class_name);
+    RtMethods *main_method = get_main_method_rt(main_class);
+    interpret(main_method);
+
+}
+
+int main(int argc, char *argv[]) {
+    start_jvm();
 }
 
 

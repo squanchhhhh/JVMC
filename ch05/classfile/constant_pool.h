@@ -81,7 +81,7 @@ void init_read_string(ConstantStringInfo *info, ClassReader *reader);
 
 void read_class(void *info, ClassReader *reader);
 
-void init_read_class(ConstantClassInfo *info, ClassReader *reader);
+void init_read_class(ConstantClassInfo *info, ClassReader *reader, ConstantPool *pool);
 
 
 void read_name(void *info, ClassReader *reader);
@@ -91,17 +91,18 @@ void init_read_name(ConstantNameAndTypeInfo *info, ClassReader *reader);
 
 void read_methodref(void *info, ClassReader *reader);
 
-void init_read_methodref(ConstantMethodRefInfo *info, ClassReader *reader, uint8_t tag);
+void init_read_methodref(ConstantMethodRefInfo *info, ClassReader *reader, uint8_t tag, ConstantPool *pool);
 
 
 void read_fieldref(void *info, ClassReader *reader);
 
-void init_read_fieldref(ConstantFieldRefInfo *info, ClassReader *reader, uint8_t tag);
+void init_read_fieldref(ConstantFieldRefInfo *info, ClassReader *reader, uint8_t tag, ConstantPool *pool);
 
 
 void read_interface_methodref(void *info, ClassReader *reader);
 
-void init_read_interface_methodref(ConstantInterfaceMethodRefInfo *info, ClassReader *reader, uint8_t tag);
+void init_read_interface_methodref(ConstantInterfaceMethodRefInfo *info, ClassReader *reader, uint8_t tag,
+                                   ConstantPool *pool);
 
 
 #endif //JVMC_CONSTANT_POOL_H

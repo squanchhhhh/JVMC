@@ -46,7 +46,7 @@ RtConstantPool *new_rt_constant_pool(Class *pClass, ConstantPool *pPool) {
     RtConstantPool *pRtPool = (RtConstantPool *) malloc(sizeof(RtConstantPool));
     pRtPool->class = pClass;
     RtConstantInfo **pRtInfo = (RtConstantInfo **) malloc(pPool->count * sizeof(RtConstantInfo *));
-    for (int i = 0; i < pPool->count; i++) {
+    for (int i = 1; i < pPool->count; i++) {
         ConstantInfo *con = pPool->constants[i];
         switch (con->tag) {
             case CONSTANT_Integer:
@@ -171,16 +171,27 @@ FieldRef *new_field_ref(RtConstantPool *pool, ConstantFieldRefInfo *info) {
 }
 
 
-ClassLoader *NewClassLoader(int size) {
+ClassLoader *new_class_loader() {
     ClassLoader *loader = (ClassLoader *) malloc(sizeof(ClassLoader));
-    loader->classMap = (ClassMapNode **) malloc(size * sizeof(ClassMapNode *));
-    for (int i = 0; i < size; i++) {
-        loader->classMap[i] = NULL;
-    }
-    loader->size = size;
+    loader->size = 0;
+    loader->classes = (Class**)malloc(sizeof(Class*));
+    loader->names = (char**)malloc(sizeof(char*));
     return loader;
 }
 
+RtMethods * get_main_method_rt(Class*cls){
+    return get_static_method_rt(cls,"main","([Ljava/lang/String;)V");
+}
+RtMethods * get_static_method_rt(Class * cls,char* name,char*description){
+    RtMethods *method=NULL;
+    for(int i=0;i<cls->methods_count;i++){
+        if(strcmp(cls->methods[i]->base.name,name)==0&&strcmp(cls->methods[i]->base.descriptor,description)==0){
+            method=cls->methods[i];
+            break;
+        }
+    }
+    return method;
+}
 unsigned int hash(const char *str, int size) {
     unsigned int hash = 5381;
     int c;
@@ -194,10 +205,20 @@ RtConstantInfo *get_constant_info(RtConstantPool *pool, uint16_t index) {
     return pool->constants[index];
 }
 
+Class * find_class_by_name(ClassLoader*loader,char*name) {
+    if (loader->size == 0) return NULL;
+    for (int i = 0; i < loader->size; i++) {
+        if (strcmp(loader->names[i], name) == 0) {
+            return loader->classes[i];
+        }
+    }
+    return NULL;
+}
+
 Class *load_class(ClassLoader *loader, char *name) {
-    ClassMapNode *node = loader->classMap[hash(name, loader->size)];
-    if (node != NULL) {
-        return node->class;
+    Class * cl = find_class_by_name(loader,name);
+    if (cl != NULL) {
+        return cl;
     }
     return load_non_array_class(loader, name);
 }
@@ -214,6 +235,7 @@ Class *load_non_array_class(ClassLoader *loader, char *name) {
 Class *define_class(ClassLoader *loader, char *name) {
     ClassFile *file = loadClassFile(name);
     Class *pClass = new_class(file);
+    pClass->loader = loader;
     resolve_super_class(pClass);
     resolve_interfaces(pClass);
     return pClass;

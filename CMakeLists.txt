@@ -80,4 +80,8 @@ add_executable(JVMC main.c
         ch05/rtda/heap/class.c
         ch05/rtda/heap/class.h
         ch05/rtda/common_rtda_struct.h
+        ch05/instructions/reference/new.c
+        ch05/instructions/reference/new.h
+        ch05/instructions/constants/ldc.c
+        ch05/instructions/constants/ldc.h
 )

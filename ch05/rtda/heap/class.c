@@ -4,6 +4,8 @@
 
 #include "class.h"
 
+RtFields *find_field(Class *pClass, char *name, char *descriptor);
+
 Class *new_class(ClassFile *cf) {
     Class *cl = (Class *) malloc(sizeof(Class));
     cl->access_flags = cf->access_flags;
@@ -121,9 +123,10 @@ void copy_attribute_info(RtMethods *methods, MemberInfo *info) {
         methods->max_locals = codeAttribute->max_locals;
     }
 }
-void copy_field_attribute_info(RtFields*fields,MemberInfo*info){
-    ConstantValueAttribute * constant = get_constant_value_attribute(info);
-    if (constant!= NULL) {
+
+void copy_field_attribute_info(RtFields *fields, MemberInfo *info) {
+    ConstantValueAttribute *constant = get_constant_value_attribute(info);
+    if (constant != NULL) {
         fields->constant_value_index = constant->constant_value_index;
     }
 }
@@ -281,16 +284,19 @@ void init_static_final_var(Class *class, RtFields *field) {
 
 }
 
-int is_static(RtFields *field){
-    return 0!=(field->base.access_flags&ACC_STATIC);
+int is_static(RtFields *field) {
+    return 0 != (field->base.access_flags & ACC_STATIC);
 }
-int is_instance(RtFields *field){
+
+int is_instance(RtFields *field) {
     return !is_static(field);
 }
-int is_final(RtFields *field){
-    return 0!=(field->base.access_flags&ACC_FINAL);
+
+int is_final(RtFields *field) {
+    return 0 != (field->base.access_flags & ACC_FINAL);
 
 }
+
 void alloc_static(Class *class) {
     class->static_vars = new_local_vars(class->static_slot_count);
     for (int i = 0; i < class->fields_count; i++) {
@@ -306,6 +312,10 @@ int is_double_or_long(RtFields *field) {
     } else {
         return 0;
     }
+}
+
+int is_public(Class *class) {
+    return 0 != (class->access_flags & ACC_PUBLIC);
 }
 
 void calc_static_field_slot_ids(Class *class) {
@@ -349,3 +359,140 @@ void prepare(Class *class) {
     alloc_static(class);
 }
 
+
+Class *resolve_classes(SymRef *self) {
+    if (self->class == NULL) {
+        resolve_class_ref(self);
+    }
+    return self->class;
+}
+char* get_package_name(Class *self) {
+    char *lastSlash = strrchr(self->name, '/');
+    if (lastSlash != NULL) {
+        size_t packageNameLength = lastSlash - self->name;
+        char *packageName = (char *)malloc(packageNameLength + 1);
+        if (packageName == NULL) {
+            fprintf(stderr, "Memory allocation failed\n");
+            exit(EXIT_FAILURE);
+        }
+        strncpy(packageName, self->name, packageNameLength);
+        packageName[packageNameLength] = '\0';
+        return packageName;
+    }
+    return strdup("");
+}
+
+int is_accessible(Class *a, Class *b) {
+    if (is_public(a)) {
+        return 1;
+    }
+    char *packageNameA = get_package_name(a);
+    char *packageNameB = get_package_name(b);
+    int result = strcmp(packageNameA, packageNameB) == 0;
+    free(packageNameA);
+    free(packageNameB);
+    return result;
+}
+
+void resolve_class_ref(SymRef *self) {
+    Class *d = self->pool->class;
+    Class *c = load_class(d->loader, self->class_name);
+    if (!is_accessible(c, d)) {
+        printf("java.lang.IllegalAccessError\n");
+        exit(1);
+    }
+    self->class = c;
+}
+
+RtFields * resolve_fields(FieldRef*self){
+    if (self->fields==NULL){
+        resolve_field_ref(self);
+    }
+    return self->fields;
+}
+void resolve_field_ref(FieldRef*self){
+    Class *d = self->base.class;
+    Class *c =  resolve_classes(&self->base);
+    RtFields *field = find_field(c, self->name, self->descriptor);
+    if (!is_accessible_field(self, d)) {
+        printf("java.lang.IllegalAccessError\n");
+        exit(1);
+    }
+    if (field == NULL) {
+        printf("java.lang.NoSuchFieldError\n");
+        exit(1);
+    }
+    self->fields = field;
+}
+
+RtFields *find_field(Class *pClass, char *name, char *descriptor) {
+    int count = pClass->fields_count;
+    for (int i = 0; i < count; i++) {
+        RtFields *field = pClass->fields[i];
+        if (strcmp(field->base.name, name) == 0 && strcmp(field->base.descriptor, descriptor) == 0) {
+            return field;
+        }
+    }
+    int icount = pClass->interfaces_count;
+    for (int i = 0; i < icount; i++) {
+        Class *interface = pClass->interfaces[i];
+        RtFields *field = find_field(interface, name, descriptor);
+        if (field!= NULL) {
+            return field;
+        }
+    }
+    if (pClass->super_class != NULL) {
+        return find_field(pClass->super_class, name, descriptor);
+    } else {
+        return NULL;
+    }
+}
+int is_protected(Class *pClass) {
+    return 0!= (pClass->access_flags & ACC_PROTECTED);
+}
+int is_private(Class *c) {
+    return 0 != (c->access_flags & ACC_PRIVATE);
+}
+int is_interface(Class *pClass){
+    return 0 != (pClass->access_flags & ACC_INTERFACE);
+}
+int is_abstract(Class *pClass){
+    return 0 != (pClass->access_flags & ACC_ABSTRACT);
+}
+
+int is_sub_class_of(Class *d, Class *c) {
+    Class *current = d;
+    while (current != NULL) {
+        if (current == c) {
+            return 1;
+        }
+        current = current->super_class;
+    }
+    return 0;
+}
+int is_accessible_field(FieldRef *self, Class *other) {
+    Class *c = self->base.class;
+    if (is_public(c)) {
+        return 1;
+    }
+    if (is_protected(c)) {
+        return other == c || is_sub_class_of(other, c) || strcmp(get_package_name(c), get_package_name(other)) == 0;
+    }
+    if (!is_private(c)) {
+        return strcmp(get_package_name(c), get_package_name(other)) == 0;
+    }
+    return other == c;
+}
+
+Object *new_object_by_class(Class *pClass){
+    return new_object(pClass);
+}
+int is_static_field(RtFields *field){
+    return 0 != (field->base.access_flags & ACC_STATIC);
+}
+int is_final_field(RtFields *field){
+    return 0 != (field->base.access_flags & ACC_FINAL);
+}
+int is_volatile_field(RtFields *field){
+    return 0 != (field->base.access_flags & ACC_VOLATILE);
+}

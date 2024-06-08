@@ -74,7 +74,7 @@ Frame *top(Stack *stack) {
 }
 
 
-Frame *new_frame(Thread *thread,unsigned int max_locals, unsigned int max_stack) {
+Frame *new_frame(Thread *thread, unsigned int max_locals, unsigned int max_stack, RtMethods *method) {
     Frame *frame = (Frame *) malloc(sizeof(Frame));
     frame->thread = thread;
     frame->local_vars = new_local_vars(max_locals);

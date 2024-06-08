@@ -8,7 +8,11 @@
 
 typedef struct{
     Class *class;
-    LocalVars slots;
+    LocalVars *slots;
 }Object;
+
+Object * new_object(Class *pClass);
+//todo 有点复杂的判断方法
+int is_instance_of(Object*ref,Class *pClass);
 
 #endif //JVMC_OBJECT_H

@@ -79,10 +79,11 @@ typedef struct{
     OperandStack* operand_stack;
     Thread * thread;
     int next_pc;
+    RtMethods *method;
 }Frame;
 void set_next_pc(Frame*frame,int pc);
 
-Frame *new_frame(Thread * thread,unsigned int max_locals,unsigned int max_stack);
+Frame *new_frame(Thread *thread, unsigned int max_locals, unsigned int max_stack, RtMethods *method);
 
 //--------------------------------------线程栈------------------------------------------------
 typedef struct {

@@ -28,7 +28,7 @@ void interpret(MemberInfo * member){
     int max_stack = codeAttribute->max_stack;
     uint8_t* code = codeAttribute->code;
     Thread * thread = new_thread();
-    Frame * frame = new_frame(thread,max_locals,max_stack);
+    Frame * frame = new_frame(thread, max_locals, max_stack, NULL);
     push_frame(thread,frame);
     loop(thread,code);
 }

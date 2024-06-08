@@ -3,7 +3,6 @@
 //
 
 #include "member_info.h"
-#include "attr_info.h"
 MemberInfo **read_members(ClassReader *reader, ConstantPool *pool, ClassFile *cf, int flag) {
     int count = read_uint16_class(reader);
     if (flag == 0) {

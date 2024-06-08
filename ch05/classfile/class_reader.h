@@ -4,10 +4,9 @@
 
 #ifndef JVMC_CLASS_READER_H
 #define JVMC_CLASS_READER_H
-#include <stdint.h>
 #include <stdlib.h>
 #include "common_classfile_struct.h"
-
+typedef struct ClassReader ClassReader;
 
 ClassReader* create_class_reader(const uint8_t *data, size_t size);
 void destroy_class_reader(ClassReader *reader);

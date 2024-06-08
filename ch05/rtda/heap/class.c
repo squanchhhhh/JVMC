@@ -80,18 +80,18 @@ RtConstantPool *new_rt_constant_pool(Class *pClass, ConstantPool *pPool) {
             case CONSTANT_Fieldref:
                 pRtInfo[i] = (RtConstantInfo *) malloc(sizeof(RtConstantInfo));
                 pRtInfo[i]->tag = CONSTANT_Fieldref;
-                pRtInfo[i]->value.fieldRef = new_field_ref(pRtPool, (ConstantFieldrefInfo *) pPool->constants[i]);
+                pRtInfo[i]->value.fieldRef = new_field_ref(pRtPool, (ConstantFieldRefInfo *) pPool->constants[i]);
                 break;
             case CONSTANT_Methodref:
                 pRtInfo[i] = (RtConstantInfo *) malloc(sizeof(RtConstantInfo));
                 pRtInfo[i]->tag = CONSTANT_Methodref;
-                pRtInfo[i]->value.methodRef = new_method_ref(pRtPool, (ConstantMethodrefInfo *) pPool->constants[i]);
+                pRtInfo[i]->value.methodRef = new_method_ref(pRtPool, (ConstantMethodRefInfo *) pPool->constants[i]);
                 break;
             case CONSTANT_InterfaceMethodref:
                 pRtInfo[i] = (RtConstantInfo *) malloc(sizeof(RtConstantInfo));
                 pRtInfo[i]->tag = CONSTANT_InterfaceMethodref;
                 pRtInfo[i]->value.interfaceMethodRef = new_interface_method_ref(pRtPool,
-                                                                                (ConstantInterfaceMethodrefInfo *) pPool->constants[i]);
+                                                                                (ConstantInterfaceMethodRefInfo *) pPool->constants[i]);
                 break;
             case CONSTANT_Class:
                 pRtInfo[i] = (RtConstantInfo *) malloc(sizeof(RtConstantInfo));
@@ -140,7 +140,7 @@ ClassRef *new_class_ref(RtConstantPool *pool, ConstantClassInfo *info) {
 }
 
 
-InterfaceMethodRef *new_interface_method_ref(RtConstantPool *pool, ConstantInterfaceMethodrefInfo *info) {
+InterfaceMethodRef *new_interface_method_ref(RtConstantPool *pool, ConstantInterfaceMethodRefInfo *info) {
     InterfaceMethodRef *ref = (InterfaceMethodRef *) malloc(sizeof(InterfaceMethodRef));
     ref->base.pool = pool;
     ref->base.class_name = get_utf8_string(info->pool, info->class_index);
@@ -150,7 +150,7 @@ InterfaceMethodRef *new_interface_method_ref(RtConstantPool *pool, ConstantInter
     return ref;
 }
 
-MethodRef *new_method_ref(RtConstantPool *pool, ConstantMethodrefInfo *info) {
+MethodRef *new_method_ref(RtConstantPool *pool, ConstantMethodRefInfo *info) {
     MethodRef *ref = (MethodRef *) malloc(sizeof(MethodRef));
     ref->base.pool = pool;
     ref->base.class_name = get_utf8_string(info->pool, info->class_index);
@@ -160,7 +160,7 @@ MethodRef *new_method_ref(RtConstantPool *pool, ConstantMethodrefInfo *info) {
     return ref;
 }
 
-FieldRef *new_field_ref(RtConstantPool *pool, ConstantFieldrefInfo *info) {
+FieldRef *new_field_ref(RtConstantPool *pool, ConstantFieldRefInfo *info) {
     FieldRef *ref = (FieldRef *) malloc(sizeof(FieldRef));
     ref->base.pool = pool;
     ref->base.class_name = get_utf8_string(info->pool, info->class_index);

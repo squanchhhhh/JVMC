@@ -17,8 +17,7 @@ void read_constant_value_attribute(void* self, ClassReader *reader){
 
 void init_constant_value_attribute(ConstantValueAttribute *self, ClassReader *reader){
     self->base.read_info = read_constant_value_attribute;
-    self->base.type =
-
+    self->base.type = CONSTANT_VALUE;
 }
 AttributeInfo *read_attribute(ClassReader *reader, ConstantPool *pool) {
     uint16_t attr_name_index = read_uint16_class(reader);
@@ -175,9 +174,9 @@ ExceptionTableEntry **read_exception_table(ClassReader *reader) {
 void read_line_number_attribute(void *self,ClassReader * reader){
     uint16_t len = read_uint16_class(reader);
     LineNumberTableAttribute *info = (LineNumberTableAttribute *) self;
-    info->lines = (lineNumberTable**) malloc(len*sizeof(lineNumberTable*));
+    info->lines = (LineNumberTable**)malloc(len*sizeof(LineNumberTable*));
     for (int i = 0; i < len; ++i) {
-        info->lines[i] = (lineNumberTable*) malloc(sizeof(lineNumberTable));
+        info->lines[i] = (LineNumberTable*)malloc(sizeof(LineNumberTable));
         info->lines[i]->start_pc = read_uint16_class(reader);
         info->lines[i]->line_number = read_uint16_class(reader);
     }

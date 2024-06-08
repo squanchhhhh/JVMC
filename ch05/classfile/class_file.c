@@ -2,16 +2,9 @@
 // Created by Squanch on 2024/6/5.
 //
 
+
 #include "class_file.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <libc.h>
-#include "class_reader.h"
-#include "class_file.h"
-#include "attr_info.h"
 
 void readAndCheckVersion(ClassFile *cf, ClassReader *reader) {
     cf->minor_version = read_uint16_class(reader);

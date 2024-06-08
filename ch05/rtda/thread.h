@@ -9,6 +9,9 @@
 #include <stdlib.h>
 #include <libc.h>
 typedef struct Thread Thread;
+typedef struct Frame Frame;
+typedef struct Object Object;
+typedef struct RtMethods RtMethods;
 typedef struct{
     int num;
     Object *ref;
@@ -73,14 +76,14 @@ void push_slot(OperandStack* operand_stack,Slot slot);
 
 Slot pop_slot(OperandStack* operand_stack);
 //--------------------------帧--------------------------------------
-typedef struct{
+struct Frame{
     struct Frame *lower;
     LocalVars * local_vars;
     OperandStack* operand_stack;
     Thread * thread;
     int next_pc;
     RtMethods *method;
-}Frame;
+};
 void set_next_pc(Frame*frame,int pc);
 
 Frame *new_frame(Thread *thread, unsigned int max_locals, unsigned int max_stack, RtMethods *method);

@@ -5,11 +5,20 @@
 #ifndef JVMC_ATTR_INFO_H
 #define JVMC_ATTR_INFO_H
 
-#include "class_reader.h"
-#include "constant_pool.h"
-#include "common_classfile_struct.h"
-#include <string.h>
 
+#include "common_classfile_struct.h"
+typedef struct UnparsedAttributeInfo UnparsedAttributeInfo;
+typedef struct CodeAttribute CodeAttribute;
+typedef struct ExceptionTableEntry ExceptionTableEntry;
+typedef struct AttributeInfo AttributeInfo;
+typedef struct LineNumberTable LineNumberTable;
+typedef struct LineNumberTableAttribute LineNumberTableAttribute;
+typedef struct SourceFileAttribute SourceFileAttribute;
+typedef struct StackMapTableAttributeInfo StackMapTableAttributeInfo;
+typedef struct StackMapTableAttributeInfo StackMapTableAttributeInfo;
+typedef struct StackMapTableEntry StackMapTableEntry;
+typedef struct ConstantValueAttribute ConstantValueAttribute;
+typedef struct MemberInfo MemberInfo;
 #define STRCMP(s1, s2) (strcmp((s1), (s2)) == 0)
 
 AttributeInfo *new_attribute_info(char *name, uint32_t len, ConstantPool *pool,ClassReader*reader);

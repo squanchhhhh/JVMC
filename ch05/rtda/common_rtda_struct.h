@@ -6,7 +6,7 @@
 #define JVMC_COMMON_RTDA_STRUCT_H
 #include "../classfile/common_classfile_struct.h"
 #include "../all_class_headers.h"
-#include "../all_headers.h"
+
 #include "thread.h"
 typedef struct Class Class;
 typedef struct ClassLoader ClassLoader;

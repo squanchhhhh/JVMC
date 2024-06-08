@@ -227,7 +227,7 @@ Class *load_class(ClassLoader *loader, char *name) {
 Class *load_non_array_class(ClassLoader *loader, char *name) {
     Class *cl = define_class(loader, name);
     link_(cl);
-    printf("load class %s ", name);
+    printf("load class %s \n", name);
     return cl;
 }
 

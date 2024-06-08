@@ -5,7 +5,7 @@
 #include "new.h"
 
 void init_NEW(NEW *self) {
-    Index16_instruction_init(self->base);
+    Index16_instruction_init(&self->base);
     self->base.base.Execute = execute_NEW;
 }
 
@@ -23,7 +23,7 @@ void execute_NEW(void *self_, Frame *frame) {
 }
 
 void init_PUT_STATIC(PUT_STATIC *self) {
-    Index16_instruction_init(self->base);
+    Index16_instruction_init(&self->base);
     self->base.base.Execute = execute_PUT_STATIC;
 }
 
@@ -80,7 +80,7 @@ void execute_PUT_STATIC(void *self_, Frame *frame) {
     }
 }
 void init_GET_STATIC(GET_STATIC *self){
-    Index16_instruction_init(self->base);
+    Index16_instruction_init(&self->base);
     self->base.base.Execute = execute_GET_STATIC;
 }
 
@@ -131,7 +131,7 @@ void execute_GET_STATIC(void *self, Frame *frame){
     }
 }
 void init_PUT_FIELD(PUT_FIELD *self){
-    Index16_instruction_init(self->base);
+    Index16_instruction_init(&self->base);
     self->base.base.Execute = execute_PUT_FIELD;
 }
 
@@ -218,7 +218,7 @@ void execute_PUT_FIELD(void *self, Frame *frame){
 }
 
 void init_GET_FIELD(GET_FIELD *self){
-    Index16_instruction_init(self->base);
+    Index16_instruction_init(&self->base);
     self->base.base.Execute = execute_GET_FIELD;
 }
 
@@ -269,7 +269,7 @@ void execute_GET_FIELD(void *self, Frame *frame){
     }
 }
 void init_INSTANCE_OF(INSTANCE_OF *self){
-    Index16_instruction_init(self->base);
+    Index16_instruction_init(&self->base);
     self->base.base.Execute = execute_INSTANCE_OF;
 }
 
@@ -290,7 +290,7 @@ void execute_INSTANCE_OF(void *self, Frame *frame){
 }
 
 void init_CHECK_CAST(CHECK_CAST *self){
-    Index16_instruction_init(self->base);
+    Index16_instruction_init(&self->base);
     self->base.base.Execute = execute_CHECK_CAST;
 }
 
@@ -315,7 +315,7 @@ void execute_CHECK_CAST(void *self, Frame *frame){
 
 
 void init_INVOKE_SPECIAL(INVOKE_SPECIAL *self){
-    Index16_instruction_init(self->base);
+    Index16_instruction_init(&self->base);
     self->base.base.Execute = execute_INVOKE_SPECIAL;
 }
 
@@ -326,7 +326,7 @@ void execute_INVOKE_SPECIAL(void *self, Frame *frame){
 
 
 void init_INVOKE_VIRTUAL(INVOKE_VIRTUAL *self){
-    Index16_instruction_init(self->base);
+    Index16_instruction_init(&self->base);
     self->base.base.Execute = execute_INVOKE_VIRTUAL;
 }
 

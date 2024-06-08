@@ -39,14 +39,14 @@ struct Index8Instruction{
     Instruction base;
     int index;
 };
-void Index8_instruction_init(Index8Instruction self);
+void Index8_instruction_init(Index8Instruction *self);
 void Index8_instruction_fetch(void *self,BytecodeReader *reader);
 
 struct Index16Instruction{
     Instruction base;
     int index;
 };
-void Index16_instruction_init(Index16Instruction self);
+void Index16_instruction_init(Index16Instruction *self);
 void Index16_instruction_fetch(void *self,BytecodeReader *reader);
 
 struct NOP {

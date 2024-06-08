@@ -26,7 +26,7 @@ void excute_iload_3(void * self,Frame *frame){
 }
 
 void init_ILOAD(ILOAD*self){
-    Index8_instruction_init(self->base);
+    Index8_instruction_init(&self->base);
     self->base.base.Execute = excute_iload;
 }
 void init_ILOAD_0(ILOAD_0*self){
@@ -66,7 +66,7 @@ void excute_aload_3(void * self,Frame *frame){
 }
 
 void init_ALOAD(ALOAD*self){
-    Index8_instruction_init(self->base);
+    Index8_instruction_init(&self->base);
     self->base.base.Execute = excute_aload;
 }
 void init_ALOAD_0(ALOAD_0*self){
@@ -109,7 +109,7 @@ void excute_lload_3(void * self,Frame *frame){
 }
 
 void init_LLOAD(LLOAD*self){
-    Index8_instruction_init(self->base);
+    Index8_instruction_init(&self->base);
     self->base.base.Execute = excute_lload;
 }
 void init_LLOAD_0(LLOAD_0*self){
@@ -152,7 +152,7 @@ void excute_dload_3(void * self,Frame *frame){
 }
 
 void init_DLOAD(DLOAD*self){
-    Index8_instruction_init(self->base);
+    Index8_instruction_init(&self->base);
     self->base.base.Execute = excute_dload;
 }
 void init_DLOAD_0(DLOAD_0*self){
@@ -197,7 +197,7 @@ void excute_fload_3(void * self,Frame *frame){
 }
 
 void init_FLOAD(FLOAD*self){
-    Index8_instruction_init(self->base);
+    Index8_instruction_init(&self->base);
     self->base.base.Execute = excute_fload;
 }
 void init_FLOAD_0(FLOAD_0*self){

@@ -32,7 +32,7 @@ void _ldc(Frame*frame,uint32_t index){
     }
 }
 void init_LDC(LDC*self){
-    Index8_instruction_init(self->base);
+    Index8_instruction_init(&self->base);
     self->base.base.Execute=execute_LDC;
 }
 void execute_LDC(void *self,Frame* frame){
@@ -41,7 +41,7 @@ void execute_LDC(void *self,Frame* frame){
 }
 
 void init_LDC_W(LDC_W*self){
-    Index16_instruction_init(self->base);
+    Index16_instruction_init(&self->base);
     self->base.base.Execute=execute_LDC_W;
 }
 void execute_LDC_W(void *self,Frame* frame){
@@ -50,7 +50,7 @@ void execute_LDC_W(void *self,Frame* frame){
 }
 
 void init_LDC2_W(LDC2_W*self){
-    Index16_instruction_init(self->base);
+    Index16_instruction_init(&self->base);
     self->base.base.Execute=execute_LDC2_W;
 }
 void execute_LDC2_W(void *self,Frame* frame){

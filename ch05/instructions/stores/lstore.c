@@ -24,7 +24,7 @@ void excute_lstore_3(void* self,Frame*frame){
     _lstore(frame,3);
 }
 void init_LSTORE(LSTORE* self){
-    Index8_instruction_init(self->base);
+    Index8_instruction_init(&self->base);
     self->base.base.Execute = excute_lstore;
 }
 void init_LSTORE_0(LSTORE_0* self){
@@ -65,7 +65,7 @@ void excute_istore_3(void* self,Frame*frame){
     _istore(frame,3);
 }
 void init_ISTORE(ISTORE* self){
-    Index8_instruction_init(self->base);
+    Index8_instruction_init(&self->base);
     self->base.base.Execute = excute_istore;
 }
 void init_ISTORE_0(ISTORE_0* self){

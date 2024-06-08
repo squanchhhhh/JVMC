@@ -20,15 +20,15 @@ void Index8_instruction_fetch(void *self,BytecodeReader *reader){
     Index8Instruction* indexInstr = (Index8Instruction*)self;
     indexInstr->index = (int)read_int8(reader);
 }
-void Index8_instruction_init(Index8Instruction self){
-    self.base.FetchOperands = Index8_instruction_fetch;
+void Index8_instruction_init(Index8Instruction *self){
+    self->base.FetchOperands = Index8_instruction_fetch;
 }
 void Index16_instruction_fetch(void *self,BytecodeReader *reader){
     Index16Instruction* indexInstr = (Index16Instruction*)self;
     indexInstr->index = (int)read_int16(reader);
 }
-void Index16_instruction_init(Index16Instruction self){
-    self.base.FetchOperands = Index16_instruction_fetch;
+void Index16_instruction_init(Index16Instruction *self){
+    self->base.FetchOperands = Index16_instruction_fetch;
 }
 void branch(Frame*frame,int offset){
     int pc = frame->thread->pc;

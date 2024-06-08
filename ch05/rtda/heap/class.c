@@ -24,8 +24,9 @@ RtMethods **new_rt_methods(Class *pClass, MemberInfo **methods, int count) {
     RtMethods **pRtMethods = (RtMethods **) malloc(count * sizeof(RtMethods *));
     for (int i = 0; i < count; i++) {
         pRtMethods[i] = (RtMethods *) malloc(sizeof(RtMethods));
-        pRtMethods[i]->base.class = pClass;
-        copy_member_info(&pRtMethods[i]->base, methods[i]);
+        pRtMethods[i]->base = (RtMember*)malloc(sizeof(RtMember));
+        pRtMethods[i]->base->class = pClass;
+        copy_member_info(pRtMethods[i]->base, methods[i]);
         copy_attribute_info(pRtMethods[i], methods[i]);
     }
     return pRtMethods;
@@ -35,8 +36,9 @@ RtFields **new_rt_fields(Class *pClass, MemberInfo **fields, int count) {
     RtFields **pRtFields = (RtFields **) malloc(count * sizeof(RtFields *));
     for (int i = 0; i < count; i++) {
         pRtFields[i] = (RtFields *) malloc(sizeof(RtFields));
-        pRtFields[i]->base.class = pClass;
-        copy_member_info(&pRtFields[i]->base, fields[i]);
+        pRtFields[i]->base = (RtMember*)malloc(sizeof(RtMember));
+        pRtFields[i]->base->class = pClass;
+        copy_member_info(pRtFields[i]->base, fields[i]);
         copy_field_attribute_info(pRtFields[i], fields[i]);
     }
     return pRtFields;
@@ -45,7 +47,9 @@ RtFields **new_rt_fields(Class *pClass, MemberInfo **fields, int count) {
 RtConstantPool *new_rt_constant_pool(Class *pClass, ConstantPool *pPool) {
     RtConstantPool *pRtPool = (RtConstantPool *) malloc(sizeof(RtConstantPool));
     pRtPool->class = pClass;
+    pRtPool->constants_count = pPool->count;
     RtConstantInfo **pRtInfo = (RtConstantInfo **) malloc(pPool->count * sizeof(RtConstantInfo *));
+    pRtPool->constants = pRtInfo;
     for (int i = 1; i < pPool->count; i++) {
         ConstantInfo *con = pPool->constants[i];
         switch (con->tag) {
@@ -102,7 +106,7 @@ RtConstantPool *new_rt_constant_pool(Class *pClass, ConstantPool *pPool) {
                 break;
         }
     }
-    return NULL;
+    return pRtPool;
 }
 
 char **get_interface_names(ConstantPool *pPool, uint16_t *pInt) {
@@ -185,7 +189,7 @@ RtMethods * get_main_method_rt(Class*cls){
 RtMethods * get_static_method_rt(Class * cls,char* name,char*description){
     RtMethods *method=NULL;
     for(int i=0;i<cls->methods_count;i++){
-        if(strcmp(cls->methods[i]->base.name,name)==0&&strcmp(cls->methods[i]->base.descriptor,description)==0){
+        if(strcmp(cls->methods[i]->base->name,name)==0&&strcmp(cls->methods[i]->base->descriptor,description)==0){
             method=cls->methods[i];
             break;
         }
@@ -226,8 +230,10 @@ Class *load_class(ClassLoader *loader, char *name) {
 
 Class *load_non_array_class(ClassLoader *loader, char *name) {
     Class *cl = define_class(loader, name);
+    loader->names[loader->size] = name;
+    loader->classes[loader->size] = cl;
+    loader->size++;
     link_(cl);
-    printf("load class %s \n", name);
     return cl;
 }
 
@@ -273,7 +279,7 @@ void init_static_final_var(Class *class, RtFields *field) {
     uint32_t index = field->constant_value_index;
     uint32_t slot_id = field->slot_id;
     if (index > 0) {
-        switch (field->base.descriptor[0]) {
+        switch (field->base->descriptor[0]) {
             case 'Z':
             case 'B':
             case 'C':
@@ -291,7 +297,7 @@ void init_static_final_var(Class *class, RtFields *field) {
                 set_double(var, slot_id, val);
             }
             case 'J': {
-                if (field->base.descriptor[1] == '\0') {
+                if (field->base->descriptor[1] == '\0') {
                     long val = get_constant_info(pool, index)->value.longValue;
                     set_long(var, slot_id, val);
                 } else {
@@ -307,7 +313,7 @@ void init_static_final_var(Class *class, RtFields *field) {
 }
 
 int is_static(RtFields *field) {
-    return 0 != (field->base.access_flags & ACC_STATIC);
+    return 0 != (field->base->access_flags & ACC_STATIC);
 }
 
 int is_instance(RtFields *field) {
@@ -315,7 +321,7 @@ int is_instance(RtFields *field) {
 }
 
 int is_final(RtFields *field) {
-    return 0 != (field->base.access_flags & ACC_FINAL);
+    return 0 != (field->base->access_flags & ACC_FINAL);
 
 }
 
@@ -329,7 +335,7 @@ void alloc_static(Class *class) {
 }
 
 int is_double_or_long(RtFields *field) {
-    if (strcmp(field->base.descriptor, "D") == 0 || strcmp(field->base.descriptor, "J") == 0) {
+    if (strcmp(field->base->descriptor, "D") == 0 || strcmp(field->base->descriptor, "J") == 0) {
         return 1;
     } else {
         return 0;
@@ -451,7 +457,7 @@ RtFields *find_field(Class *pClass, char *name, char *descriptor) {
     int count = pClass->fields_count;
     for (int i = 0; i < count; i++) {
         RtFields *field = pClass->fields[i];
-        if (strcmp(field->base.name, name) == 0 && strcmp(field->base.descriptor, descriptor) == 0) {
+        if (strcmp(field->base->name, name) == 0 && strcmp(field->base->descriptor, descriptor) == 0) {
             return field;
         }
     }
@@ -510,11 +516,11 @@ Object *new_object_by_class(Class *pClass){
     return new_object(pClass);
 }
 int is_static_field(RtFields *field){
-    return 0 != (field->base.access_flags & ACC_STATIC);
+    return 0 != (field->base->access_flags & ACC_STATIC);
 }
 int is_final_field(RtFields *field){
-    return 0 != (field->base.access_flags & ACC_FINAL);
+    return 0 != (field->base->access_flags & ACC_FINAL);
 }
 int is_volatile_field(RtFields *field){
-    return 0 != (field->base.access_flags & ACC_VOLATILE);
+    return 0 != (field->base->access_flags & ACC_VOLATILE);
 }

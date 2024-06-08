@@ -10,7 +10,6 @@ void start_jvm() {
     Class *main_class = load_non_array_class(loader, class_name);
     RtMethods *main_method = get_main_method_rt(main_class);
     interpret(main_method);
-
 }
 
 int main(int argc, char *argv[]) {

@@ -85,3 +85,52 @@ void init_ISTORE_3(ISTORE_3* self){
     self->base.base.Execute = excute_istore_3;
 }
 //todo other store
+
+void _astore(Frame*frame,int index){
+    Object* var = pop_ref(frame->operand_stack);
+    set_ref(frame->local_vars,index,var);
+}
+void excute_astore(void* self,Frame*frame){
+    ASTORE * inst = (ASTORE*)self;
+    _astore(frame,inst->base.index);
+}
+
+void init_ASTORE(ASTORE* self){
+    Index8_instruction_init(&self->base);
+    self->base.base.Execute = excute_astore;
+}
+
+void execute_astore(void* self,Frame* frame){
+    ASTORE * inst = (ASTORE*)self;
+    _astore(frame,inst->base.index);
+}
+void excute_astore_0(void* self,Frame*frame){
+    _astore(frame,0);
+}
+void excute_astore_1(void* self,Frame*frame){
+    _astore(frame,1);
+}
+void excute_astore_2(void* self,Frame*frame){
+    _astore(frame,2);
+}
+void excute_astore_3(void* self,Frame*frame){
+    _astore(frame,3);
+}
+void init_ASTORE_0(ASTORE_0* self){
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = excute_astore_0;
+}
+void init_ASTORE_1(ASTORE_1* self){
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = excute_astore_1;
+}
+void init_ASTORE_2(ASTORE_2* self){
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = excute_astore_2;
+}
+void init_ASTORE_3(ASTORE_3* self){
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = excute_astore_3;
+}
+
+

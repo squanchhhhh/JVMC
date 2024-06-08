@@ -11,7 +11,7 @@ void init_NEW(NEW *self) {
 
 void execute_NEW(void *self_, Frame *frame) {
     NEW *self = (NEW *) self_;
-    RtConstantPool *pool = frame->method->base.class->constant_pool;
+    RtConstantPool *pool = frame->method->base->class->constant_pool;
     ClassRef *class_ref = get_constant_info(pool, self->base.index)->value.classRef;
     Class *c = resolve_classes(&class_ref->base);
     if (is_abstract(c) || is_interface(c)) {
@@ -30,11 +30,11 @@ void init_PUT_STATIC(PUT_STATIC *self) {
 void execute_PUT_STATIC(void *self_, Frame *frame) {
     PUT_STATIC *self = (PUT_STATIC *) self_;
     RtMethods *current_method = frame->method;
-    Class *current_class = current_method->base.class;
+    Class *current_class = current_method->base->class;
     RtConstantPool *pool = current_class->constant_pool;
     FieldRef *field = get_constant_info(pool, self->base.index)->value.fieldRef;
     RtFields *f = resolve_fields(field);
-    Class *c = f->base.class;
+    Class *c = f->base->class;
     if (!is_static_field(f)) {
         printf("java.lang.IncompatibleClassChangeError\n");
         exit(1);
@@ -45,7 +45,7 @@ void execute_PUT_STATIC(void *self_, Frame *frame) {
             exit(1);
         }
     }
-    char *d = f->base.descriptor;
+    char *d = f->base->descriptor;
     int slot_id = f->slot_id;
     LocalVars *l = c->static_vars;
     OperandStack *o = frame->operand_stack;
@@ -79,24 +79,25 @@ void execute_PUT_STATIC(void *self_, Frame *frame) {
             exit(1);
     }
 }
-void init_GET_STATIC(GET_STATIC *self){
+
+void init_GET_STATIC(GET_STATIC *self) {
     Index16_instruction_init(&self->base);
     self->base.base.Execute = execute_GET_STATIC;
 }
 
-void execute_GET_STATIC(void *self, Frame *frame){
+void execute_GET_STATIC(void *self, Frame *frame) {
     GET_STATIC *self_ = (GET_STATIC *) self;
     RtMethods *current_method = frame->method;
-    Class *current_class = current_method->base.class;
+    Class *current_class = current_method->base->class;
     RtConstantPool *pool = current_class->constant_pool;
     FieldRef *field = get_constant_info(pool, self_->base.index)->value.fieldRef;
     RtFields *f = resolve_fields(field);
-    Class *c = f->base.class;
+    Class *c = f->base->class;
     if (!is_static_field(f)) {
         printf("java.lang.IncompatibleClassChangeError\n");
         exit(1);
     }
-    char *d = f->base.descriptor;
+    char *d = f->base->descriptor;
     int slot_id = f->slot_id;
     LocalVars *l = c->static_vars;
     OperandStack *o = frame->operand_stack;
@@ -130,28 +131,34 @@ void execute_GET_STATIC(void *self, Frame *frame){
             exit(1);
     }
 }
-void init_PUT_FIELD(PUT_FIELD *self){
+
+void init_PUT_FIELD(PUT_FIELD *self) {
     Index16_instruction_init(&self->base);
     self->base.base.Execute = execute_PUT_FIELD;
 }
 
-void execute_PUT_FIELD(void *self, Frame *frame){
+void execute_PUT_FIELD(void *self, Frame *frame) {
     PUT_FIELD *self_ = (PUT_FIELD *) self;
     RtMethods *current_method = frame->method;
-    Class *current_class = current_method->base.class;
+    Class *current_class = current_method->base->class;
     RtConstantPool *pool = current_class->constant_pool;
     FieldRef *field = get_constant_info(pool, self_->base.index)->value.fieldRef;
     RtFields *f = resolve_fields(field);
-    Class *c = f->base.class;
-    if (!is_static_field(f)) {
+    Class *c = f->base->class;
+    if (is_static_field(f)) {
         printf("java.lang.IncompatibleClassChangeError\n");
         exit(1);
     }
-    char *d = f->base.descriptor;
+    if (is_final_field(f)) {
+        if (current_class != c && current_class->name[0] != '<') {//"<clinit>"
+            printf("java.lang.IllegalAccessError\n");
+            exit(1);
+        }
+    }
+    char *d = f->base->descriptor;
     int slot_id = f->slot_id;
-    LocalVars *l = c->static_vars;
     OperandStack *o = frame->operand_stack;
-    switch (d[0]){
+    switch (d[0]) {
         case 'Z':
 
         case 'B':
@@ -160,81 +167,80 @@ void execute_PUT_FIELD(void *self, Frame *frame){
 
         case 'S':
 
-        case 'I':
-        {
+        case 'I': {
             int val = pop_int(o);
-            Object * ref = pop_ref(o);
-            if (ref == NULL){
+            Object *ref = pop_ref(o);
+            if (ref == NULL) {
                 printf("java.lang.NullPointerException\n");
                 exit(1);
             }
-            set_int(ref->slots,slot_id,val);
+            set_int(ref->slots, slot_id, val);
         }
-        case 'F':
-        {
+            break;
+        case 'F': {
             float val = pop_float(o);
-            Object * ref = pop_ref(o);
-            if (ref == NULL){
+            Object *ref = pop_ref(o);
+            if (ref == NULL) {
                 printf("java.lang.NullPointerException\n");
                 exit(1);
             }
-            set_float(ref->slots,slot_id,val);
+            set_float(ref->slots, slot_id, val);
         }
-        case 'J':
-        {
+            break;
+        case 'J': {
             long val = pop_long(o);
-            Object * ref = pop_ref(o);
-            if (ref == NULL){
+            Object *ref = pop_ref(o);
+            if (ref == NULL) {
                 printf("java.lang.NullPointerException\n");
                 exit(1);
             }
-            set_long(ref->slots,slot_id,val);
+            set_long(ref->slots, slot_id, val);
         }
-        case 'D':
-        {
+        case 'D': {
             double val = pop_double(o);
-            Object * ref = pop_ref(o);
-            if (ref == NULL){
+            Object *ref = pop_ref(o);
+            if (ref == NULL) {
                 printf("java.lang.NullPointerException\n");
                 exit(1);
             }
-            set_double(ref->slots,slot_id,val);
+            set_double(ref->slots, slot_id, val);
         }
+            break;
         case 'L':
-        case '[':
-        {
-            Object * val = pop_ref(o);
-            Object * ref = pop_ref(o);
-            if (ref == NULL){
+        case '[': {
+            Object *val = pop_ref(o);
+            Object *ref = pop_ref(o);
+            if (ref == NULL) {
                 printf("java.lang.NullPointerException\n");
                 exit(1);
             }
-            set_ref(ref->slots,slot_id,val);
+            set_ref(ref->slots, slot_id, val);
         }
+            break;
         default:
             printf("java.lang.IncompatibleClassChangeError3\n");
             exit(1);
     }
 }
 
-void init_GET_FIELD(GET_FIELD *self){
+void init_GET_FIELD(GET_FIELD *self) {
     Index16_instruction_init(&self->base);
     self->base.base.Execute = execute_GET_FIELD;
 }
 
-void execute_GET_FIELD(void *self, Frame *frame){
+void execute_GET_FIELD(void *self, Frame *frame) {
     GET_FIELD *self_ = (GET_FIELD *) self;
     RtMethods *current_method = frame->method;
-    Class *current_class = current_method->base.class;
+    Class *current_class = current_method->base->class;
     RtConstantPool *pool = current_class->constant_pool;
     FieldRef *field = get_constant_info(pool, self_->base.index)->value.fieldRef;
     RtFields *f = resolve_fields(field);
-    Class *c = f->base.class;
-    if (!is_static_field(f)) {
+    Class *c = f->base->class;
+    if (is_static_field(f)) {
         printf("java.lang.IncompatibleClassChangeError\n");
         exit(1);
     }
-    char *d = f->base.descriptor;
+    char *d = f->base->descriptor;
     int slot_id = f->slot_id;
     LocalVars *l = c->static_vars;
     OperandStack *o = frame->operand_stack;
@@ -268,75 +274,76 @@ void execute_GET_FIELD(void *self, Frame *frame){
             exit(1);
     }
 }
-void init_INSTANCE_OF(INSTANCE_OF *self){
+
+void init_INSTANCE_OF(INSTANCE_OF *self) {
     Index16_instruction_init(&self->base);
     self->base.base.Execute = execute_INSTANCE_OF;
 }
 
-void execute_INSTANCE_OF(void *self, Frame *frame){
+void execute_INSTANCE_OF(void *self, Frame *frame) {
     INSTANCE_OF *self_ = (INSTANCE_OF *) self;
     RtMethods *current_method = frame->method;
-    Class *current_class = current_method->base.class;
+    Class *current_class = current_method->base->class;
     RtConstantPool *pool = current_class->constant_pool;
     ClassRef *classRef = get_constant_info(pool, self_->base.index)->value.classRef;
     Class *c = resolve_classes(&classRef->base);
     OperandStack *o = frame->operand_stack;
     Object *ref = pop_ref(o);
-    if (ref == NULL){
+    if (ref == NULL) {
         push_int(o, 0);
         return;
     }
     push_int(o, is_instance_of(ref, c));
 }
 
-void init_CHECK_CAST(CHECK_CAST *self){
+void init_CHECK_CAST(CHECK_CAST *self) {
     Index16_instruction_init(&self->base);
     self->base.base.Execute = execute_CHECK_CAST;
 }
 
-void execute_CHECK_CAST(void *self, Frame *frame){
+void execute_CHECK_CAST(void *self, Frame *frame) {
     CHECK_CAST *self_ = (CHECK_CAST *) self;
     RtMethods *current_method = frame->method;
-    Class *current_class = current_method->base.class;
+    Class *current_class = current_method->base->class;
     RtConstantPool *pool = current_class->constant_pool;
     ClassRef *classRef = get_constant_info(pool, self_->base.index)->value.classRef;
     Class *c = resolve_classes(&classRef->base);
     OperandStack *o = frame->operand_stack;
     Object *ref = pop_ref(o);
-    if (ref == NULL){
+    if (ref == NULL) {
         printf("java.lang.NullPointerException\n");
         exit(1);
     }
-    if (!is_instance_of(ref, c)){
+    if (!is_instance_of(ref, c)) {
         printf("java.lang.ClassCastException\n");
         exit(1);
     }
 }
 
 
-void init_INVOKE_SPECIAL(INVOKE_SPECIAL *self){
+void init_INVOKE_SPECIAL(INVOKE_SPECIAL *self) {
     Index16_instruction_init(&self->base);
     self->base.base.Execute = execute_INVOKE_SPECIAL;
 }
 
 //todo invoke_special
-void execute_INVOKE_SPECIAL(void *self, Frame *frame){
+void execute_INVOKE_SPECIAL(void *self, Frame *frame) {
     pop_ref(frame->operand_stack);
 }
 
 
-void init_INVOKE_VIRTUAL(INVOKE_VIRTUAL *self){
+void init_INVOKE_VIRTUAL(INVOKE_VIRTUAL *self) {
     Index16_instruction_init(&self->base);
     self->base.base.Execute = execute_INVOKE_VIRTUAL;
 }
 
-void execute_INVOKE_VIRTUAL(void *self, Frame *frame){
+void execute_INVOKE_VIRTUAL(void *self, Frame *frame) {
     INVOKE_VIRTUAL *self_ = (INVOKE_VIRTUAL *) self;
     RtMethods *current_method = frame->method;
-    Class *current_class = current_method->base.class;
+    Class *current_class = current_method->base->class;
     RtConstantPool *pool = current_class->constant_pool;
     MethodRef *methodRef = get_constant_info(pool, self_->base.index)->value.methodRef;
-    if (strcmp(methodRef->name,"println")==0){
+    if (strcmp(methodRef->name, "println") == 0) {
         OperandStack *stack = frame->operand_stack;
         //switch methodRef.Descriptor() {
         //case "(Z)V": fmt.Printf("%v\n", stack.PopInt() != 0)
@@ -351,29 +358,31 @@ void execute_INVOKE_VIRTUAL(void *self, Frame *frame){
         //}
         //stack.PopRef()
         switch (methodRef->descriptor[1]) {
-            case  'Z'   :
-                printf("%d\n",pop_int(stack));
+            case 'Z'   :
+                printf("%d\n", pop_int(stack));
                 break;
             case 'C':
-                printf("%c\n",pop_int(stack));
+                printf("%c\n", pop_int(stack));
                 break;
             case 'B':
-                printf("%d\n",pop_int(stack));
+                printf("%d\n", pop_int(stack));
                 break;
             case 'S':
-                printf("%d\n",pop_int(stack));
+                printf("%d\n", pop_int(stack));
                 break;
-            case 'I':
-                printf("%d\n",pop_int(stack));
+            case 'I': {
+                int temp = pop_int(stack);
+                printf("%d\n", temp);
                 break;
+            }
             case 'J':
-                printf("%ld\n",pop_long(stack));
+                printf("%ld\n", pop_long(stack));
                 break;
             case 'F':
-                printf("%f\n",pop_float(stack));
+                printf("%f\n", pop_float(stack));
                 break;
             case 'D':
-                printf("%f\n",pop_double(stack));
+                printf("%f\n", pop_double(stack));
                 break;
             default:
                 printf("java.lang.IncompatibleClassChangeError\n");

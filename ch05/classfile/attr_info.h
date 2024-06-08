@@ -20,6 +20,7 @@ typedef struct StackMapTableEntry StackMapTableEntry;
 typedef struct ConstantValueAttribute ConstantValueAttribute;
 typedef struct SignatureAttributeInfo SignatureAttributeInfo;
 typedef struct ExceptionAttribute ExceptionAttribute;
+typedef struct DeprecatedAttribute DeprecatedAttribute;
 typedef struct MemberInfo MemberInfo;
 #define STRCMP(s1, s2) (strcmp((s1), (s2)) == 0)
 
@@ -35,7 +36,7 @@ ExceptionTableEntry **read_exception_table(ClassReader *reader);
 
 void read_unparsed_attribute_info(void *self, ClassReader *reader);
 
-void init_unparsed_attribute_info(UnparsedAttributeInfo *self, ClassReader *reader);
+void init_unparsed_attribute_info(UnparsedAttributeInfo *self, ClassReader *reader,int len);
 
 
 void read_code_attribute(void *self, ClassReader *reader);
@@ -68,4 +69,8 @@ void init_constant_value_attribute(ConstantValueAttribute *self, ClassReader *re
 void read_stack_map_table_attribute(void *self,ClassReader * reader);
 
 void init_stack_map_table_attribute(StackMapTableAttributeInfo *self,ClassReader * reader,int len);
+
+void init_deprecated_attribute(DeprecatedAttribute * self, ClassReader * reader);
+
+void read_deprecated_attribute(void *self, ClassReader *reader);
 #endif //JVMC_ATTR_INFO_H

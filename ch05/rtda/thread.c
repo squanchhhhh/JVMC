@@ -83,6 +83,7 @@ Frame *new_frame(Thread *thread,RtMethods *method) {
     frame->local_vars = new_local_vars(method->max_locals);
     frame->operand_stack = new_operand_stack(method->max_stack);
     frame->next_pc = 0;
+    frame->method = method;
     return frame;
 }
 
@@ -190,7 +191,7 @@ double get_double(LocalVars *local_vars, int index) {
 }
 
 void push_int(OperandStack *operand_stack, int val) {
-    if (operand_stack->size >= operand_stack->max_size) {
+    if (operand_stack->size > operand_stack->max_size) {
         printf("java.lang.StackOverflowError\n");
         return;
     }
@@ -199,16 +200,13 @@ void push_int(OperandStack *operand_stack, int val) {
 }
 
 int pop_int(OperandStack *operand_stack) {
-    if (operand_stack->size == 0) {
-        printf("java.lang.StackOverflowError\n");
-        return 0;
-    }
     operand_stack->size--;
-    return operand_stack->slots[operand_stack->size].num;
+    int temp = operand_stack->slots[operand_stack->size].num;
+    return temp;
 }
 
 void push_long(OperandStack *operand_stack, long val) {
-    if (operand_stack->size >= operand_stack->max_size) {
+    if (operand_stack->size > operand_stack->max_size) {
         printf("java.lang.StackOverflowError\n");
         return;
     }
@@ -218,10 +216,6 @@ void push_long(OperandStack *operand_stack, long val) {
 }
 
 long pop_long(OperandStack *operand_stack) {
-    if (operand_stack->size == 0) {
-        printf("java.lang.StackOverflowError\n");
-        return 0;
-    }
     operand_stack->size -= 2;
     int64_t high = (int64_t) (uint32_t) operand_stack->slots[operand_stack->size + 1].num;
     int64_t low = (int64_t) (uint32_t) operand_stack->slots[operand_stack->size].num;
@@ -229,7 +223,7 @@ long pop_long(OperandStack *operand_stack) {
 }
 
 void push_float(OperandStack *operand_stack, float val) {
-    if (operand_stack->size >= operand_stack->max_size) {
+    if (operand_stack->size > operand_stack->max_size) {
         printf("java.lang.StackOverflowError\n");
         return;
     }
@@ -238,10 +232,6 @@ void push_float(OperandStack *operand_stack, float val) {
 }
 
 float pop_float(OperandStack *operand_stack) {
-    if (operand_stack->size == 0) {
-        printf("java.lang.StackUnderflowError\n");
-        return 0.0f;
-    }
     operand_stack->size--;
     float val;
     memcpy(&val, &operand_stack->slots[operand_stack->size].num, sizeof(float));
@@ -249,7 +239,7 @@ float pop_float(OperandStack *operand_stack) {
 }
 
 void push_double(OperandStack *operand_stack, double val) {
-    if (operand_stack->size >= operand_stack->max_size) {
+    if (operand_stack->size > operand_stack->max_size) {
         printf("java.lang.StackOverflowError\n");
         return;
     }
@@ -264,10 +254,6 @@ void push_double(OperandStack *operand_stack, double val) {
 }
 
 double pop_double(OperandStack *operand_stack) {
-    if (operand_stack->size == 0) {
-        printf("java.lang.StackOverflowError\n");
-        return 0;
-    }
     operand_stack->size -= 2;
     // 组合两个 int32_t 成为 uint64_t
     uint32_t low = (uint32_t) operand_stack->slots[operand_stack->size].num;
@@ -281,7 +267,7 @@ double pop_double(OperandStack *operand_stack) {
 }
 
 void push_ref(OperandStack *operand_stack, Object *ref) {
-    if (operand_stack->size >= operand_stack->max_size) {
+    if (operand_stack->size > operand_stack->max_size) {
         printf("java.lang.StackOverflowError\n");
         return;
     }
@@ -290,10 +276,6 @@ void push_ref(OperandStack *operand_stack, Object *ref) {
 }
 
 Object *pop_ref(OperandStack *operand_stack) {
-    if (operand_stack->size == 0) {
-        printf("java.lang.StackOverflowError\n");
-        return NULL;
-    }
     operand_stack->size--;
     return operand_stack->slots[operand_stack->size].ref;
 }

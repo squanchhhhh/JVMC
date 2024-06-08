@@ -31,7 +31,7 @@ ConstantInfo *read_constant_info(ClassReader *reader, ConstantPool *pool) {
  */
 char* get_utf8_string(ConstantPool *pool,uint16_t index){
     ConstantUtf8Info *info = (ConstantUtf8Info *)pool->constants[index];
-    if (info == NULL) { printf("no info\n");return NULL;}
+    if (info == NULL) { printf("no super class\n");return NULL;}
     if (info->base.tag == CONSTANT_Class){
         ConstantClassInfo *info = (ConstantClassInfo *)pool->constants[index];
         return get_utf8_string(pool,info->name_index);

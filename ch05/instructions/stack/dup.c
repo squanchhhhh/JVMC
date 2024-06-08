@@ -5,7 +5,6 @@
 #include "dup.h"
 //todo other dup
 void init_DUP(DUP*self){
-    self = (DUP*)malloc(sizeof(DUP));
     NoOperands_instruction_init(&self->base);
     self->base.base.Execute = excute_DUP;
 }

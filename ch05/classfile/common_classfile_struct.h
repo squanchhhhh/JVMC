@@ -6,6 +6,7 @@
 #define JVMC_COMMON_CLASSFILE_STRUCT_H
 #define CODE 1
 #define CONSTANT_VALUE 2
+
 #include "class_reader.h"
 #include "constant_pool.h"
 #include <string.h>
@@ -17,6 +18,7 @@
 #include <libc.h>
 #include "class_reader.h"
 #include "attr_info.h"
+
 /**
  * 存放结构体,防止冲突
  */
@@ -54,17 +56,19 @@ typedef struct ExceptionTableEntry ExceptionTableEntry;
 typedef struct LocalVariableTableEntry LocalVariableTableEntry;
 typedef struct SignatureAttributeInfo SignatureAttributeInfo;
 typedef struct ExceptionAttribute ExceptionAttribute;
-
+typedef struct DeprecatedAttribute DeprecatedAttribute;
 typedef struct MemberInfo MemberInfo;
 
 
-struct ClassReader{
+struct ClassReader {
     const uint8_t *data;
     size_t size;
     size_t index;
 };
+
 struct ConstantInfo {
     uint8_t tag;
+
     void (*read_info)(void *self, ClassReader *reader);
 };
 
@@ -73,144 +77,151 @@ struct ConstantPool {
     int index;
     int count;
 };
-struct ConstantFloatInfo{
+struct ConstantFloatInfo {
     ConstantInfo base;
     float value;
 };
-struct ConstantIntegerInfo{
+struct ConstantIntegerInfo {
     ConstantInfo base;
     int32_t value;
 };
-struct ConstantLongInfo{
+struct ConstantLongInfo {
     ConstantInfo base;
     int64_t value;
 };
-struct ConstantDoubleInfo{
+struct ConstantDoubleInfo {
     ConstantInfo base;
     double value;
 };
-struct ConstantUtf8Info{
+struct ConstantUtf8Info {
     ConstantInfo base;
-    char * str;
+    char *str;
 };
-struct ConstantStringInfo{
+struct ConstantStringInfo {
     ConstantInfo base;
-    ConstantPool * pool;
+    ConstantPool *pool;
     uint16_t string_index;
 };
-struct ConstantClassInfo{
+struct ConstantClassInfo {
     ConstantInfo base;
-    ConstantPool * pool;
+    ConstantPool *pool;
     uint16_t name_index;
 };
-struct ConstantNameAndTypeInfo{
+struct ConstantNameAndTypeInfo {
     ConstantInfo base;
     uint16_t name_index;
     uint16_t descriptor_index;
 };
-struct ConstantInterfaceMethodRefInfo{
+struct ConstantInterfaceMethodRefInfo {
     ConstantInfo base;
     ConstantPool *pool;
     uint16_t class_index;
     uint16_t name_and_type_index;
-} ;
+};
 
 
 /**
  * 为了保证实现多态的效果，这里的ConstantInfo不能使用指针
  * 如果使用指针会导致类型强转时无法读取到base的信息
  */
-struct ConstantMethodRefInfo{
+struct ConstantMethodRefInfo {
     ConstantInfo base;
-    ConstantPool * pool;
+    ConstantPool *pool;
     uint16_t class_index;
     uint16_t name_and_type_index;
 };
-struct ConstantFieldRefInfo{
+struct ConstantFieldRefInfo {
     ConstantInfo base;
-    ConstantPool * pool;
+    ConstantPool *pool;
     uint16_t class_index;
     uint16_t name_and_type_index;
 };
-struct AttributeInfo{
-    void (*read_info)(void* ,ClassReader *);
+
+struct AttributeInfo {
+    void (*read_info)(void *, ClassReader *);
+
     int type;
 };
+
 //Signature_attribute {
 //    u2 attribute_name_index;
 //    u4 attribute_length;
 //    u2 signature_index;
 //}
-struct SignatureAttributeInfo{
+struct SignatureAttributeInfo {
     AttributeInfo base;
     uint16_t signature_index;
     //todo 临时保存属性信息
-    uint8_t* temp_store;
+    uint8_t *temp_store;
     uint16_t attribute_name_index;
 };
-struct ExceptionAttribute{
+struct ExceptionAttribute {
     AttributeInfo base;
-    uint8_t * temp_store;
+    uint8_t *temp_store;
 };
-struct ExceptionTableEntry{
+struct ExceptionTableEntry {
     uint16_t start_pc;
     uint16_t end_pc;
     uint16_t handler_pc;
     uint16_t catch_type;
 };
+struct DeprecatedAttribute {
+    AttributeInfo base;
+    uint8_t *temp_store;
+};
 
-struct StackMapTableEntry{
+struct StackMapTableEntry {
     uint8_t frame_type;
     uint16_t offset;
-    uint8_t * locals;
+    uint8_t *locals;
 };
-struct StackMapTableAttributeInfo{
+struct StackMapTableAttributeInfo {
     AttributeInfo base;
     uint16_t number_of_entries;
     //临时保存frame
-    uint8_t * contents;
-    StackMapTableEntry ** entries;
+    uint8_t *contents;
+    StackMapTableEntry **entries;
 };
 
-struct UnparsedAttributeInfo{
+struct UnparsedAttributeInfo {
     AttributeInfo base;
-    char* name;
+    char *name;
     uint32_t len;
-    uint8_t * info;
+    uint8_t *info;
 };
-struct CodeAttribute{
+struct CodeAttribute {
     AttributeInfo base;
-    ConstantPool * pool;
+    ConstantPool *pool;
     uint16_t max_stack;
     uint16_t max_locals;
-    uint8_t * code;
-    ExceptionTableEntry ** exception_table;
-    AttributeInfo ** attributes;
+    uint8_t *code;
+    ExceptionTableEntry **exception_table;
+    AttributeInfo **attributes;
 };
-struct LineNumberTable{
+struct LineNumberTable {
     uint16_t start_pc;
     uint16_t line_number;
 };
 
-struct LineNumberTableAttribute{
+struct LineNumberTableAttribute {
     AttributeInfo base;
-    LineNumberTable ** lines;
+    LineNumberTable **lines;
 };
-struct SourceFileAttribute{
+struct SourceFileAttribute {
     AttributeInfo base;
     ConstantPool *pool;
     uint16_t source_file_index;
 };
-struct ConstantValueAttribute{
+struct ConstantValueAttribute {
     AttributeInfo base;
     uint16_t constant_value_index;
 };
-struct MemberInfo{
-    ConstantPool * pool;
+struct MemberInfo {
+    ConstantPool *pool;
     uint16_t access_flags;
     uint16_t name_index;
     uint16_t descriptor_index;
-    AttributeInfo ** attributes;
+    AttributeInfo **attributes;
     int count;
 };
 

@@ -5,7 +5,7 @@
 #include "ldc.h"
 void _ldc(Frame*frame,uint32_t index){
     OperandStack *stack = frame->operand_stack;
-    RtConstantPool * pool = frame->method->base.class->constant_pool;
+    RtConstantPool * pool = frame->method->base->class->constant_pool;
     RtConstantInfo * info = get_constant_info(pool,index);
     switch (info->tag){
         case CONSTANT_Integer:
@@ -56,7 +56,7 @@ void init_LDC2_W(LDC2_W*self){
 void execute_LDC2_W(void *self,Frame* frame){
     LDC2_W* ldc = (LDC2_W*)self;
     OperandStack *stack = frame->operand_stack;
-    RtConstantPool * pool = frame->method->base.class->constant_pool;
+    RtConstantPool * pool = frame->method->base->class->constant_pool;
     RtConstantInfo * info = get_constant_info(pool,ldc->base.index);
     switch (info->tag){
         default:

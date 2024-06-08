@@ -53,8 +53,9 @@ AttributeInfo *new_attribute_info(char *name, uint32_t len, ConstantPool *pool,C
             break;
         case 'D':
             if (STRCMP(name, "Deprecated")) {
-                static AttributeInfo deprecated_attr = {NULL};
-                return &deprecated_attr;
+                DeprecatedAttribute *attr = (DeprecatedAttribute *)malloc(sizeof(DeprecatedAttribute));
+                init_deprecated_attribute(attr, reader);
+                return (AttributeInfo *)attr;
             }
             break;
         case 'E':
@@ -67,39 +68,38 @@ AttributeInfo *new_attribute_info(char *name, uint32_t len, ConstantPool *pool,C
                 ExceptionAttribute *attr = (ExceptionAttribute *)malloc(sizeof(ExceptionAttribute));
                 init_exception_attribute(attr,reader,len);
                 return (AttributeInfo *)attr;
-                printf("ExceptionsAttribute\n");
             }
             break;
-        case 'I':
-            if (STRCMP(name, "InnerClasses")) {
-                //InnerClassesAttribute *attr = (InnerClassesAttribute *)malloc(sizeof(InnerClassesAttribute));
-                // Initialize InnerClassesAttribute if necessary
-                //return (AttributeInfo *)attr;
-                printf("InnerClassesAttribute\n");
-            }
-            break;
+//        case 'I':
+//            if (STRCMP(name, "InnerClasses")) {
+//                //InnerClassesAttribute *attr = (InnerClassesAttribute *)malloc(sizeof(InnerClassesAttribute));
+//                // Initialize InnerClassesAttribute if necessary
+//                //return (AttributeInfo *)attr;
+//                printf("InnerClassesAttribute\n");
+//            }
+//            break;
         case 'L':
             if (STRCMP(name, "LineNumberTable")) {
-                LineNumberTableAttribute *attr = (LineNumberTableAttribute *)malloc(sizeof(LineNumberTableAttribute));
-                init_line_number_attribute(attr,NULL);
-                return (AttributeInfo *)attr;
-            } else if (STRCMP(name, "LocalVariableTable")) {
-                //LocalVariableTableAttribute *attr = (LocalVariableTableAttribute *)malloc(sizeof(LocalVariableTableAttribute));
-                // Initialize LocalVariableTableAttribute if necessary
-                //return (AttributeInfo *)attr;
-                printf("LocalVariableTableAttribute\n");
-            } else if (STRCMP(name, "LocalVariableTypeTable")) {
-                //LocalVariableTypeTableAttribute *attr = (LocalVariableTypeTableAttribute *)malloc(sizeof(LocalVariableTypeTableAttribute));
-                // Initialize LocalVariableTypeTableAttribute if necessary
-                //return (AttributeInfo *)attr;
-                printf("LocalVariableTypeTableAttribute\n");
+                LineNumberTableAttribute *attr = (LineNumberTableAttribute *) malloc(sizeof(LineNumberTableAttribute));
+                init_line_number_attribute(attr, NULL);
+                return (AttributeInfo *) attr;
             }
+//            } else if (STRCMP(name, "LocalVariableTable")) {
+//                //LocalVariableTableAttribute *attr = (LocalVariableTableAttribute *)malloc(sizeof(LocalVariableTableAttribute));
+//                // Initialize LocalVariableTableAttribute if necessary
+//                //return (AttributeInfo *)attr;
+//                printf("LocalVariableTableAttribute\n");
+//            } else if (STRCMP(name, "LocalVariableTypeTable")) {
+//                //LocalVariableTypeTableAttribute *attr = (LocalVariableTypeTableAttribute *)malloc(sizeof(LocalVariableTypeTableAttribute));
+//                // Initialize LocalVariableTypeTableAttribute if necessary
+//                //return (AttributeInfo *)attr;
+//                printf("LocalVariableTypeTableAttribute\n");
+//            }
             break;
         case 'S':
             if (STRCMP(name, "Signature")) {
                 SignatureAttributeInfo *attr = (SignatureAttributeInfo *)malloc(sizeof(SignatureAttributeInfo));
                 init_signature_attribute(attr,reader,len);
-                // Initialize SignatureAttribute if necessary
                 return (AttributeInfo *)attr;
             } else if (STRCMP(name, "SourceFile")) {
                 SourceFileAttribute *attr = (SourceFileAttribute *)malloc(sizeof(SourceFileAttribute));
@@ -117,7 +117,7 @@ AttributeInfo *new_attribute_info(char *name, uint32_t len, ConstantPool *pool,C
             break;
         default: {
             UnparsedAttributeInfo *info = (UnparsedAttributeInfo *) malloc(sizeof(UnparsedAttributeInfo));
-            init_unparsed_attribute_info(info,NULL);
+            init_unparsed_attribute_info(info,reader,len);
             return (AttributeInfo*)info;
         }
     }
@@ -139,7 +139,8 @@ void read_unparsed_attribute_info(void *self, ClassReader *reader) {
     info->info = read_bytes_class(reader, info->len);
 }
 
-void init_unparsed_attribute_info(UnparsedAttributeInfo *self, ClassReader *reader) {
+void init_unparsed_attribute_info(UnparsedAttributeInfo *self, ClassReader *reader,int len) {
+    self->len = len;
     self->base.read_info = read_unparsed_attribute_info;
 }
 
@@ -233,4 +234,12 @@ void read_stack_map_table_attribute(void *self,ClassReader * reader){
 void init_stack_map_table_attribute(StackMapTableAttributeInfo *self,ClassReader * reader,int len){
     self->contents = read_bytes_class(reader,len);
     self->base.read_info = read_stack_map_table_attribute;
+}
+
+void init_deprecated_attribute(DeprecatedAttribute * self, ClassReader * reader){
+    self->base.read_info = read_deprecated_attribute;
+}
+
+void read_deprecated_attribute(void *self, ClassReader *reader){
+    //do nothing
 }

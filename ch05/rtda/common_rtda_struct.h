@@ -83,13 +83,13 @@ typedef union {
 } ConstantValue;
 
 struct RtFields{
-    RtMember base;
+    RtMember *base;
     uint32_t slot_id;
     uint32_t constant_value_index;
 };
 
 struct RtMethods{
-    RtMember base;
+    RtMember *base;
     uint32_t max_stack;
     uint32_t max_locals;
     uint8_t * code;

@@ -117,7 +117,7 @@ struct Thread {
 };
 
 Thread *new_thread();
-
+int is_empty(Thread *thread);
 Frame * new_frame_thread(Thread*thread,RtMethods*method);
 int pc(Thread *thread);
 

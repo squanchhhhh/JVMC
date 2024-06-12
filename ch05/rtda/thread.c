@@ -10,6 +10,9 @@ Thread *new_thread() {
     thread->stack = new_stack(1024);
     return thread;
 }
+int is_empty(Thread *thread){
+    return thread->stack->size == 0;
+}
 Frame * new_frame_thread(Thread*thread,RtMethods*method){
     return new_frame(thread,method);
 }

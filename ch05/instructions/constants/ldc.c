@@ -59,6 +59,12 @@ void execute_LDC2_W(void *self,Frame* frame){
     RtConstantPool * pool = frame->method->base->class->constant_pool;
     RtConstantInfo * info = get_constant_info(pool,ldc->base.index);
     switch (info->tag){
+        case CONSTANT_Long:
+            push_long(stack,info->value.longValue);
+            break;
+        case CONSTANT_Double:
+            push_double(stack,info->value.doubleValue);
+            break;
         default:
             printf("ldc2_w\n");
             exit(1);

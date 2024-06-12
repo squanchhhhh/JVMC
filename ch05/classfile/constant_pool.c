@@ -20,6 +20,9 @@ ConstantInfo *read_constant_info(ClassReader *reader, ConstantPool *pool) {
     const_info->read_info((void*)const_info,reader);
     pool->constants[pool->index] =const_info;
     pool->index ++;
+    if (const_info->tag == CONSTANT_Double || const_info->tag == CONSTANT_Long){
+        pool->index++;
+    }
     return const_info;
 }
 
@@ -55,11 +58,15 @@ ConstantPool *read_constant_pool(ClassReader *reader) {
     pool->index = 1;
     pool->count = count;
     pool->constants = constants;
+    printf("pool address: %p\n", &pool);
     // 初始化常量池条目
     for (int i = 1; i < count; i++) {
-        pool->constants[i] = read_constant_info(reader, pool);
+        constants[i] = read_constant_info(reader, pool);
+        if (constants[i]->tag == CONSTANT_Utf8){
+            printf("constant : %s,index : %i\n",((ConstantUtf8Info*)constants[i])->str,i);
+        }
         // 处理 LONG 和 DOUBLE 占用两个索引的情况
-        if (pool->constants[i]->tag == CONSTANT_Long || pool->constants[i]->tag == CONSTANT_Double) {
+        if (constants[i]->tag == CONSTANT_Long || constants[i]->tag == CONSTANT_Double) {
             i++;
         }
     }

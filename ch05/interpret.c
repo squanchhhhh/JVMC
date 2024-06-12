@@ -12,7 +12,7 @@ void loop(Thread *thread, unsigned char *bytecode){
         int pc = frame->next_pc;
         thread->pc = pc;
         // add pc
-        reset(reader,bytecode,pc);
+        reset(reader,frame->method->code,pc);
         uint8_t opcode = read_int8(reader);
         Instruction * inst = new_instruction(&opcode);
         inst->FetchOperands(inst,reader);

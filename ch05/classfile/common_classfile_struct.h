@@ -68,7 +68,6 @@ struct ClassReader {
 
 struct ConstantInfo {
     uint8_t tag;
-
     void (*read_info)(void *self, ClassReader *reader);
 };
 

@@ -11,6 +11,7 @@
 #include "instructions/control/goto.h"
 #include "instructions/control/lookupswitch.h"
 #include "instructions/control/tableswitch.h"
+#include "instructions/reference/invoke.h"
 #include "instructions/conversions/d2x.h"
 #include "instructions/conversions/i2x.h"
 #include "instructions/extended/ifnull.h"

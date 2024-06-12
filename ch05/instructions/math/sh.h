@@ -53,6 +53,9 @@ typedef struct{
 }ISUB;
 typedef struct{
     NoOperandsInstruction base;
+}LSUB;
+typedef struct{
+    NoOperandsInstruction base;
 }FSUB;
 typedef struct{
     NoOperandsInstruction base;
@@ -64,6 +67,7 @@ void init_FADD(FADD*self);
 void init_LADD(LADD*self);
 void init_DADD(DADD*self);
 void init_ISUB(ISUB*self);
+void init_LSUB(LSUB*self);
 void init_FSUB(FSUB*self);
 void init_DSUB(DSUB*self);
 void execute_IADD(void*self,Frame* frame);
@@ -71,6 +75,7 @@ void execute_FADD(void*self,Frame* frame);
 void execute_LADD(void*self,Frame* frame);
 void execute_DADD(void*self,Frame* frame);
 void execute_ISUB(void*self,Frame* frame);
+void execute_LSUB(void*self,Frame* frame);
 void execute_FSUB(void*self,Frame* frame);
 void execute_DSUB(void*self,Frame* frame);
 #endif //JVMC_SH_H

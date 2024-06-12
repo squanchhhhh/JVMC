@@ -5,7 +5,7 @@
 #include "ch05/interpret.h"
 
 void start_jvm() {
-    char *class_name = "MyObject";
+    char *class_name = "FibonacciTest";
     ClassLoader *loader = new_class_loader();
     Class *main_class = load_non_array_class(loader, class_name);
     RtMethods *main_method = get_main_method_rt(main_class);

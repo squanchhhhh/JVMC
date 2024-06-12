@@ -164,7 +164,7 @@ void execute_INVOKE_STATIC(void *self, Frame *frame) {
     RtConstantPool *pool = current_class->constant_pool;
     MethodRef *methodRef = get_constant_info(pool, self_->base.index)->value.methodRef;
     RtMethods *m = resolve_methods(methodRef);
-    if (is_static_member(m->base)) {
+    if (!is_static_member(m->base)) {
         printf("java.lang.IncompatibleClassChangeError\n");
         exit(1);
     }

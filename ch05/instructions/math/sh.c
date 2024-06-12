@@ -75,9 +75,16 @@ void init_IADD(IADD*self){
     self->base.base.Execute = execute_IADD;
 }
 void init_FADD(FADD*self);
-void init_LADD(LADD*self);
+void init_LADD(LADD*self){
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_LADD;
+}
 void init_DADD(DADD*self);
 void init_ISUB(ISUB*self);
+void init_LSUB(LSUB*self){
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_LSUB;
+}
 void init_FSUB(FSUB*self);
 void init_DSUB(DSUB*self);
 void execute_IADD(void*self,Frame* frame){
@@ -87,8 +94,19 @@ void execute_IADD(void*self,Frame* frame){
     push_int(frame->operand_stack,result);
 }
 void execute_FADD(void*self,Frame* frame);
-void execute_LADD(void*self,Frame* frame);
+void execute_LADD(void*self,Frame* frame){
+    long v2 = pop_long(frame->operand_stack);
+    long v1 = pop_long(frame->operand_stack);
+    long result = v1+v2;
+    push_long(frame->operand_stack,result);
+}
 void execute_DADD(void*self,Frame* frame);
 void execute_ISUB(void*self,Frame* frame);
+void execute_LSUB(void*self,Frame* frame){
+    long v2 = pop_long(frame->operand_stack);
+    long v1 = pop_long(frame->operand_stack);
+    long result = v1-v2;
+    push_long(frame->operand_stack,result);
+}
 void execute_FSUB(void*self,Frame* frame);
 void execute_DSUB(void*self,Frame* frame);

@@ -4,10 +4,12 @@
 
 #ifndef JVMC_COMMON_RTDA_STRUCT_H
 #define JVMC_COMMON_RTDA_STRUCT_H
+
 #include "../classfile/common_classfile_struct.h"
 #include "../all_class_headers.h"
 
 #include "thread.h"
+
 typedef struct Class Class;
 typedef struct ClassLoader ClassLoader;
 typedef struct RtConstantPool RtConstantPool;
@@ -20,6 +22,8 @@ typedef struct ClassRef ClassRef;
 typedef struct MethodRef MethodRef;
 typedef struct FieldRef FieldRef;
 typedef struct InterfaceMethodRef InterfaceMethodRef;
+typedef struct MethodDescriptor MethodDescriptor;
+typedef struct MethodDescriptorParser MethodDescriptorParser;
 //accessflags
 #define ACC_PUBLIC 0x0001 // class field method
 #define ACC_PRIVATE 0x0002 // field method
@@ -41,34 +45,34 @@ typedef struct InterfaceMethodRef InterfaceMethodRef;
 #define ACC_ENUM 0x4000 // class field
 
 typedef struct LocalVars LocalVars;
-struct Class{
+struct Class {
     uint16_t access_flags;
-    char* name;
-    char* super_name;
-    char** interface_names;
-    RtConstantPool * constant_pool;
+    char *name;
+    char *super_name;
+    char **interface_names;
+    RtConstantPool *constant_pool;
     uint32_t fields_count;
-    RtFields ** fields;
+    RtFields **fields;
     uint32_t methods_count;
-    RtMethods ** methods;
-    ClassLoader* loader;
-    Class* super_class;
-    Class** interfaces;
+    RtMethods **methods;
+    ClassLoader *loader;
+    Class *super_class;
+    Class **interfaces;
     uint32_t interfaces_count;
     uint32_t instance_slot_count;
     uint32_t static_slot_count;
     LocalVars *static_vars;
 };
-struct RtConstantPool{
-    Class* class;
+struct RtConstantPool {
+    Class *class;
     uint16_t constants_count;
-    RtConstantInfo ** constants;
+    RtConstantInfo **constants;
 };
-struct RtMember{
+struct RtMember {
     uint16_t access_flags;
-    char* name;
-    char* descriptor;
-    Class* class;
+    char *name;
+    char *descriptor;
+    Class *class;
 };
 typedef union {
     int intValue;
@@ -82,60 +86,72 @@ typedef union {
     InterfaceMethodRef *interfaceMethodRef;
 } ConstantValue;
 
-struct RtFields{
+struct RtFields {
     RtMember *base;
     uint32_t slot_id;
     uint32_t constant_value_index;
 };
 
-struct RtMethods{
+struct RtMethods {
     RtMember *base;
     uint32_t max_stack;
     uint32_t max_locals;
-    uint8_t * code;
+    uint8_t *code;
+    uint32_t arg_slots_count;
 };
+
+struct MethodDescriptor {
+    char **parameter_type;
+    int parameter_count;
+    char *return_type;
+};
+
+struct MethodDescriptorParser {
+    const char *raw;
+    int offset;
+    MethodDescriptor *parsed;
+};
+
 struct RtConstantInfo {
     int tag;
     ConstantValue value;
 };
 
-struct SymRef{
-    char* class_name;
-    Class * class;
-    RtConstantPool * pool;
+struct SymRef {
+    char *class_name;
+    Class *class;
+    RtConstantPool *pool;
 };
 
-struct MethodRef{
+struct MethodRef {
     SymRef base;
-    char* name;
-    char* descriptor;
-    RtMethods * methods;
+    char *name;
+    char *descriptor;
+    RtMethods *methods;
 };
-struct FieldRef{
+struct FieldRef {
     SymRef base;
-    char* name;
-    char* descriptor;
-   RtFields * fields;
+    char *name;
+    char *descriptor;
+    RtFields *fields;
 };
-struct InterfaceMethodRef{
+struct InterfaceMethodRef {
     SymRef base;
-    char* name;
-    char* descriptor;
-    RtMethods * methods;
+    char *name;
+    char *descriptor;
+    RtMethods *methods;
 };
-struct ClassRef{
+struct ClassRef {
     SymRef base;
 };
 
-//typedef struct ClassMapNode {
-//    char *name;
-//    Class *class;
-//    struct ClassMapNode *next;
-//} ClassMapNode;
 
-struct ClassLoader{
-    char** names;
-    Class ** classes;
+/*
+ * 用两个数组存储类加载器的信息
+ */
+struct ClassLoader {
+    char **names;
+    Class **classes;
     int size;                // 大小
 };
 

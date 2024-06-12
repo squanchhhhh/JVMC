@@ -84,4 +84,8 @@ add_executable(JVMC main.c
         ch05/instructions/reference/new.h
         ch05/instructions/constants/ldc.c
         ch05/instructions/constants/ldc.h
+        ch05/instructions/control/return.c
+        ch05/instructions/control/return.h
+        ch05/instructions/reference/invoke.c
+        ch05/instructions/reference/invoke.h
 )

@@ -44,6 +44,9 @@ double get_double(LocalVars *local_vars,int index);
 
 void set_double(LocalVars *local_vars,int index,double value);
 
+void set_slot(LocalVars *local_vars,int index,Slot slot);
+
+Slot get_slot(LocalVars *local_vars,int index);
 typedef struct {
     unsigned int size;  // 当前栈大小
     Slot *slots;    // 指向Slot数组
@@ -75,6 +78,8 @@ Object *pop_ref(OperandStack* operand_stack);
 void push_slot(OperandStack* operand_stack,Slot slot);
 
 Slot pop_slot(OperandStack* operand_stack);
+
+Object * get_ref_from_top(OperandStack*self,uint index);
 //--------------------------帧--------------------------------------
 struct Frame{
     struct Frame *lower;
@@ -85,6 +90,7 @@ struct Frame{
     RtMethods *method;
 };
 void set_next_pc(Frame*frame,int pc);
+
 
 Frame *new_frame(Thread *thread, RtMethods *method);
 
@@ -125,6 +131,6 @@ void push_frame(Thread *thread,Frame *frame);
 Frame *pop_frame(Thread *thread);
 
 //获取当前栈帧
-Frame *current_frame(Thread *thread);
+Frame *top_frame(Thread *thread);
 
 #endif //JVMC_THREAD_H

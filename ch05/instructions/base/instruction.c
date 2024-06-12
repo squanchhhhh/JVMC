@@ -46,3 +46,16 @@ void fetch_NOP(void * self,BytecodeReader *reader){
 void execute_NOP(void * self,Frame*frame){
 
 }
+
+void invoke_method(Frame *frame, RtMethods *method) {
+    Thread *thread = frame->thread;
+    Frame *new_frame = new_frame_thread(thread, method);
+    push_frame(thread, new_frame);
+    int args = method->arg_slots_count;
+    if (args > 0) {
+        for (int i = args - 1; i >= 0; --i) {
+            Slot slot = pop_slot(frame->operand_stack);
+            set_slot(new_frame->local_vars, i, slot);
+        }
+    }
+}

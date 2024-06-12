@@ -56,4 +56,6 @@ void init_NOP(NoOperandsInstruction * self);
 void fetch_NOP(void * self,BytecodeReader *reader);
 void execute_NOP(void * self,Frame*frame);
 
+
+void invoke_method(Frame*frame,RtMethods*methods);
 #endif //JVMC_INSTRUCTION_H

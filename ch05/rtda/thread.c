@@ -30,7 +30,7 @@ Frame *pop_frame(Thread *thread) {
     return (Frame *) pop(thread->stack);
 }
 
-Frame *current_frame(Thread *thread) {
+Frame *top_frame(Thread *thread) {
     return (Frame *) top(thread->stack);
 }
 
@@ -175,6 +175,14 @@ void set_double(LocalVars *local_vars, int index, double value) {
     }
 }
 
+void set_slot(LocalVars *local_vars,int index,Slot slot){
+    local_vars->slots[index] = slot;
+}
+
+Slot get_slot(LocalVars *local_vars,int index){
+    return local_vars->slots[index];
+}
+
 double get_double(LocalVars *local_vars, int index) {
     if (index + 1 < local_vars->size) {
         // 组合两个 int32_t 成为 uint64_t
@@ -287,4 +295,8 @@ void push_slot(OperandStack* operand_stack,Slot slot){
 Slot pop_slot(OperandStack* operand_stack){
     operand_stack->size--;
     return operand_stack->slots[operand_stack->size];
+}
+
+Object * get_ref_from_top(OperandStack*self,uint index){
+    return self->slots[self->size-1 -index].ref;
 }

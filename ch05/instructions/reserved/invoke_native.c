@@ -3,6 +3,7 @@
 //
 
 #include "invoke_native.h"
+#include "../../native/java/lang/system.h"
 
 
 void init_INVOKE_NATIVE(INVOKE_NATIVE*self) {
@@ -10,6 +11,7 @@ void init_INVOKE_NATIVE(INVOKE_NATIVE*self) {
     self->base.base.Execute = execute_INVOKE_NATIVE;
 }
 void execute_INVOKE_NATIVE(void*self,Frame*frame){
+    init();
     RtMethods * methods = frame->method;
     char* class_name  = methods->base->class->name;
     char * descriptor = methods->base->descriptor;

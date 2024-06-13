@@ -15,5 +15,5 @@ uint16_t* utf8_to_utf16(const char *utf8_str);
 Object* create_java_string(ClassLoader *loader ,const char *str);
 char* to_c_string(Object*ref);
 char* utf16_to_utf8(const uint16_t* utf16_str, size_t utf16_len);
-
+Object * intern_string(Object*str);
 #endif //JVMC_STRING_POOL_H

@@ -118,3 +118,19 @@ Object* find_interned_string(const char *str) {
     }
     return NULL;
 }
+
+Object * intern_string(Object*str){
+    if (find_interned_string(to_c_string(str))!=NULL){
+        return find_interned_string(to_c_string(str));
+    }
+    StringPool *current = internedStrings;
+    while (current->next!= NULL) {
+        current = current->next;
+    }
+    current->next = (StringPool *) malloc(sizeof(StringPool));
+    current->str = (char *) malloc(strlen(to_c_string(str)) + 1);
+    strcpy(current->str, to_c_string(str));
+    current->string = str;
+    current->next = NULL;
+    return str;
+}

@@ -94,4 +94,6 @@ add_executable(JVMC main.c
         ch05/native/register.h
         ch05/instructions/reserved/invoke_native.c
         ch05/instructions/reserved/invoke_native.h
+        ch05/native/java/lang/system.c
+        ch05/native/java/lang/system.h
 )

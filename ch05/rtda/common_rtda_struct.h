@@ -74,7 +74,6 @@ struct StringPool{
     StringPool *next;
 };
 typedef enum {
-    TYPE_SLOTS,
     TYPE_INT8_ARRAY,
     TYPE_INT16_ARRAY,
     TYPE_INT32_ARRAY,

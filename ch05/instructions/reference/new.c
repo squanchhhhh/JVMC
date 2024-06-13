@@ -17,8 +17,8 @@ void execute_NEW(void *self_, Frame *frame) {
     //如果类没有被初始化
     if (!c->initialized){
         revert_next_pc(frame);
-
-        //todo
+        init_class(frame->thread,c);
+        return ;
     }
     if (is_abstract(c) || is_interface(c)) {
         printf("java.lang.InstantiationError\n");

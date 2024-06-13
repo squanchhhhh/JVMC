@@ -6,11 +6,12 @@
 #include "reference/new.h"
 #include "constants/ldc.h"
 #include "control/return.h"
-
+#include "reserved/invoke_native.h"
+//printf("current instruction :%s\n",#type);
 #define CREATE_INSTRUCTION(opcode, type) \
     case opcode: { \
         type *instruction = M(type); \
-        init_##type(instruction); \
+        init_##type(instruction);        \
         return (Instruction *) instruction; \
     }
 #define M(x) (x*)malloc(sizeof(x))
@@ -218,6 +219,7 @@ Instruction * new_instruction(unsigned char * opcode){
 //        CREATE_INSTRUCTION(0xC7,IFNONNULL)
 //        CREATE_INSTRUCTION(0xC8,GOTO_W)
 //        CREATE_INSTRUCTION(0xC9,JSR_W)
+        CREATE_INSTRUCTION(0xFE,INVOKE_NATIVE)
         default:
             printf("Unknown instruction code %d\n",*opcode);
             exit(1);

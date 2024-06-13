@@ -90,4 +90,8 @@ add_executable(JVMC main.c
         ch05/instructions/reference/invoke.h
         ch05/rtda/heap/string_pool.c
         ch05/rtda/heap/string_pool.h
+        ch05/native/register.c
+        ch05/native/register.h
+        ch05/instructions/reserved/invoke_native.c
+        ch05/instructions/reserved/invoke_native.h
 )

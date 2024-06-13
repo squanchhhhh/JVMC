@@ -10,7 +10,7 @@ void init_IINC(IINC*self){
 void fetch_IINC(void*self,BytecodeReader*reader){
     IINC* iinc = (IINC*)self;
     iinc->index = read_uint8(reader);
-    iinc->increment = read_uint8(reader);
+    iinc->increment = (int32_t)read_int8(reader);
 }
 void execute_IINC(void * self,Frame* frame){
     IINC* iinc = (IINC*)self;

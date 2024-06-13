@@ -20,15 +20,70 @@ Class *new_class(ClassFile *cf) {
     return cl;
 }
 
+//func (self *Method) injectCodeAttribute(returnType string) {
+//self.maxStack = 4
+//self.maxLocals = self.argSlotCount
+//switch returnType[0] {
+//case 'V': self.code = []byte{0xfe, 0xb1} // return
+//case 'D': self.code = []byte{0xfe, 0xaf} // dreturn
+//case 'F': self.code = []byte{0xfe, 0xae} // freturn
+//case 'J': self.code = []byte{0xfe, 0xad} // lreturn
+//case 'L', '[': self.code = []byte{0xfe, 0xb0} // areturn
+//default: self.code = []byte{0xfe, 0xac} // ireturn
+//}
+void inject_code_attribute(RtMethods *method, const char *return_type) {
+    method->max_stack = 4;
+    method->max_locals = method->arg_slots_count;
+    switch (return_type[0]) {
+        case 'V':
+            method->code = (uint8_t *) malloc(2 * sizeof(uint8_t));
+            method->code[0] = 0xfe;
+            method->code[1] = 0xb1;
+            break;
+        case 'D':
+            method->code = (uint8_t *) malloc(2 * sizeof(uint8_t));
+            method->code[0] = 0xfe;
+            method->code[1] = 0xaf;
+            break;
+        case 'F':
+            method->code = (uint8_t *) malloc(2 * sizeof(uint8_t));
+            method->code[0] = 0xfe;
+            method->code[1] = 0xae;
+            break;
+        case 'J':
+            method->code = (uint8_t *) malloc(2 * sizeof(uint8_t));
+            method->code[0] = 0xfe;
+            method->code[1] = 0xad;
+            break;
+        case 'L':
+        case '[':
+            method->code = (uint8_t *) malloc(2 * sizeof(uint8_t));
+            method->code[0] = 0xfe;
+            method->code[1] = 0xb0;
+            break;
+        default:
+            method->code = (uint8_t *) malloc(2 * sizeof(uint8_t));
+            method->code[0] = 0xfe;
+            method->code[1] = 0xac;
+            break;
+    }
+
+}
+
 RtMethods **new_rt_methods(Class *pClass, MemberInfo **methods, int count) {
     RtMethods **pRtMethods = (RtMethods **) malloc(count * sizeof(RtMethods *));
     for (int i = 0; i < count; i++) {
         pRtMethods[i] = (RtMethods *) malloc(sizeof(RtMethods));
         pRtMethods[i]->base = (RtMember *) malloc(sizeof(RtMember));
         pRtMethods[i]->base->class = pClass;
+        //获取方法描述
         copy_member_info(pRtMethods[i]->base, methods[i]);
         copy_attribute_info(pRtMethods[i], methods[i]);
         calculate_args(pRtMethods[i]);
+        MethodDescriptor *method_desc = parse_method_descriptor(pRtMethods[i]->base->descriptor);
+        if (is_native_member(pRtMethods[i]->base)) {
+            inject_code_attribute(pRtMethods[i], method_desc->return_type);
+        }
     }
     return pRtMethods;
 }
@@ -43,6 +98,10 @@ int is_protected_member(RtMember *member) {
 
 int is_abstract_member(RtMember *member) {
     return (member->access_flags & ACC_ABSTRACT) != 0;
+}
+
+int is_native_member(RtMember *member) {
+    return (member->access_flags & ACC_NATIVE) != 0;
 }
 
 int is_public_member(RtMember *member) {
@@ -235,12 +294,28 @@ FieldRef *new_field_ref(RtConstantPool *pool, ConstantFieldRefInfo *info) {
     return ref;
 }
 
+//加载基础类
+void load_basic_classes(ClassLoader*loader){
+    Class * jClass = load_class(loader,"java/lang/Class");
+    for (int i=0; i<loader->size;i++){
+        if (loader->classes[i]->jClass == NULL){
+            loader->classes[i]->jClass = new_object(jClass);
+            loader->classes[i]->jClass->extra = loader->classes[i];
+        }
+    }
+}
+
+void load_primitive_classes(ClassLoader* loader){
+
+
+}
 
 ClassLoader *new_class_loader() {
     ClassLoader *loader = (ClassLoader *) malloc(sizeof(ClassLoader));
     loader->size = 0;
     loader->classes = (Class **) malloc(sizeof(Class *));
     loader->names = (char **) malloc(sizeof(char *));
+    load_basic_classes(loader);
     return loader;
 }
 
@@ -274,24 +349,11 @@ RtFields *get_field_rt(Class *cls, char *name, char *descriptor, int is_static) 
     return NULL;
 }
 
-unsigned int hash(const char *str, int size) {
-    unsigned int hash = 5381;
-    int c;
-    while ((c = *str++)) {
-        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
-    }
-    return hash % size;
-}
 
 RtConstantInfo *get_constant_info(RtConstantPool *pool, uint16_t index) {
     return pool->constants[index];
 }
 
-
-typedef struct {
-    const char *name;
-    const char *descriptor;
-} PrimitiveType;
 
 PrimitiveType primitiveTypes[] = {
         {"void",    "V"},
@@ -304,6 +366,7 @@ PrimitiveType primitiveTypes[] = {
         {"float",   "F"},
         {"double",  "D"}
 };
+
 
 const int primitiveTypesCount = sizeof(primitiveTypes) / sizeof(PrimitiveType);
 
@@ -380,6 +443,7 @@ Class *find_class_by_name(ClassLoader *loader, char *name) {
     if (loader->size == 0) return NULL;
     for (int i = 0; i < loader->size; i++) {
         if (strcmp(loader->names[i], name) == 0) {
+            printf("found class %s in class_loader\n", loader->names[i]);
             return loader->classes[i];
         }
     }
@@ -392,9 +456,16 @@ Class *load_class(ClassLoader *loader, char *name) {
         return cl;
     }
     if (name[0] == '[') {
-        return load_array_class(loader, name);
+        cl = load_array_class(loader, name);
+    }else {
+        cl = load_non_array_class(loader, name);
     }
-    return load_non_array_class(loader, name);
+    Class * jClass = find_class_by_name(loader,"java/lang/Class");
+    if (jClass != NULL){
+        cl->jClass = new_object(jClass);
+        cl->jClass->extra = cl;
+    }
+    return cl;
 }
 
 
@@ -584,10 +655,20 @@ void prepare(Class *class) {
 
 
 Class *resolve_classes(SymRef *self) {
-    if (self->class == NULL) {
-        resolve_class_ref(self);
-    }
+//    if (self->class == NULL) {
+//        resolve_class_ref(self);
+//    }
+    resolve_class_ref(self);
     return self->class;
+}
+void resolve_class_ref(SymRef *self) {
+    Class *d = self->pool->class;
+    Class *c = load_class(d->loader, self->class_name);
+    if (!is_accessible(c, d)) {
+        printf("java.lang.IllegalAccessError\n");
+        exit(1);
+    }
+    self->class = c;
 }
 
 char *get_package_name(Class *self) {
@@ -618,15 +699,7 @@ int is_accessible(Class *a, Class *b) {
     return result;
 }
 
-void resolve_class_ref(SymRef *self) {
-    Class *d = self->pool->class;
-    Class *c = load_class(d->loader, self->class_name);
-    if (!is_accessible(c, d)) {
-        printf("java.lang.IllegalAccessError\n");
-        exit(1);
-    }
-    self->class = c;
-}
+
 
 
 //解析方法引用

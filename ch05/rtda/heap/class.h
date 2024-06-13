@@ -15,7 +15,11 @@ typedef struct InterfaceMethodRef InterfaceMethodRef;
 typedef struct RtConstantPool RtConstantPool;
 typedef struct RtFields RtFields;
 typedef struct RtMember RtMember;
-
+typedef struct {
+    const char *name;
+    const char *descriptor;
+} PrimitiveType;
+extern PrimitiveType primitiveTypes[];
 Class *new_class(ClassFile *cf);
 
 int is_accessible(Class *a, Class *b);
@@ -73,7 +77,7 @@ int is_static_member(RtMember *member);
 int is_protected_member(RtMember *member);
 
 int is_abstract_member(RtMember *member);
-
+int is_native_member(RtMember *member);
 int is_private_member(RtMember *member);
 
 int is_public_member(RtMember *member);
@@ -98,7 +102,6 @@ char* get_arr_name(const char* className);
 char* to_class_name(const char* descriptor);
 char* get_component_class_name(const char* className);
 
-unsigned int hash(const char *str, int size);
 
 ClassLoader *new_class_loader();
 

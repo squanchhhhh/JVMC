@@ -9,6 +9,7 @@
 #include "../../rtda/heap/string_pool.h"
 #include "../../rtda/heap/object.h"
 #include "bytecode_reader.h"
+#include "../../native/register.h"
 
 typedef struct Frame Frame;
 typedef struct BranchInstruction BranchInstruction;

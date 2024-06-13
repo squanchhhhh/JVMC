@@ -71,7 +71,7 @@ void init_super_class(Thread *thread, Class *class) {
     if (!is_interface(class)) {
         Class *super_class = class->super_class;
         if (super_class != NULL && !super_class->initialized) {
-            init_class(thread, class);
+            init_class(thread, super_class);
         }
     }
 }

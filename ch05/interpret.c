@@ -14,11 +14,24 @@ void loop(Thread *thread, unsigned char *bytecode){
         // add pc
         reset(reader,frame->method->code,pc);
         uint8_t opcode = read_int8(reader);
+//        printf("\n取指\n");
         Instruction * inst = new_instruction(&opcode);
         inst->FetchOperands(inst,reader);
         set_next_pc(frame,reader->pc);
-//        printf("pc:%2d\n", pc);
+        printf("current method : %s\n",frame->method->base->name);
+        printf("current pc : %d\n",pc);
+        printf("current operandStack length : %d\n",frame->operand_stack->size);
+        for (int i = 0; i < frame->operand_stack->size;i++){
+            printf("%d ",frame->operand_stack->slots[i].num);
+        }
+        printf("\n");
+        printf("current localVars length : %d\n",frame->local_vars->size);
+        for (int i = 0; i < frame->local_vars->size;i++){
+            printf("%d ",frame->local_vars->slots[i].num);
+        }
+        printf("\n");
         inst->Execute(inst,frame);
+
         if (is_empty(thread)){
             break;
         }

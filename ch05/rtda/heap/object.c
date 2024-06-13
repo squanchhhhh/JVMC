@@ -30,7 +30,7 @@ size_t utf16_strlen(const uint16_t *str) {
     return len;
 }
 
-Object *new_chars_object(Class *pClass, char *str) {
+Object *new_chars_object(Class *pClass,uint16_t *str) {
     Object *pObject = malloc(sizeof(Object));
     pObject->class = pClass;
     pObject->data_type = TYPE_CHAR_ARRAY;
@@ -77,12 +77,12 @@ int64_t *longs(Object *obj) {
     return (int64_t *) obj->data;
 }
 
-int16_t *chars(Object *obj) {
+uint16_t *chars(Object *obj) {
     if (obj->data_type != TYPE_CHAR_ARRAY) {
         fprintf(stderr, "Not a char array!\n");
         exit(1);
     }
-    return (int16_t *) obj->data;
+    return (uint16_t *) obj->data;
 }
 
 float *floats(Object *obj) {

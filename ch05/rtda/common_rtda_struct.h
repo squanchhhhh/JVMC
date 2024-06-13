@@ -65,6 +65,8 @@ struct Class {
     uint32_t static_slot_count;
     LocalVars *static_vars;
     int initialized;
+    //建立对象和类的双向连接
+    Object *jClass;
 };
 struct StringPool{
     char *str;
@@ -91,6 +93,9 @@ struct Object{
     void *data;
     DataType data_type;
     uint length;
+
+    //
+    void * extra;
 };
 struct RtConstantPool {
     Class *class;

@@ -89,7 +89,8 @@
 				77,
 				79,
 				81,
-				83
+				83,
+				85
 			]
 		}
 	],
@@ -162,7 +163,8 @@
 				77,
 				79,
 				81,
-				83
+				83,
+				85
 			]
 		},
 		{
@@ -212,7 +214,8 @@
 				78,
 				80,
 				82,
-				84
+				84,
+				86
 			]
 		}
 	],
@@ -682,6 +685,17 @@
 		{
 			"backtrace" : 1,
 			"path" : "ch05/instructions/reference/invoke.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "ch05/rtda/heap/string_pool.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "ch05/rtda/heap/string_pool.h",
 			"sourceGroupIndex" : 1
 		}
 	],

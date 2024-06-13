@@ -134,3 +134,43 @@ void init_ASTORE_3(ASTORE_3* self){
 }
 
 
+
+void init_AASTORE(AASTORE*self){
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = excute_aastore;
+}
+void init_BASTORE(BASTORE*self);
+void init_CASTORE(CASTORE*self);
+void init_DASTORE(DASTORE*self);
+void init_FASTORE(FASTORE*self);
+void init_IASTORE(IASTORE*self){
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = excute_iastore;
+}
+void init_LASTORE(LASTORE*self);
+void init_SASTORE(SASTORE*self);
+void excute_aastore(void* self,Frame*frame){
+
+}
+void excute_bastore(void* self,Frame*frame);
+void excute_castore(void* self,Frame*frame);
+void excute_dastore(void* self,Frame*frame);
+void excute_fastore(void* self,Frame*frame);
+void excute_iastore(void* self,Frame*frame){
+    OperandStack *stack = frame->operand_stack;
+    int val = pop_int(stack);
+    int index = pop_int(stack);
+    Object * arr_ref = pop_ref(stack);
+    if(arr_ref == NULL){
+        printf("java.lang.NullPointerException\n");
+        exit(1);
+    }
+    int32_t* int_arr = ints(arr_ref);
+    if (index >= arrayLength(arr_ref) || index <0){
+        printf("java.lang.ArrayIndexOutOfBoundsException\n");
+        exit(1);
+    }
+    int_arr[index] = val;
+}
+void excute_lastore(void* self,Frame*frame);
+void excute_sastore(void* self,Frame*frame);

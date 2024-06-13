@@ -326,4 +326,135 @@ void execute_CHECK_CAST(void *self, Frame *frame) {
     }
 }
 
+void init_NEW_ARRAY(NEW_ARRAY *self){
+    self->base.Execute = execute_NEW_ARRAY;
+    self->base.FetchOperands = fetch_NEW_ARRAY;
+}
 
+
+Class * get_primitive_array_class(ClassLoader *loader,uint8_t atype){
+    switch(atype){
+        case AT_BOOLEAN:
+            return load_class(loader,"[Z");
+        case AT_CHAR:
+            return load_class(loader,"[C");
+        case AT_FLOAT:
+            return load_class(loader,"[F");
+        case AT_DOUBLE:
+            return load_class(loader,"[D");
+        case AT_BYTE:
+            return load_class(loader,"[B");
+        case AT_SHORT:
+            return load_class(loader,"[S");
+        case AT_INT:
+            return load_class(loader,"[I");
+        case AT_LONG:
+            return load_class(loader,"[J");
+        default:
+            printf("java.lang.InternalError\n");
+            exit(1);
+    }
+}
+void execute_NEW_ARRAY(void *self, Frame *frame){
+    NEW_ARRAY *self_ = (NEW_ARRAY *) self;
+    OperandStack *stack = frame->operand_stack;
+    int count = pop_int(stack);
+    if (count < 0) {
+        printf("java.lang.NegativeArraySizeException\n");
+        exit(1);
+    }
+    ClassLoader * loader = frame->method->base->class->loader;
+    Class * arr_class = get_primitive_array_class(loader,self_->atype);
+    Object * arr = new_array(arr_class, count);
+    push_ref(stack,arr);
+}
+
+void fetch_NEW_ARRAY(void *self,BytecodeReader*reader){
+    NEW_ARRAY *self_ = (NEW_ARRAY *) self;
+    self_->atype = read_uint8(reader);
+}
+
+void init_ANEW_ARRAY(ANEW_ARRAY *self){
+    Index16_instruction_init(&self->base);
+    self->base.base.Execute = execute_ANEW_ARRAY;
+}
+
+void execute_ANEW_ARRAY(void *self, Frame *frame){
+    RtConstantPool * pool = frame->method->base->class->constant_pool;
+    ANEW_ARRAY *self_ = (ANEW_ARRAY *) self;
+    ClassRef *classRef = get_constant_info(pool, self_->base.index)->value.classRef;
+    Class * component_class = resolve_classes(&classRef->base);
+    OperandStack *stack = frame->operand_stack;
+    int count = pop_int(stack);
+    if (count < 0) {
+        printf("java.lang.NegativeArraySizeException\n");
+        exit(1);
+    }
+    Class * array_class = arr_class(component_class);
+    Object * arr = new_array(array_class, count);
+    push_ref(stack,arr);
+}
+
+
+void init_ARRAY_LENGTH(ARRAY_LENGTH *self){
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_ARRAY_LENGTH;
+}
+
+void execute_ARRAY_LENGTH(void *self, Frame *frame){
+    ARRAY_LENGTH *self_ = (ARRAY_LENGTH *) self;
+    OperandStack *stack = frame->operand_stack;
+    Object * arr_ref = pop_ref(stack);
+    if (arr_ref == NULL) {
+        printf("java.lang.NullPointerException\n");
+        exit(1);
+    }
+    int arr_len = arrayLength(arr_ref);
+    push_int(stack,arr_len);
+}
+
+int32_t * pop_and_check_counts(OperandStack*stack,int dimensions){
+    int32_t * counts= (int32_t*) malloc(sizeof(int32_t));
+    for (int i = dimensions-1;i>=0;i--){
+        counts[i] = pop_int(stack);
+        if (counts[i]<0){
+            printf("java.lang.NegativeArraySizeException\n");
+            exit(1);
+        }
+    }
+    return counts;
+}
+
+Object* new_multi_array(Class*self,int32_t * counts,int dimensions){
+    int count = counts[0];
+    Object * arr_class = new_array(self,count);
+    if (dimensions>1){
+        Object ** ref_ = refs(arr_class);
+        int len = arr_class->length;
+        for (int i=0;i<len;i++){
+            ref_[i] = new_multi_array(ComponentClass(self),counts+1,dimensions-1);
+        }
+    }
+    return arr_class;
+}
+void init_MULTI_ANEW_ARRAY(MULTI_ANEW_ARRAY *self){
+    self->base.Execute = execute_MULTI_ANEW_ARRAY;
+    self->base.FetchOperands = fetch_MULTI_ANEW_ARRAY;
+}
+
+void execute_MULTI_ANEW_ARRAY(void *self, Frame *frame){
+    MULTI_ANEW_ARRAY *self_ = (MULTI_ANEW_ARRAY *) self;
+    RtConstantPool * pool = frame->method->base->class->constant_pool;
+    ClassRef *class_ref = get_constant_info(pool,self_->index)->value.classRef;
+    Class * arr_class = resolve_classes(&class_ref->base);
+    OperandStack * stack = frame->operand_stack;
+    int32_t* counts = pop_and_check_counts(stack,self_->dimensions);
+    Object *arr = new_multi_array(arr_class,counts,self_->dimensions);
+    push_ref(stack,arr);
+}
+
+void fetch_MULTI_ANEW_ARRAY(void *self, BytecodeReader *reader){
+    MULTI_ANEW_ARRAY *self_ = (MULTI_ANEW_ARRAY *) self;
+    self_->index= read_uint16(reader);
+    self_->dimensions = read_uint8(reader);
+}

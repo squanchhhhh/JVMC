@@ -104,6 +104,47 @@ void excute_fstore(void* self,Frame*frame);
 void init_FSTORE(FSTORE* self);
 
 
+typedef struct{
+    NoOperandsInstruction base;
+}AASTORE;
+typedef struct{
+    NoOperandsInstruction base;
+}BASTORE;
+typedef struct{
+    NoOperandsInstruction base;
+}CASTORE;
+typedef struct{
+    NoOperandsInstruction base;
+}DASTORE;
+typedef struct{
+    NoOperandsInstruction base;
+}FASTORE;
+typedef struct{
+    NoOperandsInstruction base;
+}IASTORE;
+typedef struct{
+    NoOperandsInstruction base;
+}LASTORE;
+typedef struct{
+    NoOperandsInstruction base;
+}SASTORE;
+void init_AASTORE(AASTORE*self);
+void init_BASTORE(BASTORE*self);
+void init_CASTORE(CASTORE*self);
+void init_DASTORE(DASTORE*self);
+void init_FASTORE(FASTORE*self);
+void init_IASTORE(IASTORE*self);
+void init_LASTORE(LASTORE*self);
+void init_SASTORE(SASTORE*self);
+void excute_aastore(void* self,Frame*frame);
+void excute_bastore(void* self,Frame*frame);
+void excute_castore(void* self,Frame*frame);
+void excute_dastore(void* self,Frame*frame);
+void excute_fastore(void* self,Frame*frame);
+void excute_iastore(void* self,Frame*frame);
+void excute_lastore(void* self,Frame*frame);
+void excute_sastore(void* self,Frame*frame);
+
 
 
 #endif //JVMC_LSTORE_H

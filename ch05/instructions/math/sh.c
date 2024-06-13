@@ -80,7 +80,10 @@ void init_LADD(LADD*self){
     self->base.base.Execute = execute_LADD;
 }
 void init_DADD(DADD*self);
-void init_ISUB(ISUB*self);
+void init_ISUB(ISUB*self){
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = execute_ISUB;
+}
 void init_LSUB(LSUB*self){
     NoOperands_instruction_init(&self->base);
     self->base.base.Execute = execute_LSUB;
@@ -101,7 +104,12 @@ void execute_LADD(void*self,Frame* frame){
     push_long(frame->operand_stack,result);
 }
 void execute_DADD(void*self,Frame* frame);
-void execute_ISUB(void*self,Frame* frame);
+void execute_ISUB(void*self,Frame* frame){
+    int v2 = pop_int(frame->operand_stack);
+    int v1 = pop_int(frame->operand_stack);
+    int result = v1-v2;
+    push_int(frame->operand_stack,result);
+}
 void execute_LSUB(void*self,Frame* frame){
     long v2 = pop_long(frame->operand_stack);
     long v1 = pop_long(frame->operand_stack);

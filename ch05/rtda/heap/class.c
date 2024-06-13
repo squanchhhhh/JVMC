@@ -264,6 +264,16 @@ RtMethods *get_clinit_method(Class *cls) {
     return get_static_method_rt(cls, "<clinit>", "()V");
 }
 
+RtFields *get_field_rt(Class *cls, char *name, char *descriptor, int is_static) {
+    for (int i = 0; i < cls->fields_count; i++) {
+        if (strcmp(cls->fields[i]->base->name, name) == 0 &&
+            strcmp(cls->fields[i]->base->descriptor, descriptor) == 0 && is_static_field(cls->fields[i]) == is_static) {
+            return cls->fields[i];
+        }
+    }
+    return NULL;
+}
+
 unsigned int hash(const char *str, int size) {
     unsigned int hash = 5381;
     int c;
@@ -276,6 +286,95 @@ unsigned int hash(const char *str, int size) {
 RtConstantInfo *get_constant_info(RtConstantPool *pool, uint16_t index) {
     return pool->constants[index];
 }
+
+
+typedef struct {
+    const char *name;
+    const char *descriptor;
+} PrimitiveType;
+
+PrimitiveType primitiveTypes[] = {
+        {"void",    "V"},
+        {"boolean", "Z"},
+        {"byte",    "B"},
+        {"short",   "S"},
+        {"int",     "I"},
+        {"long",    "J"},
+        {"char",    "C"},
+        {"float",   "F"},
+        {"double",  "D"}
+};
+
+const int primitiveTypesCount = sizeof(primitiveTypes) / sizeof(PrimitiveType);
+
+const char *getPrimitiveDescriptor(const char *typeName) {
+    for (int i = 0; i < primitiveTypesCount; i++) {
+        if (strcmp(primitiveTypes[i].name, typeName) == 0) {
+            return primitiveTypes[i].descriptor;
+        }
+    }
+    return NULL; // 如果未找到匹配的类型，返回 NULL
+}
+
+char *to_descriptor(const char *className) {
+    // 如果类名以 '[' 开头，直接返回类名
+    if (className[0] == '[') {
+        return strdup(className);
+    }
+
+    // 查找是否是基本类型
+    const char *primitiveDescriptor = getPrimitiveDescriptor(className);
+    if (primitiveDescriptor != NULL) {
+        return strdup(primitiveDescriptor);
+    }
+
+    // 否则，构造普通类名的描述符
+    size_t len = strlen(className) + 3; // "L" + className + ";"
+    char *descriptor = (char *) malloc(len);
+    snprintf(descriptor, len, "L%s;", className);
+
+    return descriptor;
+}
+
+char *get_arr_name(const char *className) {
+    char *descriptor = to_descriptor(className);
+    size_t len = strlen(descriptor) + 2; // '[' + descriptor + '\0'
+    char *arrName = (char *) malloc(len);
+
+    snprintf(arrName, len, "[%s", descriptor);
+    free(descriptor);
+
+    return arrName;
+}
+
+char *to_class_name(const char *descriptor) {
+    if (descriptor[0] == '[') {
+        return strdup(descriptor);
+    }
+    if (descriptor[0] == 'L') {
+        size_t len = strlen(descriptor) - 2;
+        char *className = (char *) malloc(len + 1);
+        strncpy(className, descriptor + 1, len);
+        className[len] = '\0';
+        return className;
+    }
+    for (int i = 0; i < primitiveTypesCount; i++) {
+        if (strcmp(primitiveTypes[i].descriptor, descriptor) == 0) {
+            return strdup(primitiveTypes[i].name);
+        }
+    }
+    fprintf(stderr, "Invalid descriptor: %s\n", descriptor);
+    exit(EXIT_FAILURE);
+}
+
+char *get_component_class_name(const char *className) {
+    if (className[0] == '[') {
+        return to_class_name(className + 1);
+    }
+    fprintf(stderr, "Not array: %s\n", className);
+    exit(EXIT_FAILURE);
+}
+
 
 Class *find_class_by_name(ClassLoader *loader, char *name) {
     if (loader->size == 0) return NULL;
@@ -292,7 +391,7 @@ Class *load_class(ClassLoader *loader, char *name) {
     if (cl != NULL) {
         return cl;
     }
-    if (cl->name[0] == '[') {
+    if (name[0] == '[') {
         return load_array_class(loader, name);
     }
     return load_non_array_class(loader, name);
@@ -301,6 +400,7 @@ Class *load_class(ClassLoader *loader, char *name) {
 
 Class *load_non_array_class(ClassLoader *loader, char *name) {
     Class *cl = define_class(loader, name);
+    printf("loading non-array class: %s\n", name);
     loader->names[loader->size] = name;
     loader->classes[loader->size] = cl;
     loader->size++;
@@ -310,6 +410,7 @@ Class *load_non_array_class(ClassLoader *loader, char *name) {
 
 Class *load_array_class(ClassLoader *loader, char *name) {
     Class *cl = (Class *) malloc(sizeof(Class));
+    printf("load array class : %s\n", name);
     cl->access_flags = ACC_PUBLIC;
     cl->name = name;
     cl->loader = loader;
@@ -378,26 +479,29 @@ void init_static_final_var(Class *class, RtFields *field) {
             case 'I': {
                 int val = get_constant_info(pool, index)->value.intValue;
                 set_int(var, slot_id, val);
+                break;
             }
             case 'F': {
                 float val = get_constant_info(pool, index)->value.floatValue;
                 set_float(var, slot_id, val);
+                break;
             }
             case 'D': {
                 double val = get_constant_info(pool, index)->value.doubleValue;
                 set_double(var, slot_id, val);
+                break;
             }
             case 'J': {
-                if (field->base->descriptor[1] == '\0') {
-                    long val = get_constant_info(pool, index)->value.longValue;
-                    set_long(var, slot_id, val);
-                } else {
-                    printf("String \n");
-                    exit(1);
-                }
+                long val = get_constant_info(pool, index)->value.longValue;
+                set_long(var, slot_id, val);
+                break;
             }
-
-
+            case 'L': {
+                char *str = get_constant_info(pool, index)->value.stringValue;
+                Object *java_string = create_java_string(class->loader, str);
+                set_ref(var, slot_id, java_string);
+                break;
+            }
         }
     }
 
@@ -559,7 +663,7 @@ RtMethods *resolve_interface_method_refs(InterfaceMethodRef *self) {
     return self->methods;
 }
 
-RtMethods *resolve_interface_method_ref(InterfaceMethodRef *self) {
+void resolve_interface_method_ref(InterfaceMethodRef *self) {
     Class *d = self->base.class;
     Class *c = resolve_classes(&self->base);
     if (is_interface(c)) {

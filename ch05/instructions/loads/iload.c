@@ -220,3 +220,64 @@ void _fload(Frame*frame,int index){
     float val = get_float(frame->local_vars,index);
     push_float(frame->operand_stack,val);
 }
+
+
+void init_AALOAD(AALOAD*self){
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = excute_aaload;
+}
+void init_BALOAD(BALOAD*self);
+void init_CALOAD(CALOAD*self);
+void init_DALOAD(DALOAD*self);
+void init_FALOAD(FALOAD*self);
+void init_IALOAD(IALOAD*self){
+    NoOperands_instruction_init(&self->base);
+    self->base.base.Execute = excute_iaload;
+}
+void init_LALOAD(LALOAD*self);
+void init_SALOAD(SALOAD*self);
+//func (self *AALOAD) Execute(frame *rtda.Frame) {
+//stack := frame.OperandStack()
+//index := stack.PopInt()
+//arrRef := stack.PopRef()
+//checkNotNil(arrRef)
+//refs := arrRef.Refs()
+//checkIndex(len(refs), index)
+//stack.PushRef(refs[index])
+//}
+void excute_aaload(void * self,Frame *frame){
+    OperandStack *stack = frame->operand_stack;
+    int index = pop_int(stack);
+    Object *arrRef = pop_ref(stack);
+    if (arrRef == NULL){
+        printf("java.lang.NullPointerException\n");
+        exit(1);
+    }
+    Object **r = refs(arrRef);
+    if (arrayLength(arrRef) <= index || index < 0){
+        printf("java.lang.ArrayIndexOutOfBoundsException\n");
+        exit(1);
+    }
+    push_ref(stack,r[index]);
+}
+void excute_baload(void * self,Frame *frame);
+void excute_caload(void * self,Frame *frame);
+void excute_daload(void * self,Frame *frame);
+void excute_faload(void * self,Frame *frame);
+void excute_iaload(void * self,Frame *frame){
+    OperandStack *stack = frame->operand_stack;
+    int index = pop_int(stack);
+    Object *arrRef = pop_ref(stack);
+    if (arrRef == NULL){
+        printf("java.lang.NullPointerException\n");
+        exit(1);
+    }
+    int32_t * r = ints(arrRef);
+    if (arrayLength(arrRef) <= index || index < 0){
+        printf("java.lang.ArrayIndexOutOfBoundsException\n");
+        exit(1);
+    }
+    push_int(stack,r[index]);
+}
+void excute_laload(void * self,Frame *frame);
+void excute_saload(void * self,Frame *frame);

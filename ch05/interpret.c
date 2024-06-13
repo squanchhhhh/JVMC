@@ -25,9 +25,31 @@ void loop(Thread *thread, unsigned char *bytecode){
     }
 }
 
-void interpret(RtMethods*methods){
+void interpret(RtMethods*methods,char**args,int argc){
     Thread * thread = new_thread();
     Frame * frame = new_frame_thread(thread,methods);
     push_frame(thread,frame);
+    Object * argsArr = create_args_array(methods->base->class->loader,args,argc);
+    set_ref(frame->local_vars,0,argsArr);
     loop(thread,methods->code);
+}
+
+//func createArgsArray(loader *heap.ClassLoader, args []string) *heap.Object {
+//stringClass := loader.LoadClass("java/lang/String")
+//argsArr := stringClass.ArrayClass().NewArray(uint(len(args)))
+//jArgs := argsArr.Refs()
+//for i, arg := range args {
+//jArgs[i] = heap.JString(loader, arg)
+//}
+//return argsArr
+//}
+
+Object * create_args_array(ClassLoader*loader,char**args,int argc){
+    Class * stringClass = load_class(loader,"java/lang/String");
+    Object * argsArr = new_array(arr_class(stringClass),argc);
+    Object ** jArgs = refs(argsArr);
+    for (int i = 0; i < argc; ++i) {
+        jArgs[i] = create_java_string(loader,args[i]);
+    }
+    return argsArr;
 }

@@ -81,3 +81,14 @@ void init_class(Thread *thread, Class *class) {
     schedule_clinit(thread, class);
     init_super_class(thread, class);
 }
+
+Class * arr_class(Class * class){
+    char * name = get_arr_name(class->name);
+    return load_class(class->loader,name);
+}
+Class* ComponentClass(Class *self) {
+    char* componentClassName = get_component_class_name(self->name);
+    Class* componentClass = load_class(self->loader, componentClassName);
+    free(componentClassName);
+    return componentClass;
+}

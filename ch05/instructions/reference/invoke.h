@@ -2,7 +2,7 @@
 // Created by Squanch on 2024/6/12.
 //
 
-#ifndef JVMC_INVOKE_METHOD_H
+#ifndef JVMC_INVOKE_H
 #define JVMC_INVOKE_H
 #include "../base/instruction.h"
 typedef struct {
@@ -37,4 +37,4 @@ typedef struct {
 void init_INVOKE_INTERFACE(INVOKE_INTERFACE *self);
 void fetch_INVOKE_INTERFACE(void * self,BytecodeReader*reader);
 void execute_INVOKE_INTERFACE(void *self, Frame *frame);
-#endif //JVMC_INVOKE_METHOD_H
+#endif //JVMC_INVOKE_H

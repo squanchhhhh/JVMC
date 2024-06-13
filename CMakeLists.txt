@@ -88,4 +88,6 @@ add_executable(JVMC main.c
         ch05/instructions/control/return.h
         ch05/instructions/reference/invoke.c
         ch05/instructions/reference/invoke.h
+        ch05/rtda/heap/string_pool.c
+        ch05/rtda/heap/string_pool.h
 )

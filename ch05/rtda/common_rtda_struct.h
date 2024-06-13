@@ -24,6 +24,8 @@ typedef struct FieldRef FieldRef;
 typedef struct InterfaceMethodRef InterfaceMethodRef;
 typedef struct MethodDescriptor MethodDescriptor;
 typedef struct MethodDescriptorParser MethodDescriptorParser;
+typedef struct Object Object;
+typedef struct StringPool StringPool;
 //accessflags
 #define ACC_PUBLIC 0x0001 // class field method
 #define ACC_PRIVATE 0x0002 // field method
@@ -63,6 +65,32 @@ struct Class {
     uint32_t static_slot_count;
     LocalVars *static_vars;
     int initialized;
+};
+struct StringPool{
+    char *str;
+    Object * string;
+    StringPool *next;
+};
+typedef enum {
+    TYPE_SLOTS,
+    TYPE_INT8_ARRAY,
+    TYPE_INT16_ARRAY,
+    TYPE_INT32_ARRAY,
+    TYPE_INT64_ARRAY,
+    TYPE_CHAR_ARRAY,
+    TYPE_FLOAT32_ARRAY,
+    TYPE_FLOAT64_ARRAY,
+    TYPE_OBJECT_ARRAY
+} DataType;
+
+struct Object{
+    Class *class;
+    LocalVars *slots;
+
+    //为数组类准备的额外字段
+    void *data;
+    DataType data_type;
+    uint length;
 };
 struct RtConstantPool {
     Class *class;

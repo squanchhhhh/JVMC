@@ -6,8 +6,15 @@
 #define JVMC_CLASS_H
 
 #include "../common_rtda_struct.h"
-
+#include "string_pool.h"
 typedef struct Object Object;
+typedef struct Class Class;
+typedef struct RtMethods RtMethods;
+typedef struct SymRef SymRef;
+typedef struct InterfaceMethodRef InterfaceMethodRef;
+typedef struct RtConstantPool RtConstantPool;
+typedef struct RtFields RtFields;
+typedef struct RtMember RtMember;
 
 Class *new_class(ClassFile *cf);
 
@@ -35,7 +42,7 @@ int is_super(Class *target);
 
 int is_accessible_s(SymRef *self, Class *other);
 
-RtMethods *resolve_interface_method_ref(InterfaceMethodRef *self);
+void resolve_interface_method_ref(InterfaceMethodRef *self);
 
 RtMethods *resolve_interface_method_refs(InterfaceMethodRef *self);
 
@@ -83,7 +90,13 @@ InterfaceMethodRef *new_interface_method_ref(RtConstantPool *pool, ConstantInter
 
 RtConstantInfo *get_constant_info(RtConstantPool *pool, uint16_t index);
 
+Class *load_class(ClassLoader *loader, char *name);
+
 Class *find_class_by_name(ClassLoader *loader, char *name);
+char* to_descriptor(const char* className);
+char* get_arr_name(const char* className);
+char* to_class_name(const char* descriptor);
+char* get_component_class_name(const char* className);
 
 unsigned int hash(const char *str, int size);
 
@@ -95,14 +108,19 @@ RtMethods *get_static_method_rt(Class *cls, char *name, char *description);
 
 RtMethods *get_clinit_method(Class *cls);
 
+RtFields *get_field_rt(Class *cls, char *name,char * descriptor,int is_static);
 void resolve_super_class(Class *class);
 
 void resolve_interfaces(Class *class);
-Class * load_array_class(ClassLoader *loader, char *name);
+
+Class *load_array_class(ClassLoader *loader, char *name);
+
 Class *load_non_array_class(ClassLoader *loader, char *name);
 
 Class *define_class(ClassLoader *loader, char *name);
+
 int isArrayClass(Class *class);
+
 void verify(Class *class);
 
 void prepare(Class *class);

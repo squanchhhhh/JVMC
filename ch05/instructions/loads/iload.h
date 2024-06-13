@@ -147,4 +147,48 @@ void init_LLOAD_2(LLOAD_2*self);
 void init_LLOAD_3(LLOAD_3*self);
 void _lload(Frame*frame,int index);
 
+typedef struct{
+    NoOperandsInstruction base;
+}AALOAD;
+typedef struct {
+    NoOperandsInstruction base;
+}BALOAD;
+typedef struct{
+    NoOperandsInstruction base;
+}CALOAD;
+typedef struct{
+    NoOperandsInstruction base;
+}DALOAD;
+typedef struct{
+    NoOperandsInstruction base;
+}FALOAD;
+typedef struct{
+    NoOperandsInstruction base;
+}IALOAD;
+typedef struct{
+    NoOperandsInstruction base;
+}LALOAD;
+typedef struct{
+    NoOperandsInstruction base;
+}SALOAD;
+
+void init_AALOAD(AALOAD*self);
+void init_BALOAD(BALOAD*self);
+void init_CALOAD(CALOAD*self);
+void init_DALOAD(DALOAD*self);
+void init_FALOAD(FALOAD*self);
+void init_IALOAD(IALOAD*self);
+void init_LALOAD(LALOAD*self);
+void init_SALOAD(SALOAD*self);
+
+void excute_aaload(void * self,Frame *frame);
+void excute_baload(void * self,Frame *frame);
+void excute_caload(void * self,Frame *frame);
+void excute_daload(void * self,Frame *frame);
+void excute_faload(void * self,Frame *frame);
+void excute_iaload(void * self,Frame *frame);
+void excute_laload(void * self,Frame *frame);
+void excute_saload(void * self,Frame *frame);
+
+
 #endif //JVMC_ILOAD_H

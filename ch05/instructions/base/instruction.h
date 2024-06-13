@@ -6,7 +6,10 @@
 #define JVMC_INSTRUCTION_H
 
 #include "../../rtda/thread.h"
+#include "../../rtda/heap/string_pool.h"
+#include "../../rtda/heap/object.h"
 #include "bytecode_reader.h"
+
 typedef struct Frame Frame;
 typedef struct BranchInstruction BranchInstruction;
 typedef struct Index8Instruction Index8Instruction;
@@ -61,4 +64,6 @@ void invoke_method(Frame*frame,RtMethods*methods);
 void init_class(Thread *thread,Class* class);
 void schedule_clinit(Thread*thread,Class*class);
 void init_super_class(Thread*thread,Class*class);
+Class * arr_class(Class * class);
+Class* ComponentClass(Class *self);;
 #endif //JVMC_INSTRUCTION_H

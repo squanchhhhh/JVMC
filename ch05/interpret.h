@@ -11,5 +11,6 @@
 #include "classfile/member_info.h"
 
 void loop(Thread *thread, unsigned char *bytecode);
-void interpret(RtMethods*methods);
+void interpret(RtMethods*methods,char**args,int argc);
+Object * create_args_array(ClassLoader*loader,char**args,int argc);
 #endif //JVMC_INTERPRET_H

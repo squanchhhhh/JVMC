@@ -75,7 +75,7 @@ ClassFile * loadClassFile(char*class_name){
     }
     // 拼接路径
     snprintf(full_path, path_len, "%s%s.class", base_path, class_name);
-    printf("load class %s \n", full_path);
+//    printf("load class %s \n", full_path);
     int fd = open(full_path, O_RDONLY);
     if (fd == -1) {
         perror("open");

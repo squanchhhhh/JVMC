@@ -144,7 +144,12 @@ void println(OperandStack *stack, const char* descriptor) {
         printf("%ld\n", pop_long(stack));
     } else if (strcmp(descriptor, "(D)V") == 0) {
         printf("%lf\n", pop_double(stack));
-    } else {
+    } else if (strcmp(descriptor, "(Ljava/lang/String;)V") == 0){
+        Object * ref = pop_ref(stack);
+        char * c = to_c_string(ref);
+        printf("%s\n", c);
+    }
+    else {
         printf("println: %s\n", descriptor);
         exit(1);
     }

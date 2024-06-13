@@ -90,7 +90,8 @@ struct Frame{
     RtMethods *method;
 };
 void set_next_pc(Frame*frame,int pc);
-
+//new指令需要将pc前移
+void revert_next_pc(Frame*frame);
 
 Frame *new_frame(Thread *thread, RtMethods *method);
 
@@ -120,6 +121,7 @@ Thread *new_thread();
 int is_empty(Thread *thread);
 Frame * new_frame_thread(Thread*thread,RtMethods*method);
 int pc(Thread *thread);
+
 
 //设置pc
 void set_pc(Thread *thread,int pc);

@@ -17,7 +17,7 @@ void loop(Thread *thread, unsigned char *bytecode){
         Instruction * inst = new_instruction(&opcode);
         inst->FetchOperands(inst,reader);
         set_next_pc(frame,reader->pc);
-        printf("pc:%2d\n", pc);
+//        printf("pc:%2d\n", pc);
         inst->Execute(inst,frame);
         if (is_empty(thread)){
             break;

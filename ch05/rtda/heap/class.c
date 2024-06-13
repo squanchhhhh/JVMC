@@ -57,7 +57,7 @@ int is_implements(Class *self, Class *target) {
     for (Class *c = self; c; c = c->super_class) {
         int count = c->interfaces_count;
         for (int i = 0; i < count; i++) {
-            if (c->interfaces[i] == target || is_sub_interface_of(c->interfaces[i],target)) {
+            if (c->interfaces[i] == target || is_sub_interface_of(c->interfaces[i], target)) {
                 return true;
             }
         }
@@ -260,6 +260,10 @@ RtMethods *get_static_method_rt(Class *cls, char *name, char *description) {
     return method;
 }
 
+RtMethods *get_clinit_method(Class *cls) {
+    return get_static_method_rt(cls, "<clinit>", "()V");
+}
+
 unsigned int hash(const char *str, int size) {
     unsigned int hash = 5381;
     int c;
@@ -288,6 +292,9 @@ Class *load_class(ClassLoader *loader, char *name) {
     if (cl != NULL) {
         return cl;
     }
+    if (cl->name[0] == '[') {
+        return load_array_class(loader, name);
+    }
     return load_non_array_class(loader, name);
 }
 
@@ -301,6 +308,23 @@ Class *load_non_array_class(ClassLoader *loader, char *name) {
     return cl;
 }
 
+Class *load_array_class(ClassLoader *loader, char *name) {
+    Class *cl = (Class *) malloc(sizeof(Class));
+    cl->access_flags = ACC_PUBLIC;
+    cl->name = name;
+    cl->loader = loader;
+    cl->initialized = 1;
+    cl->super_class = load_class(loader, "java/lang/Object");
+    cl->interfaces = (Class **) malloc(sizeof(Class *) * 2);
+    cl->interfaces[0] = load_class(loader, "java/lang/Cloneable");
+    cl->interfaces[1] = load_class(loader, "java/io/Serializable");
+    cl->interfaces_count = 2;
+    loader->names[loader->size] = name;
+    loader->classes[loader->size] = cl;
+    loader->size++;
+    return cl;
+}
+
 
 Class *define_class(ClassLoader *loader, char *name) {
     ClassFile *file = loadClassFile(name);
@@ -311,6 +335,9 @@ Class *define_class(ClassLoader *loader, char *name) {
     return pClass;
 }
 
+int isArrayClass(Class *class) {
+    return class->name[0] == '[';
+}
 
 void resolve_super_class(Class *class) {
     if (strcmp(class->name, "java/lang/Object") != 0) {

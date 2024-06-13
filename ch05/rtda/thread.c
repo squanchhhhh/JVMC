@@ -10,11 +10,13 @@ Thread *new_thread() {
     thread->stack = new_stack(1024);
     return thread;
 }
-int is_empty(Thread *thread){
+
+int is_empty(Thread *thread) {
     return thread->stack->size == 0;
 }
-Frame * new_frame_thread(Thread*thread,RtMethods*method){
-    return new_frame(thread,method);
+
+Frame *new_frame_thread(Thread *thread, RtMethods *method) {
+    return new_frame(thread, method);
 }
 
 int pc(Thread *thread) {
@@ -24,6 +26,8 @@ int pc(Thread *thread) {
 void set_pc(Thread *thread, int pc) {
     thread->pc = pc;
 }
+
+
 
 void push_frame(Thread *thread, Frame *frame) {
     push(thread->stack, frame);
@@ -60,6 +64,10 @@ void set_next_pc(Frame *frame, int pc) {
     frame->next_pc = pc;
 }
 
+void revert_next_pc(Frame *frame) {
+    frame->next_pc = frame->thread->pc;
+}
+
 Frame *pop(Stack *stack) {
     if (stack->size == 0) {
         printf("jvm stack is empty!\n");
@@ -80,7 +88,7 @@ Frame *top(Stack *stack) {
 }
 
 
-Frame *new_frame(Thread *thread,RtMethods *method) {
+Frame *new_frame(Thread *thread, RtMethods *method) {
     Frame *frame = (Frame *) malloc(sizeof(Frame));
     frame->thread = thread;
     frame->local_vars = new_local_vars(method->max_locals);
@@ -178,11 +186,11 @@ void set_double(LocalVars *local_vars, int index, double value) {
     }
 }
 
-void set_slot(LocalVars *local_vars,int index,Slot slot){
+void set_slot(LocalVars *local_vars, int index, Slot slot) {
     local_vars->slots[index] = slot;
 }
 
-Slot get_slot(LocalVars *local_vars,int index){
+Slot get_slot(LocalVars *local_vars, int index) {
     return local_vars->slots[index];
 }
 
@@ -290,16 +298,17 @@ Object *pop_ref(OperandStack *operand_stack) {
     operand_stack->size--;
     return operand_stack->slots[operand_stack->size].ref;
 }
-void push_slot(OperandStack* operand_stack,Slot slot){
+
+void push_slot(OperandStack *operand_stack, Slot slot) {
     operand_stack->slots[operand_stack->size] = slot;
     operand_stack->size++;
 }
 
-Slot pop_slot(OperandStack* operand_stack){
+Slot pop_slot(OperandStack *operand_stack) {
     operand_stack->size--;
     return operand_stack->slots[operand_stack->size];
 }
 
-Object * get_ref_from_top(OperandStack*self,uint index){
-    return self->slots[self->size-1 -index].ref;
+Object *get_ref_from_top(OperandStack *self, uint index) {
+    return self->slots[self->size - 1 - index].ref;
 }

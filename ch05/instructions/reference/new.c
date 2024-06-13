@@ -14,6 +14,12 @@ void execute_NEW(void *self_, Frame *frame) {
     RtConstantPool *pool = frame->method->base->class->constant_pool;
     ClassRef *class_ref = get_constant_info(pool, self->base.index)->value.classRef;
     Class *c = resolve_classes(&class_ref->base);
+    //如果类没有被初始化
+    if (!c->initialized){
+        revert_next_pc(frame);
+
+        //todo
+    }
     if (is_abstract(c) || is_interface(c)) {
         printf("java.lang.InstantiationError\n");
         exit(1);

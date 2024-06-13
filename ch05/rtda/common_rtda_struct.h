@@ -62,6 +62,7 @@ struct Class {
     uint32_t instance_slot_count;
     uint32_t static_slot_count;
     LocalVars *static_vars;
+    int initialized;
 };
 struct RtConstantPool {
     Class *class;

@@ -58,4 +58,7 @@ void execute_NOP(void * self,Frame*frame);
 
 
 void invoke_method(Frame*frame,RtMethods*methods);
+void init_class(Thread *thread,Class* class);
+void schedule_clinit(Thread*thread,Class*class);
+void init_super_class(Thread*thread,Class*class);
 #endif //JVMC_INSTRUCTION_H

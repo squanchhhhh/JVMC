@@ -59,3 +59,25 @@ void invoke_method(Frame *frame, RtMethods *method) {
         }
     }
 }
+void schedule_clinit(Thread *thread, Class *class) {
+    RtMethods *clinit = get_clinit_method(class);
+    if (clinit != NULL) {
+        Frame *frame = new_frame_thread(thread, clinit);
+        push_frame(thread, frame);
+    }
+}
+
+void init_super_class(Thread *thread, Class *class) {
+    if (!is_interface(class)) {
+        Class *super_class = class->super_class;
+        if (super_class != NULL && !super_class->initialized) {
+            init_class(thread, class);
+        }
+    }
+}
+
+void init_class(Thread *thread, Class *class) {
+    class->initialized = 1;
+    schedule_clinit(thread, class);
+    init_super_class(thread, class);
+}

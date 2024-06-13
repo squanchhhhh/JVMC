@@ -22,7 +22,7 @@ void init_constant_value_attribute(ConstantValueAttribute *self, ClassReader *re
 AttributeInfo *read_attribute(ClassReader *reader, ConstantPool *pool) {
     uint16_t attr_name_index = read_uint16_class(reader);
     char *attr_name = (char *) get_utf8_string(pool, attr_name_index);
-    printf("开始加载属性:%s\n",attr_name);
+//    printf("开始加载属性:%s\n",attr_name);
     uint32_t attr_length = read_uint32_class(reader);
     AttributeInfo *info = new_attribute_info(attr_name, attr_length, pool,reader);
     info->read_info(info, reader);

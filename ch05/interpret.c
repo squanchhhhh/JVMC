@@ -18,6 +18,7 @@ void loop(Thread *thread, unsigned char *bytecode){
         Instruction * inst = new_instruction(&opcode);
         inst->FetchOperands(inst,reader);
         set_next_pc(frame,reader->pc);
+        printf("current class : %s\n",frame->method->base->class->name);
         printf("current method : %s\n",frame->method->base->name);
         printf("current pc : %d\n",pc);
         printf("current operandStack length : %d\n",frame->operand_stack->size);

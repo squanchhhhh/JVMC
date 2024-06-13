@@ -824,7 +824,7 @@ RtFields *resolve_fields(FieldRef *self) {
 }
 
 void resolve_field_ref(FieldRef *self) {
-    Class *d = self->base.class;
+    Class *d = self->base.pool->class;
     Class *c = resolve_classes(&self->base);
     RtFields *field = find_field(c, self->name, self->descriptor);
     if (!is_accessible_s(&self->base, d)) {

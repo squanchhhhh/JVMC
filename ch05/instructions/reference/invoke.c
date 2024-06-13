@@ -24,7 +24,7 @@ void execute_INVOKE_SPECIAL(void *self, Frame *frame) {
     RtMethods *resolved_method = resolve_methods(method);
 
     // 检查初始化方法
-    if (strcmp(resolved_method->base->name, "<init>") == 0 && resolved_class != current_class) {
+    if (strcmp(resolved_method->base->name, "<init>") == 0 && resolved_class != resolved_method->base->class) {
         printf("java.lang.NoSuchMethodError\n");
         exit(1);
     }

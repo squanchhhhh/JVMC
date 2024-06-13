@@ -7,11 +7,12 @@
 #include "constants/ldc.h"
 #include "control/return.h"
 #include "reserved/invoke_native.h"
-//printf("current instruction :%s\n",#type);
+
 #define CREATE_INSTRUCTION(opcode, type) \
     case opcode: { \
         type *instruction = M(type); \
         init_##type(instruction);        \
+        printf("current instruction :%s\n",#type);\
         return (Instruction *) instruction; \
     }
 #define M(x) (x*)malloc(sizeof(x))

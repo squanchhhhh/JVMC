@@ -573,6 +573,9 @@ void init_static_final_var(Class *class, RtFields *field) {
                 set_ref(var, slot_id, java_string);
                 break;
             }
+            case '[': {
+
+            }
         }
     }
 

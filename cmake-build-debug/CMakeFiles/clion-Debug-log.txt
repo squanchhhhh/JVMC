@@ -1,4 +1,10 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/ninja -G Ninja -S /Users/squanch/CLionProjects/JVMC -B /Users/squanch/CLionProjects/JVMC/cmake-build-debug
--- Configuring done (0.0s)
+/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -S /Users/squanch/CLionProjects/JVMC -B /Users/squanch/CLionProjects/JVMC/cmake-build-debug
+-- The C compiler identification is AppleClang 16.0.0.16000026
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /Library/Developer/CommandLineTools/usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Configuring done (0.3s)
 -- Generating done (0.0s)
 -- Build files have been written to: /Users/squanch/CLionProjects/JVMC/cmake-build-debug
